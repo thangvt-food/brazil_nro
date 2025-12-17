@@ -55,7 +55,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-
 public class Manager {
 
     private static Manager i;
@@ -66,7 +65,7 @@ public class Manager {
     public static int MAX_PLAYER = 20000;
     public static byte RATE_EXP_SERVER = 7;
     public static boolean LOCAL = false;
-//    public static byte RATE_EXP_SERVER = 1;// sau khi chinh
+    // public static byte RATE_EXP_SERVER = 1;// sau khi chinh
 
     public static MapTemplate[] MAP_TEMPLATES;
     public static final List<com.girlkun.models.map.Map> MAPS = new ArrayList<>();
@@ -101,7 +100,6 @@ public class Manager {
     public static final String queryTopSK = "SELECT name, gender, CAST( split_str( data_inventory,',',5)  AS UNSIGNED) AS event FROM player INNER JOIN account ON account.id = player.account_id WHERE account.is_admin = 0 AND account.ban = 0 ORDER BY CAST( split_str( data_inventory,',',5)  AS UNSIGNED) DESC LIMIT 10;";
     public static final String queryTopPVP = "SELECT name, gender, CAST( pointPvp AS UNSIGNED) AS pointPvp FROM player INNER JOIN account ON account.id = player.account_id WHERE account.is_admin = 0 AND account.ban = 0 ORDER BY CAST( pointPvp AS UNSIGNED) DESC LIMIT 10;";
     public static final String queryTopNHS = "SELECT name, gender, CAST( pointPvp AS UNSIGNED) AS nhs FROM player INNER JOIN account ON account.id = player.account_id WHERE account.is_admin = 0 AND account.ban = 0 ORDER BY CAST( NguHanhSonPoint AS UNSIGNED) DESC LIMIT 10;";
-    
 
     public static List<TOP> topSM;
     public static List<TOP> topSD;
@@ -112,45 +110,47 @@ public class Manager {
     public static List<TOP> topPVP;
     public static List<TOP> topNHS;
     public static long timeRealTop = 0;
-    public static final short[] itemIds_TL = {555, 557, 559, 556, 558, 560, 562, 564, 566, 563, 565, 567, 561};
-    public static final short[] itemIds_CT = {1071, 1072, 1073, 1084, 1085, 1086};
-    public static final short[] itemIds_ManhTShiem = {1069, 1070};
-    public static final short[] itemIds_ManhTSthuong = {1066, 1067, 1068};
-    public static final short[] itemIds_DA = {1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083};
-    public static final byte[] itemIds_NR_SB = {15, 16};
-    public static final short[] itemDC12 = {233, 237, 241,245, 249, 253,257, 261, 265,269, 273, 277};
-    public static final short[] itemSkien = {537, 538, 539};
-    public static final short[] itemManh = {1066, 1067, 1068, 1069, 1070};
+    public static final short[] itemIds_TL = { 555, 557, 559, 556, 558, 560, 562, 564, 566, 563, 565, 567, 561 };
+    public static final short[] itemIds_CT = { 1071, 1072, 1073, 1084, 1085, 1086 };
+    public static final short[] itemIds_ManhTShiem = { 1069, 1070 };
+    public static final short[] itemIds_ManhTSthuong = { 1066, 1067, 1068 };
+    public static final short[] itemIds_DA = { 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083 };
+    public static final byte[] itemIds_NR_SB = { 15, 16 };
+    public static final short[] itemDC12 = { 233, 237, 241, 245, 249, 253, 257, 261, 265, 269, 273, 277 };
+    public static final short[] itemSkien = { 537, 538, 539 };
+    public static final short[] itemManh = { 1066, 1067, 1068, 1069, 1070 };
 
-    public static final short[] aotd = {138, 139, 230, 231, 232, 233, 555};
-    public static final short[] quantd = {142, 143, 242, 243, 244, 245, 556};
-    public static final short[] gangtd = {146, 147, 254, 255, 256, 257, 562};
-    public static final short[] giaytd = {150, 151, 266, 267, 268, 269, 563};
-    public static final short[] aoxd = {170, 171, 238, 239, 240, 241, 559};
-    public static final short[] quanxd = {174, 175, 250, 251, 252, 253, 560};
-    public static final short[] gangxd = {178, 179, 262, 263, 264, 265, 566};
-    public static final short[] giayxd = {182, 183, 274, 275, 276, 277, 567};
-    public static final short[] aonm = {154, 155, 234, 235, 236, 237, 557};
-    public static final short[] quannm = {158, 159, 246, 247, 248, 249, 558};
-    public static final short[] gangnm = {162, 163, 258, 259, 260, 261, 564};
-    public static final short[] giaynm = {166, 167, 270, 271, 272, 273, 565};
-    public static final short[] radaSKHVip = {186, 187, 278, 279, 280, 281, 561};
-    public static final short[] radaSKH = {12};
-    public static final short[] aoskhtd = {0};
-    public static final short[] quanskhtd = {6};
-    public static final short[] gangskhtd = {21};
-    public static final short[] giayskhtd = {27};
-    public static final short[] aoskhxd = {2};
-    public static final short[] quanskhxd = {8};
-    public static final short[] gangskhxd = {23};
-    public static final short[] giayskhxd = {29};
-    public static final short[] aoskhnm = {1};
-    public static final short[] quanskhnm = {7};
-    public static final short[] gangskhnm = {22};
-    public static final short[] giayskhnm = {28};
-    public static final short[][][] doSKHVip = {{aotd, quantd, gangtd, giaytd}, {aonm, quannm, gangnm, giaynm}, {aoxd, quanxd, gangxd, giayxd}};
-    public static final short[][][] doSKH = {{aoskhtd, quanskhtd, gangskhtd, giayskhtd}, {aoskhnm, quanskhnm, gangskhnm, giayskhnm}, {aoskhxd, quanskhxd, gangskhxd, giayskhxd}};
-    //doSKHVip[gender][typeDo][randomLVDo]
+    public static final short[] aotd = { 138, 139, 230, 231, 232, 233, 555 };
+    public static final short[] quantd = { 142, 143, 242, 243, 244, 245, 556 };
+    public static final short[] gangtd = { 146, 147, 254, 255, 256, 257, 562 };
+    public static final short[] giaytd = { 150, 151, 266, 267, 268, 269, 563 };
+    public static final short[] aoxd = { 170, 171, 238, 239, 240, 241, 559 };
+    public static final short[] quanxd = { 174, 175, 250, 251, 252, 253, 560 };
+    public static final short[] gangxd = { 178, 179, 262, 263, 264, 265, 566 };
+    public static final short[] giayxd = { 182, 183, 274, 275, 276, 277, 567 };
+    public static final short[] aonm = { 154, 155, 234, 235, 236, 237, 557 };
+    public static final short[] quannm = { 158, 159, 246, 247, 248, 249, 558 };
+    public static final short[] gangnm = { 162, 163, 258, 259, 260, 261, 564 };
+    public static final short[] giaynm = { 166, 167, 270, 271, 272, 273, 565 };
+    public static final short[] radaSKHVip = { 186, 187, 278, 279, 280, 281, 561 };
+    public static final short[] radaSKH = { 12 };
+    public static final short[] aoskhtd = { 0 };
+    public static final short[] quanskhtd = { 6 };
+    public static final short[] gangskhtd = { 21 };
+    public static final short[] giayskhtd = { 27 };
+    public static final short[] aoskhxd = { 2 };
+    public static final short[] quanskhxd = { 8 };
+    public static final short[] gangskhxd = { 23 };
+    public static final short[] giayskhxd = { 29 };
+    public static final short[] aoskhnm = { 1 };
+    public static final short[] quanskhnm = { 7 };
+    public static final short[] gangskhnm = { 22 };
+    public static final short[] giayskhnm = { 28 };
+    public static final short[][][] doSKHVip = { { aotd, quantd, gangtd, giaytd }, { aonm, quannm, gangnm, giaynm },
+            { aoxd, quanxd, gangxd, giayxd } };
+    public static final short[][][] doSKH = { { aoskhtd, quanskhtd, gangskhtd, giayskhtd },
+            { aoskhnm, quanskhnm, gangskhnm, giayskhnm }, { aoskhxd, quanskhxd, gangskhxd, giayskhxd } };
+    // doSKHVip[gender][typeDo][randomLVDo]
 
     public static Manager gI() {
         if (i == null) {
@@ -202,7 +202,7 @@ public class Manager {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection();) {
-            //load part
+            // load part
             ps = con.prepareStatement("select * from part");
             rs = ps.executeQuery();
             List<Part> parts = new ArrayList<>();
@@ -247,7 +247,7 @@ public class Manager {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection();) {
-            //load part
+            // load part
             ps = con.prepareStatement("select * from part");
             rs = ps.executeQuery();
             List<Part> parts = new ArrayList<>();
@@ -280,11 +280,11 @@ public class Manager {
             dos.close();
             Logger.success("Load part thành công (" + parts.size() + ")\n");
 
-            //load small version
+            // load small version
             ps = con.prepareStatement("select count(id) from small_version");
             rs = ps.executeQuery();
             List<byte[]> smallVersion = new ArrayList<>();
-            if (rs.first()) {
+            if (rs.next()) {
                 int size = rs.getInt(1);
                 for (int i = 0; i < 4; i++) {
                     smallVersion.add(new byte[size]);
@@ -301,7 +301,8 @@ public class Manager {
                 index++;
             }
             for (int i = 0; i < 4; i++) {
-                dos = new DataOutputStream(new FileOutputStream("data/girlkun/data_img_version/x" + (i + 1) + "/img_version"));
+                dos = new DataOutputStream(
+                        new FileOutputStream("data/girlkun/data_img_version/x" + (i + 1) + "/img_version"));
                 dos.writeShort(smallVersion.get(i).length);
                 for (int j = 0; j < smallVersion.get(i).length; j++) {
                     dos.writeByte(smallVersion.get(i)[j]);
@@ -310,7 +311,7 @@ public class Manager {
                 dos.close();
             }
 
-            //load clan
+            // load clan
             ps = con.prepareStatement("select * from clan_sv" + SERVER);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -354,12 +355,12 @@ public class Manager {
 
             ps = con.prepareStatement("select id from clan_sv" + SERVER + " order by id desc limit 1");
             rs = ps.executeQuery();
-            if (rs.first()) {
+            if (rs.next()) {
                 Clan.NEXT_ID = rs.getInt("id") + 1;
             }
 
             Logger.success("Load clan thành công (" + CLANS.size() + "), clan next id: " + Clan.NEXT_ID + "\n");
-            
+
             ps = con.prepareStatement("select * from dhvt_template");
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -376,7 +377,7 @@ public class Manager {
 
             Logger.success("Load DHVT thành công (" + LIST_DHVT.size() + "), clan next id: " + Clan.NEXT_ID + "\n");
 
-            //load skill
+            // load skill
             ps = con.prepareStatement("select * from skill_template order by nclass_id, slot");
             rs = ps.executeQuery();
             byte nClassId = -1;
@@ -407,8 +408,7 @@ public class Manager {
                                 .replaceAll("\"\\[", "[")
                                 .replaceAll("\"\\]", "]")
                                 .replaceAll("\\]\"", "]")
-                                .replaceAll("\\}\",\"\\{", "},{")
-                );
+                                .replaceAll("\\}\",\"\\{", "},{"));
                 for (int j = 0; j < dataArray.size(); j++) {
                     JSONObject dts = (JSONObject) jv.parse(String.valueOf(dataArray.get(j)));
                     Skill skill = new Skill();
@@ -429,7 +429,7 @@ public class Manager {
             }
             Logger.success("Load skill thành công (" + NCLASS.size() + ")\n");
 
-            //load head avatar
+            // load head avatar
             ps = con.prepareStatement("select * from head_avatar");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -438,7 +438,7 @@ public class Manager {
             }
             Logger.success("Load head avatar thành công (" + HEAD_AVATARS.size() + ")\n");
 
-            //load flag bag
+            // load flag bag
             ps = con.prepareStatement("select * from flag_bag");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -457,7 +457,7 @@ public class Manager {
             }
             Logger.success("Load flag bag thành công (" + FLAGS_BAGS.size() + ")\n");
 
-            //load intrinsic
+            // load intrinsic
             ps = con.prepareStatement("select * from intrinsic");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -489,7 +489,7 @@ public class Manager {
             }
             Logger.success("Load intrinsic thành công (" + INTRINSICS.size() + ")\n");
 
-            //load task
+            // load task
             ps = con.prepareStatement("SELECT id, task_main_template.name, detail, "
                     + "task_sub_template.name AS 'sub_name', max_count, notify, npc_id, map "
                     + "FROM task_main_template JOIN task_sub_template ON task_main_template.id = "
@@ -517,7 +517,7 @@ public class Manager {
             }
             Logger.success("Load task thành công (" + TASKS.size() + ")\n");
 
-            //load side task
+            // load side task
             ps = con.prepareStatement("select * from side_task_template");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -543,7 +543,7 @@ public class Manager {
             }
             Logger.success("Load side task thành công (" + SIDE_TASKS_TEMPLATE.size() + ")\n");
 
-            //load item template
+            // load item template
             ps = con.prepareStatement("select * from item_template");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -566,7 +566,7 @@ public class Manager {
             }
             Logger.success("Load map item template thành công (" + ITEM_TEMPLATES.size() + ")\n");
 
-            //load item option template
+            // load item option template
             ps = con.prepareStatement("select id, name from item_option_template");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -577,11 +577,11 @@ public class Manager {
             }
             Logger.success("Load map item option template thành công (" + ITEM_OPTION_TEMPLATES.size() + ")\n");
 
-            //load shop
+            // load shop
             SHOPS = ShopDAO.getShops(con);
             Logger.success("Load shop thành công (" + SHOPS.size() + ")\n");
 
-            //load reward lucky round
+            // load reward lucky round
             File folder = new File("data/girlkun/data_lucky_round_reward");
             for (File fileEntry : folder.listFiles()) {
                 if (!fileEntry.isDirectory()) {
@@ -615,7 +615,7 @@ public class Manager {
                 }
             }
             Logger.success("Load reward lucky round thành công (" + LUCKY_ROUND_REWARDS.size() + ")\n");
-            //load reward mob
+            // load reward mob
             folder = new File("data/girlkun/mob_reward");
             for (File fileEntry : folder.listFiles()) {
                 if (!fileEntry.isDirectory()) {
@@ -639,26 +639,25 @@ public class Manager {
                             mapDrop[g] = Integer.parseInt(arrMap[g]);
                         }
                         ItemMobReward item = new ItemMobReward(itemId, mapDrop,
-                                new int[]{Integer.parseInt(quantity[0]), Integer.parseInt(quantity[1])},
-                                new int[]{Integer.parseInt(ratio[0]), Integer.parseInt(ratio[1])}, gender);
+                                new int[] { Integer.parseInt(quantity[0]), Integer.parseInt(quantity[1]) },
+                                new int[] { Integer.parseInt(ratio[0]), Integer.parseInt(ratio[1]) }, gender);
                         if (item.getTemp().type == 30) { // sao pha lê
-                            item.setRatio(new int[]{20, Integer.parseInt(ratio[1])});
+                            item.setRatio(new int[] { 20, Integer.parseInt(ratio[1]) });
                         }
-                        if (item.getTemp().type == 14) { //14 đá nâng cấp
-                            item.setRatio(new int[]{20, Integer.parseInt(ratio[1])});
+                        if (item.getTemp().type == 14) { // 14 đá nâng cấp
+                            item.setRatio(new int[] { 20, Integer.parseInt(ratio[1]) });
                         }
                         if (item.getTemp().type < 5) {
-                            item.setRatio(new int[]{Integer.parseInt(ratio[0]), Integer.parseInt(ratio[1]) / 4 * 3});
+                            item.setRatio(new int[] { Integer.parseInt(ratio[0]), Integer.parseInt(ratio[1]) / 4 * 3 });
                         }
 
+                        // System.out.println(mobReward.getMobId());
+                        // System.out.println(item.getTemp().name);
+                        // System.out.println(item.getTemp().type);
+                        // System.out.println(item.getRatio()[0] + "/" + item.getRatio()[1]);
+                        // System.out.println(item.getQuantity()[0] + "/" + item.getQuantity()[1]);
 
-//                        System.out.println(mobReward.getMobId());
-//                        System.out.println(item.getTemp().name);
-//                        System.out.println(item.getTemp().type);
-//                        System.out.println(item.getRatio()[0] + "/" + item.getRatio()[1]);
-//                        System.out.println(item.getQuantity()[0] + "/" + item.getQuantity()[1]);
-
-                        if (item.getTemp().type == 9) { //vàng
+                        if (item.getTemp().type == 9) { // vàng
                             mobReward.getGoldReward().add(item);
                         } else {
                             mobReward.getItemReward().add(item);
@@ -669,8 +668,8 @@ public class Manager {
                             String[] param = dis.readUTF().split("-");
                             String[] ratioOption = dis.readUTF().split("-");
                             ItemOptionMobReward option = new ItemOptionMobReward(optionId,
-                                    new int[]{Integer.parseInt(param[0]), Integer.parseInt(param[1])},
-                                    new int[]{Integer.parseInt(ratioOption[0]), Integer.parseInt(ratioOption[1])});
+                                    new int[] { Integer.parseInt(param[0]), Integer.parseInt(param[1]) },
+                                    new int[] { Integer.parseInt(ratioOption[0]), Integer.parseInt(ratioOption[1]) });
                             item.getOption().add(option);
                         }
                     }
@@ -679,11 +678,12 @@ public class Manager {
             }
             Logger.success("Load reward mob thành công (" + MOB_REWARDS.size() + ")\n");
 
-            //load notify
+            // load notify
             folder = new File("data/girlkun/notify");
             for (File fileEntry : folder.listFiles()) {
                 if (!fileEntry.isDirectory()) {
-                    StringBuffer notify = new StringBuffer(fileEntry.getName().substring(0, fileEntry.getName().lastIndexOf("."))).append("<>");
+                    StringBuffer notify = new StringBuffer(
+                            fileEntry.getName().substring(0, fileEntry.getName().lastIndexOf("."))).append("<>");
                     BufferedReader br = new BufferedReader(new FileReader(fileEntry));
                     String line = null;
                     while ((line = br.readLine()) != null) {
@@ -694,7 +694,7 @@ public class Manager {
             }
             Logger.success("Load notify thành công (" + NOTIFY.size() + ")\n");
 
-            //load caption
+            // load caption
             ps = con.prepareStatement("select * from caption");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -702,7 +702,7 @@ public class Manager {
             }
             Logger.success("Load caption thành công (" + CAPTIONS.size() + ")\n");
 
-            //load image by name
+            // load image by name
             ps = con.prepareStatement("select name, n_frame from img_by_name");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -710,7 +710,7 @@ public class Manager {
             }
             Logger.success("Load images by name thành công (" + IMAGES_BY_NAME.size() + ")\n");
 
-            //load mob template
+            // load mob template
             ps = con.prepareStatement("select * from mob_template");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -728,7 +728,7 @@ public class Manager {
             }
             Logger.success("Load mob template thành công (" + MOB_TEMPLATES.size() + ")\n");
 
-            //load npc template
+            // load npc template
             ps = con.prepareStatement("select * from npc_template");
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -743,10 +743,10 @@ public class Manager {
             }
             Logger.success("Load npc template thành công (" + NPC_TEMPLATES.size() + ")\n");
 
-            //load map template
+            // load map template
             ps = con.prepareStatement("select count(id) from map_template");
             rs = ps.executeQuery();
-            if (rs.first()) {
+            if (rs.next()) {
                 int countRow = rs.getShort(1);
                 MAP_TEMPLATES = new MapTemplate[countRow];
                 ps = con.prepareStatement("select * from map_template");
@@ -758,15 +758,15 @@ public class Manager {
                     String mapName = rs.getString("name");
                     mapTemplate.id = mapId;
                     mapTemplate.name = mapName;
-                    //load data
+                    // load data
 
-//                    dataArray = (JSONArray) jv.parse(rs.getString("data"));
-//                    mapTemplate.type = Byte.parseByte(String.valueOf(dataArray.get(0)));
-//                    mapTemplate.planetId = Byte.parseByte(String.valueOf(dataArray.get(1)));
-//                    mapTemplate.bgType = Byte.parseByte(String.valueOf(dataArray.get(2)));
-//                    mapTemplate.tileId = Byte.parseByte(String.valueOf(dataArray.get(3)));
-//                    mapTemplate.bgId = Byte.parseByte(String.valueOf(dataArray.get(4)));
-//                    dataArray.clear();
+                    // dataArray = (JSONArray) jv.parse(rs.getString("data"));
+                    // mapTemplate.type = Byte.parseByte(String.valueOf(dataArray.get(0)));
+                    // mapTemplate.planetId = Byte.parseByte(String.valueOf(dataArray.get(1)));
+                    // mapTemplate.bgType = Byte.parseByte(String.valueOf(dataArray.get(2)));
+                    // mapTemplate.tileId = Byte.parseByte(String.valueOf(dataArray.get(3)));
+                    // mapTemplate.bgId = Byte.parseByte(String.valueOf(dataArray.get(4)));
+                    // dataArray.clear();
                     mapTemplate.type = rs.getByte("type");
                     mapTemplate.planetId = rs.getByte("planet_id");
                     mapTemplate.bgType = rs.getByte("bg_type");
@@ -774,12 +774,11 @@ public class Manager {
                     mapTemplate.bgId = rs.getByte("bg_id");
                     mapTemplate.zones = rs.getByte("zones");
                     mapTemplate.maxPlayerPerZone = rs.getByte("max_player");
-                    //load waypoints
+                    // load waypoints
                     dataArray = (JSONArray) jv.parse(rs.getString("waypoints")
                             .replaceAll("\\[\"\\[", "[[")
                             .replaceAll("\\]\"\\]", "]]")
-                            .replaceAll("\",\"", ",")
-                    );
+                            .replaceAll("\",\"", ","));
                     for (int j = 0; j < dataArray.size(); j++) {
                         WayPoint wp = new WayPoint();
                         JSONArray dtwp = (JSONArray) jv.parse(String.valueOf(dataArray.get(j)));
@@ -797,7 +796,7 @@ public class Manager {
                         dtwp.clear();
                     }
                     dataArray.clear();
-                    //load mobs
+                    // load mobs
                     dataArray = (JSONArray) jv.parse(rs.getString("mobs").replaceAll("\\\"", ""));
                     mapTemplate.mobTemp = new byte[dataArray.size()];
                     mapTemplate.mobLevel = new byte[dataArray.size()];
@@ -814,7 +813,7 @@ public class Manager {
                         dtm.clear();
                     }
                     dataArray.clear();
-                    //load npcs
+                    // load npcs
                     dataArray = (JSONArray) jv.parse(rs.getString("npcs").replaceAll("\\\"", ""));
                     mapTemplate.npcId = new byte[dataArray.size()];
                     mapTemplate.npcX = new short[dataArray.size()];
@@ -901,12 +900,11 @@ public class Manager {
         return tops;
     }
 
-
     public void loadProperties() throws IOException {
         Properties properties = new Properties();
         properties.load(new FileInputStream("data/girlkun/girlkun.properties"));
         Object value = null;
-        //###Config sv
+        // ###Config sv
         if ((value = properties.get("server.girlkun.port")) != null) {
             ServerManager.PORT = Integer.parseInt(String.valueOf(value));
         }
@@ -995,7 +993,7 @@ public class Manager {
         return tileMap;
     }
 
-    //service*******************************************************************
+    // service*******************************************************************
     public static Clan getClanById(int id) throws Exception {
         for (Clan clan : CLANS) {
             if (clan.id == id) {
@@ -1031,6 +1029,5 @@ public class Manager {
             return 0;
         }
     }
-
 
 }

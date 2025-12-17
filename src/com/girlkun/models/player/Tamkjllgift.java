@@ -81,17 +81,22 @@ public class Tamkjllgift {
 
     public Tamkjllgift checkUseGiftCode(int idPlayer, String code) throws Exception {
         GirlkunResultSet rs = null;
-        rs = GirlkunDB.executeQuery("SELECT * FROM Tamkjll_History_Code WHERE `player_id` = " + idPlayer + " AND `code` = '" + code + "';");
-        if (rs != null && rs.first()) {
-            Service.getInstance().sendThongBaoOK(Client.gI().getPlayer(idPlayer).getSession(), "Bạn đã nhập code này vào: " + rs.getTimestamp("time"));
+        rs = GirlkunDB.executeQuery(
+                "SELECT * FROM Tamkjll_History_Code WHERE `player_id` = " + idPlayer + " AND `code` = '" + code + "';");
+        if (rs != null && rs.next()) {
+            Service.getInstance().sendThongBaoOK(Client.gI().getPlayer(idPlayer).getSession(),
+                    "Bạn đã nhập code này vào: " + rs.getTimestamp("time"));
             return null;
         } else {
             for (Tamkjllgift giftCode : listGiftCode) {
                 if (giftCode.code.equals(code) && giftCode.Luot > 0) {
                     giftCode.Luot -= 1;
-                    String sqlSET = "(" + idPlayer + ", '" + code + "', '" + Util.toDateString(Date.from(Instant.now())) + "');";
-                    GirlkunDB.executeUpdate("INSERT INTO `Tamkjll_History_Code` (`player_id`,`code`,`time`) VALUES " + sqlSET);
-                    GirlkunDB.executeUpdate("UPDATE `TamkjllGift` SET `Luot` = '" + giftCode.Luot + "' WHERE `Code` = '" + code + "' LIMIT 1;");
+                    String sqlSET = "(" + idPlayer + ", '" + code + "', '" + Util.toDateString(Date.from(Instant.now()))
+                            + "');";
+                    GirlkunDB.executeUpdate(
+                            "INSERT INTO `Tamkjll_History_Code` (`player_id`,`code`,`time`) VALUES " + sqlSET);
+                    GirlkunDB.executeUpdate("UPDATE `TamkjllGift` SET `Luot` = '" + giftCode.Luot + "' WHERE `Code` = '"
+                            + code + "' LIMIT 1;");
                     return giftCode;
                 }
             }
@@ -110,7 +115,8 @@ public class Tamkjllgift {
 
     public void giftCode(Player player, String code) throws Exception {
         Tamkjllgift giftcode = Tamkjllgift.gI().checkUseGiftCode((int) player.id, code);
-        // if(!Maintenance.gI().canUseCode){Service.gI().sendThongBao(player, "Không thể thực hiện lúc này ");return;}
+        // if(!Maintenance.gI().canUseCode){Service.gI().sendThongBao(player, "Không thể
+        // thực hiện lúc này ");return;}
         if (giftcode == null) {
             Service.getInstance().sendThongBao(player, "Code đã được sử dụng, hoặc không tồn tại!");
         } else {

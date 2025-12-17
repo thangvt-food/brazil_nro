@@ -40,7 +40,7 @@ import java.util.Set;
 public class Service {
 
     private static Service instance;
-    
+
     public static Service gI() {
         if (instance == null) {
             instance = new Service();
@@ -54,8 +54,7 @@ public class Service {
         }
         return instance;
     }
-    
-    
+
     public void sendchienlinh(Player player, short smallId) {
         Message msg;
         try {
@@ -67,7 +66,7 @@ public class Service {
                 msg.writer().writeByte(1);
                 msg.writer().writeShort(smallId);
                 msg.writer().writeByte(1);
-                int[] fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
+                int[] fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
                 msg.writer().writeByte(fr.length);
                 for (int i = 0; i < fr.length; i++) {
                     msg.writer().writeByte(fr[i]);
@@ -95,7 +94,7 @@ public class Service {
             msg.writer().writeByte(1);
             msg.writer().writeShort(smallId);
             msg.writer().writeByte(1);
-            int[] fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
+            int[] fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
             msg.writer().writeByte(fr.length);
             for (int i = 0; i < fr.length; i++) {
                 msg.writer().writeByte(fr[i]);
@@ -108,6 +107,7 @@ public class Service {
             e.printStackTrace();
         }
     }
+
     public void sendPopUpMultiLine(Player pl, int tempID, int avt, String text) {
         Message msg = null;
         try {
@@ -118,7 +118,7 @@ public class Service {
             pl.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
-//            e.printStackTrace();
+            // e.printStackTrace();
         } finally {
             if (msg != null) {
                 msg.cleanup();
@@ -139,84 +139,114 @@ public class Service {
                 msg.writer().writeShort(smallId);
                 msg.writer().writeByte(1);
                 int[] fr = null;
-            if (smallId == 14012){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-            }
-            else if (smallId == 14024){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60};                    
-            }else if (smallId == 14000){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43};                    
-            }else if (smallId == 14002){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63 , 64, 65, 66, 67, 68, 69, 70};                    
-            }else if (smallId == 14004){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50};                    
-            }else if (smallId == 14006){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47};                    
-            }else if (smallId == 14008){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94};                    
-            }else if (smallId == 14010){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80};                    
-            }else if (smallId == 14014){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76};                    
-            }else if (smallId == 14016){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47};                    
-            }else if (smallId == 14018){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60};                    
-            }else if (smallId == 14020){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70};                    
-            }else if (smallId == 14022){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79};                    
-            } else {
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
-            }
+                if (smallId == 14012) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
+                } else if (smallId == 14024) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+                } else if (smallId == 14000) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 };
+                } else if (smallId == 14002) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70 };
+                } else if (smallId == 14004) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50 };
+                } else if (smallId == 14006) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47 };
+                } else if (smallId == 14008) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91,
+                            92, 93, 94 };
+                } else if (smallId == 14010) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80 };
+                } else if (smallId == 14014) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70, 71, 72, 73, 74, 75, 76 };
+                } else if (smallId == 14016) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47 };
+                } else if (smallId == 14018) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
+                } else if (smallId == 14020) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70 };
+                } else if (smallId == 14022) {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+                            23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+                            46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+                            69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79 };
+                } else {
+                    fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+                }
                 msg.writer().writeByte(fr.length);
                 for (int i = 0; i < fr.length; i++) {
                     msg.writer().writeByte(fr[i]);
                 }
-                if (smallId == 14012 ){
-                msg.writer().writeShort(96);
-                msg.writer().writeShort(96);
-                
-            } else if (smallId == 14024){
-                msg.writer().writeShort(96);
-                msg.writer().writeShort(96);
-            }else if (smallId == 14000){
-                msg.writer().writeShort(70);
-                msg.writer().writeShort(70);
-            }else if (smallId == 14002){
-                msg.writer().writeShort(70);
-                msg.writer().writeShort(70);
-            }else if (smallId == 14004){
-                msg.writer().writeShort(70);
-                msg.writer().writeShort(70);
-            }else if (smallId == 14006){
-                msg.writer().writeShort(86);
-                msg.writer().writeShort(86);
-            }else if (smallId == 14008){
-                msg.writer().writeShort(96);
-                msg.writer().writeShort(96);
-            }else if (smallId == 14010){
-                msg.writer().writeShort(96);
-                msg.writer().writeShort(96);
-            }else if (smallId == 14014){
-                msg.writer().writeShort(70);
-                msg.writer().writeShort(70);
-            }else if (smallId == 14016){
-                msg.writer().writeShort(50);
-                msg.writer().writeShort(50);
-            }else if (smallId == 14018){
-                msg.writer().writeShort(50);
-                msg.writer().writeShort(50);
-            }else if (smallId == 14020){
-                msg.writer().writeShort(96);
-                msg.writer().writeShort(96);
-            }else if (smallId == 14022){
-                msg.writer().writeShort(70);
-                msg.writer().writeShort(70);
-            } else {
-            msg.writer().writeShort(smallId == 15067 ? 65 : 75);
-            msg.writer().writeShort(smallId == 15067 ? 65 : 75);
-            }
+                if (smallId == 14012) {
+                    msg.writer().writeShort(96);
+                    msg.writer().writeShort(96);
+
+                } else if (smallId == 14024) {
+                    msg.writer().writeShort(96);
+                    msg.writer().writeShort(96);
+                } else if (smallId == 14000) {
+                    msg.writer().writeShort(70);
+                    msg.writer().writeShort(70);
+                } else if (smallId == 14002) {
+                    msg.writer().writeShort(70);
+                    msg.writer().writeShort(70);
+                } else if (smallId == 14004) {
+                    msg.writer().writeShort(70);
+                    msg.writer().writeShort(70);
+                } else if (smallId == 14006) {
+                    msg.writer().writeShort(86);
+                    msg.writer().writeShort(86);
+                } else if (smallId == 14008) {
+                    msg.writer().writeShort(96);
+                    msg.writer().writeShort(96);
+                } else if (smallId == 14010) {
+                    msg.writer().writeShort(96);
+                    msg.writer().writeShort(96);
+                } else if (smallId == 14014) {
+                    msg.writer().writeShort(70);
+                    msg.writer().writeShort(70);
+                } else if (smallId == 14016) {
+                    msg.writer().writeShort(50);
+                    msg.writer().writeShort(50);
+                } else if (smallId == 14018) {
+                    msg.writer().writeShort(50);
+                    msg.writer().writeShort(50);
+                } else if (smallId == 14020) {
+                    msg.writer().writeShort(96);
+                    msg.writer().writeShort(96);
+                } else if (smallId == 14022) {
+                    msg.writer().writeShort(70);
+                    msg.writer().writeShort(70);
+                } else {
+                    msg.writer().writeShort(smallId == 15067 ? 65 : 75);
+                    msg.writer().writeShort(smallId == 15067 ? 65 : 75);
+                }
             }
             sendMessAllPlayerInMap(player, msg);
             msg.cleanup();
@@ -239,29 +269,29 @@ public class Service {
             msg.writer().writeShort(smallId);
             msg.writer().writeByte(1);
             int[] fr = null;
-            if (smallId == 14004){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-            }
-            else if (smallId == 14006){
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60};                    
+            if (smallId == 14004) {
+                fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+                        24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 };
+            } else if (smallId == 14006) {
+                fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+                        24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+                        48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
             } else {
-                fr = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
+                fr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
             }
             msg.writer().writeByte(fr.length);
             for (int i = 0; i < fr.length; i++) {
                 msg.writer().writeByte(fr[i]);
             }
-            if (smallId == 14004){
+            if (smallId == 14004) {
                 msg.writer().writeShort(96);
                 msg.writer().writeShort(96);
-            }
-            else if (smallId == 14006){
+            } else if (smallId == 14006) {
                 msg.writer().writeShort(96);
                 msg.writer().writeShort(96);
-            }
-            else {
-            msg.writer().writeShort(smallId == 15067 ? 65 : 75);
-            msg.writer().writeShort(smallId == 15067 ? 65 : 75);
+            } else {
+                msg.writer().writeShort(smallId == 15067 ? 65 : 75);
+                msg.writer().writeShort(smallId == 15067 ? 65 : 75);
             }
             me.sendMessage(msg);
             msg.cleanup();
@@ -343,7 +373,7 @@ public class Service {
                 return;
             }
             GirlkunResultSet rs = GirlkunDB.executeQuery("select * from account where username = ?", user);
-            if (rs.first()) {
+            if (rs.next()) {
                 sendThongBaoOK((MySession) session, "Tài khoản đã tồn tại");
             } else {
                 GirlkunDB.executeUpdate("insert into account (username, password) values()", user, pass);
@@ -377,10 +407,10 @@ public class Service {
     public void Send_Info_NV(Player pl) {
         Message msg;
         try {
-            msg = Service.getInstance().messageSubCommand((byte) 14);//Cập nhật máu
+            msg = Service.getInstance().messageSubCommand((byte) 14);// Cập nhật máu
             msg.writer().writeInt((int) pl.id);
             msg.writer().writeInt(Util.TamkjllGH(pl.nPoint.hp));
-            msg.writer().writeByte(0);//Hiệu ứng Ăn Đậu
+            msg.writer().writeByte(0);// Hiệu ứng Ăn Đậu
             msg.writer().writeInt(Util.TamkjllGH(pl.nPoint.hpMax));
             sendMessAnotherNotMeInMap(pl, msg);
             msg.cleanup();
@@ -453,41 +483,36 @@ public class Service {
         } catch (Exception e) {
         }
     }
-//
-// Lệnh người chơi
-//public void chatpl(Player player, String text) {
-//    if (player.getSession() != null) {
-//        
-//        }
-//    }
-    
+    //
+    // Lệnh người chơi
+    // public void chatpl(Player player, String text) {
+    // if (player.getSession() != null) {
+    //
+    // }
+    // }
 
-
-
-    
-    
-// Lệnh ADmin
+    // Lệnh ADmin
     public void chat(Player player, String text) {
-//        if (text.equals("a")) {
-//            for (int i = 0; i < 5000; i++) {
-//                new Thread(() -> {
-//                    while (true) {
-//                        try {
-//                            Thread.sleep(1000);
-//                            this.sendThongBao(player, "Time " + System.currentTimeMillis());
-//                            System.out.println(player.getSession().getNumMessages());
-//                        } catch (Exception e) {
-//                        }
-//                    }
-//                }).start();
-//            }
-//            return;
-//        }
-//        if (text.equals("a")) {
-//            BossManager.gI().loadBoss();
-//            return;
-//        }
-        
+        // if (text.equals("a")) {
+        // for (int i = 0; i < 5000; i++) {
+        // new Thread(() -> {
+        // while (true) {
+        // try {
+        // Thread.sleep(1000);
+        // this.sendThongBao(player, "Time " + System.currentTimeMillis());
+        // System.out.println(player.getSession().getNumMessages());
+        // } catch (Exception e) {
+        // }
+        // }
+        // }).start();
+        // }
+        // return;
+        // }
+        // if (text.equals("a")) {
+        // BossManager.gI().loadBoss();
+        // return;
+        // }
+
         if (player.getSession() != null && player.isAdmin()) {
             if (text.equals("r")) {
                 new Thread(() -> {
@@ -502,8 +527,8 @@ public class Service {
                 }).start();
                 return;
             }
-         
-             if (text.equals("hskill")) {
+
+            if (text.equals("hskill")) {
                 Service.getInstance().releaseCooldownSkill(player);
                 return;
             }
@@ -531,7 +556,7 @@ public class Service {
             } else if (text.equals("boss")) {
                 String str = "";
                 for (Player b : player.zone.getBosses()) {
-                    str += b.name + "\n";                
+                    str += b.name + "\n";
                 }
                 sendThongBao(player, str);
             } else if (text.equals("vt")) {
@@ -539,93 +564,93 @@ public class Service {
                         + player.zone.map.yPhysicInTop(player.location.x, player.location.y));
             } else if (text.startsWith("ss")) {
 
-//                Message msg;
-//                try {
-//                    msg = new Message(48);
-//                    msg.writer().writeByte(Byte.parseByte(text.replaceAll("ss", "")));
-//                    player.sendMessage(msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
-//                try {
-//                    msg = new Message(113);
-//                    msg.writer().writeByte(111);
-//                    msg.writer().writeByte(3);
-//                    msg.writer().writeByte(Byte.parseByte(text.replaceAll("ss", "")));//id
-//                    msg.writer().writeShort(player.location.x);
-//                    msg.writer().writeShort(player.location.y);
-//                    msg.writer().writeShort(1);
-//                    player.sendMessage(msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
+                // Message msg;
+                // try {
+                // msg = new Message(48);
+                // msg.writer().writeByte(Byte.parseByte(text.replaceAll("ss", "")));
+                // player.sendMessage(msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
+                // try {
+                // msg = new Message(113);
+                // msg.writer().writeByte(111);
+                // msg.writer().writeByte(3);
+                // msg.writer().writeByte(Byte.parseByte(text.replaceAll("ss", "")));//id
+                // msg.writer().writeShort(player.location.x);
+                // msg.writer().writeShort(player.location.y);
+                // msg.writer().writeShort(1);
+                // player.sendMessage(msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
             } else if (text.equals("a")) {
 
-//                BossManager.gI().createBoss(BossID.ANDROID_13);
-//                BossManager.gI().loadBoss();
-//                Message msg;
-//                try {
-//                    msg = new Message(31);
-//                    msg.writer().writeInt((int) player.id);
-//                    msg.writer().writeByte(1);
-//                    msg.writer().writeShort(7094);
-//
-////                    msg.writer().writeByte(4);
-////                    int n = 3;
-////                    msg.writer().writeByte(n);
-////                    for (int i = 0; i < n; i++) {
-////                        msg.writer().writeByte(i);
-////                    }
-////                    msg.writer().writeShort(70);
-////                    msg.writer().writeShort(80);
-//                    player.sendMessage(msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
-//                try {
-//                    msg = new Message(52);
-//                    msg.writer().writeByte(1);
-//                    msg.writer().writeInt((int) player.id);
-//                    msg.writer().writeShort(player.location.x);
-//                    msg.writer().writeShort(player.location.y-16);
-//                    sendMessAllPlayerInMap(player, msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
-//                Message msg;
-//                try {
-//                    msg = new Message(50);
-//                    msg.writer().writeByte(10);
-//                    for (int i = 0; i < 10; i++) {
-//                        System.out.println("ok");
-//                        msg.writer().writeShort(i);
-//                        msg.writer().writeUTF("main " + i);
-//                        msg.writer().writeUTF("content " + i);
-//                    }
-//                    player.sendMessage(msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
-//                Message msg;
-//                try {
-//                    msg = new Message(-96);
-//                    msg.writer().writeByte(0);
-//                    msg.writer().writeUTF("Girlkun test");
-//                    msg.writer().writeByte(100);
-//                    for(int i = 0; i < 100; i++){
-//                        msg.writer().writeInt(i);
-//                        msg.writer().writeInt(i);
-//                        msg.writer().writeShort(player.getHead());
-//                        msg.writer().writeShort(player.getBody());
-//                        msg.writer().writeShort(player.getLeg());
-//                        msg.writer().writeUTF("Test name " + i);
-//                        msg.writer().writeUTF("Test info");
-//                        msg.writer().writeUTF("info 2");
-//                    }
-//                    player.sendMessage(msg);
-//                    msg.cleanup();
-//                } catch (Exception e) {
-//                }
+                // BossManager.gI().createBoss(BossID.ANDROID_13);
+                // BossManager.gI().loadBoss();
+                // Message msg;
+                // try {
+                // msg = new Message(31);
+                // msg.writer().writeInt((int) player.id);
+                // msg.writer().writeByte(1);
+                // msg.writer().writeShort(7094);
+                //
+                //// msg.writer().writeByte(4);
+                //// int n = 3;
+                //// msg.writer().writeByte(n);
+                //// for (int i = 0; i < n; i++) {
+                //// msg.writer().writeByte(i);
+                //// }
+                //// msg.writer().writeShort(70);
+                //// msg.writer().writeShort(80);
+                // player.sendMessage(msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
+                // try {
+                // msg = new Message(52);
+                // msg.writer().writeByte(1);
+                // msg.writer().writeInt((int) player.id);
+                // msg.writer().writeShort(player.location.x);
+                // msg.writer().writeShort(player.location.y-16);
+                // sendMessAllPlayerInMap(player, msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
+                // Message msg;
+                // try {
+                // msg = new Message(50);
+                // msg.writer().writeByte(10);
+                // for (int i = 0; i < 10; i++) {
+                // System.out.println("ok");
+                // msg.writer().writeShort(i);
+                // msg.writer().writeUTF("main " + i);
+                // msg.writer().writeUTF("content " + i);
+                // }
+                // player.sendMessage(msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
+                // Message msg;
+                // try {
+                // msg = new Message(-96);
+                // msg.writer().writeByte(0);
+                // msg.writer().writeUTF("Girlkun test");
+                // msg.writer().writeByte(100);
+                // for(int i = 0; i < 100; i++){
+                // msg.writer().writeInt(i);
+                // msg.writer().writeInt(i);
+                // msg.writer().writeShort(player.getHead());
+                // msg.writer().writeShort(player.getBody());
+                // msg.writer().writeShort(player.getLeg());
+                // msg.writer().writeUTF("Test name " + i);
+                // msg.writer().writeUTF("Test info");
+                // msg.writer().writeUTF("info 2");
+                // }
+                // player.sendMessage(msg);
+                // msg.cleanup();
+                // } catch (Exception e) {
+                // }
             } else if (text.equals("b")) {
                 Message msg;
                 try {
@@ -662,7 +687,8 @@ public class Service {
 
             }
             if (text.equals("ad")) {
-                NpcService.gI().createMenuConMeo(player, ConstNpc.MENU_ADMIN, -1, "Quản trị admin Số người online: " + Client.gI().getPlayers().size() + "\n",
+                NpcService.gI().createMenuConMeo(player, ConstNpc.MENU_ADMIN, -1,
+                        "Quản trị admin Số người online: " + Client.gI().getPlayers().size() + "\n",
                         "Ngọc rồng", "Đệ tử", "Bảo trì", "Tìm kiếm\nngười chơi", "Boss", "Đóng");
                 return;
 
@@ -700,19 +726,21 @@ public class Service {
                 }
                 InventoryServiceNew.gI().addItemBag(player, item);
                 InventoryServiceNew.gI().sendItemBags(player);
-                Service.getInstance().sendThongBao(player, "GET " + item.template.name + " [" + item.template.id + "] SUCCESS !");
+                Service.getInstance().sendThongBao(player,
+                        "GET " + item.template.name + " [" + item.template.id + "] SUCCESS !");
 
             } else if (text.equals("item")) {
-                Input.gI().createFormGiveItem(player);}
-             else if (text.equals("34")){
-                Input.gI().createFormSenditem1(player);}
+                Input.gI().createFormGiveItem(player);
+            } else if (text.equals("34")) {
+                Input.gI().createFormSenditem1(player);
+            }
 
-             else if (text.equals("thread")) {
+            else if (text.equals("thread")) {
                 sendThongBao(player, "Current thread: " + Thread.activeCount());
                 Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-//                for (Thread t : threadSet) {phen ư
-//                    System.out.println(t.getName());
-//                }
+                // for (Thread t : threadSet) {phen ư
+                // System.out.println(t.getName());
+                // }
                 return;
             } else if (text.startsWith("s")) {
                 try {
@@ -721,17 +749,24 @@ public class Service {
                     return;
                 } catch (Exception e) {
                 }
-            }
-            else{
-               if(text.equals("tt")){
-           Service.getInstance().sendBigMessage(player,8025, "|0|Thông tin nhân vật: "+ player.name +"\n|1|"+"HP: "+ Util.format(player.nPoint.hp) +"/"+Util.format(player.nPoint.hpMax)+"\n|2|KI: "+ Util.format(player.nPoint.mp) + "/"+Util.format(player.nPoint.mpMax)+"\n|3|"+"Sức Đánh: "+Util.format(player.nPoint.dame));
-           }
+            } else {
+                if (text.equals("tt")) {
+                    Service.getInstance().sendBigMessage(player, 8025,
+                            "|0|Thông tin nhân vật: " + player.name + "\n|1|" + "HP: " + Util.format(player.nPoint.hp)
+                                    + "/" + Util.format(player.nPoint.hpMax) + "\n|2|KI: "
+                                    + Util.format(player.nPoint.mp) + "/" + Util.format(player.nPoint.mpMax) + "\n|3|"
+                                    + "Sức Đánh: " + Util.format(player.nPoint.dame));
+                }
             }
         }
-        
-        if(text.equals("tt")){
-           Service.getInstance().sendBigMessage(player,8025, "|0|Thông tin nhân vật: "+ player.name +"\n|1|"+"HP: "+ Util.format(player.nPoint.hp) +"/"+Util.format(player.nPoint.hpMax)+"\n|2|KI: "+ Util.format(player.nPoint.mp) + "/"+Util.format(player.nPoint.mpMax)+"\n|3|"+"Sức Đánh: "+Util.format(player.nPoint.dame));
-           } 
+
+        if (text.equals("tt")) {
+            Service.getInstance().sendBigMessage(player, 8025,
+                    "|0|Thông tin nhân vật: " + player.name + "\n|1|" + "HP: " + Util.format(player.nPoint.hp) + "/"
+                            + Util.format(player.nPoint.hpMax) + "\n|2|KI: " + Util.format(player.nPoint.mp) + "/"
+                            + Util.format(player.nPoint.mpMax) + "\n|3|" + "Sức Đánh: "
+                            + Util.format(player.nPoint.dame));
+        }
 
         if (text.startsWith("ten con la ")) {
             PetService.gI().changeNamePet(player, text.replaceAll("ten con la ", ""));
@@ -740,41 +775,41 @@ public class Service {
                     + "\b|8|KI bản thân:\b|5|" + Util.powerToString(player.nPoint.mp)
                     + player.Hppl);
         }
-//        else if (text.equals("mabuegg")) {
-//            sendThongBao(player, "have mabu egg: " + (player.mabuEgg != null));
-//            MabuEgg.createMabuEgg(player);
-//        } else if (text.equals("freakyex")) {
-//            System.exit(0);
-//        } else if (text.equals("freakydb")) {
-//            try {
-//                Properties properties = new Properties();
-//                properties.load(new FileInputStream("data/girlkun/girlkun.properties"));
-//                String str = "";
-//                Object value = null;
-//                if ((value = properties.get("server.girlkun.db.ip")) != null) {
-//                    str += String.valueOf(value) + "\n";
-//                }
-//                if ((value = properties.get("server.girlkun.db.port")) != null) {
-//                    str += Integer.parseInt(String.valueOf(value)) + "\n";
-//                }
-//                if ((value = properties.get("server.girlkun.db.name")) != null) {
-//                    str += String.valueOf(value) + "\n";
-//                }
-//                if ((value = properties.get("server.girlkun.db.us")) != null) {
-//                    str += String.valueOf(value) + "\n";
-//                }
-//                if ((value = properties.get("server.girlkun.db.pw")) != null) {
-//                    str += String.valueOf(value);
-//                }
-//                Service.getInstance().sendThongBao(player, str);
-//                return;
-//            } catch (Exception e) {
-//            }
-//        }
-//        if (text.equals("fixapk")) {
-//            Service.getInstance().player(player);
-//            Service.getInstance().Send_Caitrang(player);
-//        }
+        // else if (text.equals("mabuegg")) {
+        // sendThongBao(player, "have mabu egg: " + (player.mabuEgg != null));
+        // MabuEgg.createMabuEgg(player);
+        // } else if (text.equals("freakyex")) {
+        // System.exit(0);
+        // } else if (text.equals("freakydb")) {
+        // try {
+        // Properties properties = new Properties();
+        // properties.load(new FileInputStream("data/girlkun/girlkun.properties"));
+        // String str = "";
+        // Object value = null;
+        // if ((value = properties.get("server.girlkun.db.ip")) != null) {
+        // str += String.valueOf(value) + "\n";
+        // }
+        // if ((value = properties.get("server.girlkun.db.port")) != null) {
+        // str += Integer.parseInt(String.valueOf(value)) + "\n";
+        // }
+        // if ((value = properties.get("server.girlkun.db.name")) != null) {
+        // str += String.valueOf(value) + "\n";
+        // }
+        // if ((value = properties.get("server.girlkun.db.us")) != null) {
+        // str += String.valueOf(value) + "\n";
+        // }
+        // if ((value = properties.get("server.girlkun.db.pw")) != null) {
+        // str += String.valueOf(value);
+        // }
+        // Service.getInstance().sendThongBao(player, str);
+        // return;
+        // } catch (Exception e) {
+        // }
+        // }
+        // if (text.equals("fixapk")) {
+        // Service.getInstance().player(player);
+        // Service.getInstance().Send_Caitrang(player);
+        // }
 
         if (player.pet != null) {
             if (text.equals("di theo") || text.equals("follow")) {
@@ -923,8 +958,8 @@ public class Service {
             msg.writer().writeShort(pl.location.x);
             msg.writer().writeShort(pl.location.y);
             msg.writer().writeByte(1);
-            //   lastTimeShenronWait = System.currentTimeMillis();
-            //   isShenronAppear = true;
+            // lastTimeShenronWait = System.currentTimeMillis();
+            // isShenronAppear = true;
 
             Service.getInstance().sendMessAllPlayerInMap(pl, msg);
         } catch (Exception e) {
@@ -943,13 +978,13 @@ public class Service {
             msg.writer().writeByte(pl.gender);
             msg.writer().writeShort(pl.head);
             msg.writer().writeUTF(pl.name);
-            msg.writer().writeByte(0); //cPK
+            msg.writer().writeByte(0); // cPK
             msg.writer().writeByte(pl.typePk);
             msg.writer().writeLong(pl.nPoint.power);
             msg.writer().writeShort(0);
             msg.writer().writeShort(0);
             msg.writer().writeByte(pl.gender);
-            //--------skill---------
+            // --------skill---------
 
             ArrayList<Skill> skills = (ArrayList<Skill>) pl.playerSkill.skills;
 
@@ -961,7 +996,7 @@ public class Service {
                 }
             }
 
-            //---vang---luong--luongKhoa
+            // ---vang---luong--luongKhoa
             if (pl.getSession().version >= 214) {
                 msg.writer().writeLong(pl.inventory.gold);
             } else {
@@ -970,7 +1005,7 @@ public class Service {
             msg.writer().writeInt(pl.inventory.ruby);
             msg.writer().writeInt(pl.inventory.gem);
 
-            //--------itemBody---------
+            // --------itemBody---------
             ArrayList<Item> itemsBody = (ArrayList<Item>) pl.inventory.itemsBody;
             msg.writer().writeByte(itemsBody.size());
             for (Item item : itemsBody) {
@@ -991,7 +1026,7 @@ public class Service {
 
             }
 
-            //--------itemBag---------
+            // --------itemBag---------
             ArrayList<Item> itemsBag = (ArrayList<Item>) pl.inventory.itemsBag;
             msg.writer().writeByte(itemsBag.size());
             for (int i = 0; i < itemsBag.size(); i++) {
@@ -1013,7 +1048,7 @@ public class Service {
 
             }
 
-            //--------itemBox---------
+            // --------itemBox---------
             ArrayList<Item> itemsBox = (ArrayList<Item>) pl.inventory.itemsBox;
             msg.writer().writeByte(itemsBox.size());
             for (int i = 0; i < itemsBox.size(); i++) {
@@ -1033,21 +1068,21 @@ public class Service {
                     }
                 }
             }
-            //-----------------
+            // -----------------
             DataGame.sendHeadAvatar(msg);
-            //-----------------
-            msg.writer().writeShort(514); //char info id - con chim thông báo
-            msg.writer().writeShort(515); //char info id
-            msg.writer().writeShort(537); //char info id
-            msg.writer().writeByte(pl.fusion.typeFusion != ConstPlayer.NON_FUSION ? 1 : 0); //nhập thể
-//            msg.writer().writeInt(1632811835); //deltatime
-            msg.writer().writeInt(333); //deltatime
-            msg.writer().writeByte(pl.isNewMember ? 1 : 0); //is new member
+            // -----------------
+            msg.writer().writeShort(514); // char info id - con chim thông báo
+            msg.writer().writeShort(515); // char info id
+            msg.writer().writeShort(537); // char info id
+            msg.writer().writeByte(pl.fusion.typeFusion != ConstPlayer.NON_FUSION ? 1 : 0); // nhập thể
+            // msg.writer().writeInt(1632811835); //deltatime
+            msg.writer().writeInt(333); // deltatime
+            msg.writer().writeByte(pl.isNewMember ? 1 : 0); // is new member
 
-//            if (pl.isAdmin()) {
-            msg.writer().writeShort(pl.getAura()); //idauraeff
+            // if (pl.isAdmin()) {
+            msg.writer().writeShort(pl.getAura()); // idauraeff
             msg.writer().writeByte(pl.getEffFront());
-//            }
+            // }
             pl.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
@@ -1108,36 +1143,36 @@ public class Service {
         }
     }
 
-    //    public void congTiemNang(Player pl, byte type, int tiemnang) {
-//        Message msg;
-//        try {
-//            msg = new Message(-3);
-//            msg.writer().writeByte(type);// 0 là cộng sm, 1 cộng tn, 2 là cộng cả 2
-//            msg.writer().writeInt(tiemnang);// số tn cần cộng
-//            if (!pl.isPet) {
-//                pl.sendMessage(msg);
-//            } else {
-//                ((Pet) pl).master.nPoint.powerUp(tiemnang);
-//                ((Pet) pl).master.nPoint.tiemNangUp(tiemnang);
-//                ((Pet) pl).master.sendMessage(msg);
-//            }
-//            msg.cleanup();
-//            switch (type) {
-//                case 1:
-//                    pl.nPoint.tiemNangUp(tiemnang);
-//                    break;
-//                case 2:
-//                    pl.nPoint.powerUp(tiemnang);
-//                    pl.nPoint.tiemNangUp(tiemnang);
-//                    break;
-//                default:
-//                    pl.nPoint.powerUp(tiemnang);
-//                    break;
-//            }
-//        } catch (Exception e) {
-//
-//        }
-//    }
+    // public void congTiemNang(Player pl, byte type, int tiemnang) {
+    // Message msg;
+    // try {
+    // msg = new Message(-3);
+    // msg.writer().writeByte(type);// 0 là cộng sm, 1 cộng tn, 2 là cộng cả 2
+    // msg.writer().writeInt(tiemnang);// số tn cần cộng
+    // if (!pl.isPet) {
+    // pl.sendMessage(msg);
+    // } else {
+    // ((Pet) pl).master.nPoint.powerUp(tiemnang);
+    // ((Pet) pl).master.nPoint.tiemNangUp(tiemnang);
+    // ((Pet) pl).master.sendMessage(msg);
+    // }
+    // msg.cleanup();
+    // switch (type) {
+    // case 1:
+    // pl.nPoint.tiemNangUp(tiemnang);
+    // break;
+    // case 2:
+    // pl.nPoint.powerUp(tiemnang);
+    // pl.nPoint.tiemNangUp(tiemnang);
+    // break;
+    // default:
+    // pl.nPoint.powerUp(tiemnang);
+    // break;
+    // }
+    // } catch (Exception e) {
+    //
+    // }
+    // }
     public String get_HanhTinh(int hanhtinh) {
         switch (hanhtinh) {
             case 0:
@@ -1296,13 +1331,13 @@ public class Service {
             }
             msg = new Message(-8);
             msg.writer().writeShort((int) pl.id);
-            msg.writer().writeByte(0); //cpk
+            msg.writer().writeByte(0); // cpk
             msg.writer().writeShort(pl.location.x);
             msg.writer().writeShort(pl.location.y);
             sendMessAnotherNotMeInMap(pl, msg);
             msg.cleanup();
 
-//            Send_Info_NV(pl);
+            // Send_Info_NV(pl);
         } catch (Exception e) {
             Logger.logException(Service.class, e);
         }
@@ -1312,7 +1347,7 @@ public class Service {
         if (pl != null && pl.zone != null) {
             for (Mob mob : pl.zone.mobs) {
                 if (mob.id == mobId) {
-                    SkillService.gI().useSkill(pl, null, mob , null);
+                    SkillService.gI().useSkill(pl, null, mob, null);
                     break;
                 }
             }
@@ -1325,15 +1360,15 @@ public class Service {
             try {
                 msg = new Message(-90);
                 msg.writer().writeByte(1);// check type
-                msg.writer().writeInt((int) player.id); //id player
+                msg.writer().writeInt((int) player.id); // id player
                 short head = player.getHead();
                 short body = player.getBody();
                 short leg = player.getLeg();
 
-                msg.writer().writeShort(head);//set head
-                msg.writer().writeShort(body);//setbody
-                msg.writer().writeShort(leg);//set leg
-                msg.writer().writeByte(player.effectSkill.isMonkey ? 1 : 0);//set khỉ
+                msg.writer().writeShort(head);// set head
+                msg.writer().writeShort(body);// setbody
+                msg.writer().writeShort(leg);// set leg
+                msg.writer().writeByte(player.effectSkill.isMonkey ? 1 : 0);// set khỉ
                 sendMessAllPlayerInMap(player, msg);
                 msg.cleanup();
             } catch (Exception e) {
@@ -1433,10 +1468,11 @@ public class Service {
         } catch (Exception e) {
         }
     }
+
     public void sendThongBao(List<Player> pl, String thongBao) {
-        for(int i = 0 ; i < pl.size();i++){
+        for (int i = 0; i < pl.size(); i++) {
             Player ply = pl.get(i);
-            if(ply != null){
+            if (ply != null) {
                 this.sendThongBao(ply, thongBao);
             }
         }
@@ -1473,8 +1509,8 @@ public class Service {
         }
     }
 
-    public static final int[] flagTempId = {363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747};
-    public static final int[] flagIconId = {2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325};
+    public static final int[] flagTempId = { 363, 364, 365, 366, 367, 368, 369, 370, 371, 519, 520, 747 };
+    public static final int[] flagIconId = { 2761, 2330, 2323, 2327, 2326, 2324, 2329, 2328, 2331, 4386, 4385, 2325 };
 
     public void openFlagUI(Player pl) {
         Message msg;
@@ -1560,14 +1596,16 @@ public class Service {
     }
 
     public void chooseFlag(Player pl, int index) {
-        if (MapService.gI().isMapBlackBallWar(pl.zone.map.mapId) || MapService.gI().isMapMaBu(pl.zone.map.mapId)  || MapService.gI().isChienTruong(pl.zone.map.mapId)) {
+        if (MapService.gI().isMapBlackBallWar(pl.zone.map.mapId) || MapService.gI().isMapMaBu(pl.zone.map.mapId)
+                || MapService.gI().isChienTruong(pl.zone.map.mapId)) {
             sendThongBao(pl, "Không thể đổi cờ lúc này!");
             return;
         }
         if (Util.canDoWithTime(pl.iDMark.getLastTimeChangeFlag(), 60000)) {
             changeFlag(pl, index);
         } else {
-            sendThongBao(pl, "Không thể đổi cờ lúc này! Vui lòng đợi " + TimeUtil.getTimeLeft(pl.iDMark.getLastTimeChangeFlag(), 60) + " nữa!");
+            sendThongBao(pl, "Không thể đổi cờ lúc này! Vui lòng đợi "
+                    + TimeUtil.getTimeLeft(pl.iDMark.getLastTimeChangeFlag(), 60) + " nữa!");
         }
     }
 
@@ -1673,22 +1711,22 @@ public class Service {
                     }
                 }
 
-                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.hp)); //hp
-                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.hpMax)); //hpfull
-                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.mp)); //mp
-                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.mpMax)); //mpfull
-                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.dame)); //damefull
-                msg.writer().writeUTF(pl.pet.name); //name
-                msg.writer().writeUTF(getCurrStrLevel(pl.pet)); //curr level
-                msg.writer().writeLong(pl.pet.nPoint.power); //power
-                msg.writer().writeLong(pl.pet.nPoint.tiemNang); //tiềm năng
-                msg.writer().writeByte(pl.pet.getStatus()); //status
-                msg.writer().writeShort(pl.pet.nPoint.stamina); //stamina
-                msg.writer().writeShort(pl.pet.nPoint.maxStamina); //stamina full
-                msg.writer().writeByte(pl.pet.nPoint.crit); //crit
-                msg.writer().writeShort(pl.pet.nPoint.def); //def
+                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.hp)); // hp
+                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.hpMax)); // hpfull
+                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.mp)); // mp
+                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.mpMax)); // mpfull
+                msg.writer().writeInt(Util.TamkjllGH(pl.pet.nPoint.dame)); // damefull
+                msg.writer().writeUTF(pl.pet.name); // name
+                msg.writer().writeUTF(getCurrStrLevel(pl.pet)); // curr level
+                msg.writer().writeLong(pl.pet.nPoint.power); // power
+                msg.writer().writeLong(pl.pet.nPoint.tiemNang); // tiềm năng
+                msg.writer().writeByte(pl.pet.getStatus()); // status
+                msg.writer().writeShort(pl.pet.nPoint.stamina); // stamina
+                msg.writer().writeShort(pl.pet.nPoint.maxStamina); // stamina full
+                msg.writer().writeByte(pl.pet.nPoint.crit); // crit
+                msg.writer().writeShort(pl.pet.nPoint.def); // def
                 int sizeSkill = pl.pet.playerSkill.skills.size();
-                msg.writer().writeByte(4); //counnt pet skill
+                msg.writer().writeByte(4); // counnt pet skill
                 for (int i = 0; i < pl.pet.playerSkill.skills.size(); i++) {
                     if (pl.pet.playerSkill.skills.get(i).skillId != -1) {
                         msg.writer().writeShort(pl.pet.playerSkill.skills.get(i).skillId);
@@ -1706,10 +1744,10 @@ public class Service {
                                 msg.writer().writeShort(-1);
                                 msg.writer().writeUTF("Cần đạt sức mạnh 20tỷ\nđể mở");
                                 break;
-//                            default:
-//                                msg.writer().writeShort(-1);
-//                                msg.writer().writeUTF("Cần đạt sức mạnh 60tỷ\nđể mở");
-//                                break;
+                            // default:
+                            // msg.writer().writeShort(-1);
+                            // msg.writer().writeUTF("Cần đạt sức mạnh 60tỷ\nđể mở");
+                            // break;
                         }
                     }
                 }
@@ -1792,7 +1830,7 @@ public class Service {
             msg.writer().writeInt((int) plChat.id);
             msg.writer().writeShort(plChat.getHead());
             msg.writer().writeShort(plChat.getBody());
-            msg.writer().writeShort(plChat.getFlagBag()); //bag
+            msg.writer().writeShort(plChat.getFlagBag()); // bag
             msg.writer().writeShort(plChat.getLeg());
             msg.writer().writeByte(1);
             plChat.sendMessage(msg);
@@ -1903,18 +1941,18 @@ public class Service {
 
     public void setClientType(MySession session, Message msg) {
         try {
-            session.typeClient = (msg.reader().readByte());//client_type
-            session.zoomLevel = msg.reader().readByte();//zoom_level
-            msg.reader().readBoolean();//is_gprs
-            msg.reader().readInt();//width
-            msg.reader().readInt();//height
-            msg.reader().readBoolean();//is_qwerty
-            msg.reader().readBoolean();//is_touch
+            session.typeClient = (msg.reader().readByte());// client_type
+            session.zoomLevel = msg.reader().readByte();// zoom_level
+            msg.reader().readBoolean();// is_gprs
+            msg.reader().readInt();// width
+            msg.reader().readInt();// height
+            msg.reader().readBoolean();// is_qwerty
+            msg.reader().readBoolean();// is_touch
             String platform = msg.reader().readUTF();
             String[] arrPlatform = platform.split("\\|");
             session.version = Integer.parseInt(arrPlatform[1].replaceAll("\\.", ""));
 
-//            System.out.println(platform);
+            // System.out.println(platform);
         } catch (Exception e) {
         } finally {
             msg.cleanup();
