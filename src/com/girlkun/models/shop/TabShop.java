@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  *
- * @author 💖 Trần Lại 💖
- * @copyright 💖 GirlkuN  💖
+ * @Stole By Arriety💖
  *
  */
 public class TabShop {

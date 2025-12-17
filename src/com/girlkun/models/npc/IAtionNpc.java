@@ -4,8 +4,7 @@ import com.girlkun.models.player.Player;
 
 /**
  *
- * @author 💖 Trần Lại 💖
- * @copyright 💖 GirlkuN  💖
+ *@Stole By Arriety 💖
  *
  */
 public interface IAtionNpc {

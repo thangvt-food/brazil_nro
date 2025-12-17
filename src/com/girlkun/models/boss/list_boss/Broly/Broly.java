@@ -6,6 +6,7 @@ import com.girlkun.models.boss.BossStatus;
 import com.girlkun.models.boss.BossesData;
 import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.player.Player;
+import com.girlkun.services.EffectSkillService;
 import com.girlkun.services.Service;
 import com.girlkun.utils.Util;
 import java.util.Random;
@@ -14,8 +15,7 @@ import java.util.Random;
 public class Broly extends Boss {
 
     public Broly() throws Exception {
-        super(BossID.BROLY , BossesData.BROLY_1, 
-                BossesData.BROLY_2, BossesData.BROLY_3);
+        super(BossID.BROLY , BossesData.BROLY_1,BossesData.BROLY_2, BossesData.BROLY_3);
     }
      @Override
     public void reward(Player plKill) {
@@ -47,6 +47,30 @@ public class Broly extends Boss {
         st= System.currentTimeMillis();
     }
     private long st;
+    @Override
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (!this.isDie()) {
+            if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
+                this.chat("Xí hụt");
+                return 0;
+            }
+            damage = this.nPoint.subDameInjureWithDeff(damage);
+            if (!piercing && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
+            }
+            this.nPoint.subHP(damage);
+            if (isDie()) {
+                this.setDie(plAtt);
+                die(plAtt);
+            }
+            return damage;
+        } else {
+            return 0;
+        }
+    }
 }
 
 

@@ -134,6 +134,7 @@ public class FriendAndEnemyService {
             for (Friend f : player.friends) {
                 msg.writer().writeInt(f.id);
                 msg.writer().writeShort(f.head);
+                msg.writer().writeShort(-1);
                 msg.writer().writeShort(f.body);
                 msg.writer().writeShort(f.leg);
                 msg.writer().writeByte(f.bag);
@@ -158,6 +159,7 @@ public class FriendAndEnemyService {
             for (Enemy e : player.enemies) {
                 msg.writer().writeInt(e.id);
                 msg.writer().writeShort(e.head);
+                 msg.writer().writeShort(-1);
                 msg.writer().writeShort(e.body);
                 msg.writer().writeShort(e.leg);
                 msg.writer().writeShort(e.bag);
@@ -265,7 +267,7 @@ public class FriendAndEnemyService {
             Player pl = Client.gI().getPlayer(msg.reader().readInt());
             if (pl != null) {
                 if (player.isAdmin() || player.nPoint.teleport) {
-                    if (!pl.itemTime.isUseAnDanh || player.isAdmin()) {
+                    if ((!pl.itemTime.isUseAnDanh || player.isAdmin()) && pl.zone.map.mapId != 169 && pl.zone.map.mapId != 147 && pl.zone.map.mapId != 148 && pl.zone.map.mapId != 149 && pl.zone.map.mapId != 151 && pl.zone.map.mapId != 152) {
                         if ((player.isAdmin() || !pl.zone.isFullPlayer()) && !MapService.gI().isMapDoanhTrai(pl.zone.map.mapId)&& !MapService.gI().isMapMaBu(pl.zone.map.mapId)) {
                             ChangeMapService.gI().changeMapYardrat(player, pl.zone, pl.location.x + Util.nextInt(-5, 5), pl.location.y);
                         } else {

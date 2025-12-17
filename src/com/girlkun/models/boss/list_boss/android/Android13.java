@@ -45,7 +45,7 @@ public class Android13 extends Boss {
     }
 
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (damage >= this.nPoint.hp) {
             boolean flag = true;
             if (this.parentBoss != null) {
@@ -71,5 +71,5 @@ public class Android13 extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

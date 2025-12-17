@@ -21,7 +21,8 @@ public class IDMark {
 
     private Shop shopOpen; //shop người chơi đang mở
     private String tagNameShop; //thẻ tên shop đang mở
-
+    private boolean goToGas;
+    private long lastTimeGotoGas;
     /**
      * loại tàu vận chuyển dùng ;0 - Không dùng ;1 - Tàu vũ trụ ;2 - Dịch chuyển
      * tức thời ;3 - Tàu tenis

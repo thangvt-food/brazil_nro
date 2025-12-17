@@ -35,7 +35,7 @@ public class Android19 extends Boss {
     @Override
     public void active() {
         super.active(); //To change body of generated methods, choose Tools | Templates.
-        if(Util.canDoWithTime(st,900000)){
+        if(Util.canDoWithTime(st,1500000)){
             this.changeStatus(BossStatus.LEAVE_MAP);
         }
     }
@@ -47,13 +47,13 @@ public class Android19 extends Boss {
     }
     private long st;
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (plAtt != null) {
             switch (plAtt.playerSkill.skillSelect.template.id) {
                 case Skill.KAMEJOKO:
                 case Skill.MASENKO:
                 case Skill.ANTOMIC:
-                    int hpHoi = (int) ((long) damage * 80 / 100);
+                    long hpHoi =Util.TamkjllGH(damage * 80 / 100);
                     PlayerService.gI().hoiPhuc(this, hpHoi, 0);
                     if (Util.isTrue(1, 5)) {
                         this.chat("Hấp thụ.. các ngươi nghĩ sao vậy?");
@@ -75,5 +75,5 @@ public class Android19 extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

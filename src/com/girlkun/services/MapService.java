@@ -7,11 +7,13 @@ import com.girlkun.models.map.WayPoint;
 import com.girlkun.models.map.Zone;
 import com.girlkun.models.map.blackball.BlackBallWar;
 import com.girlkun.models.map.doanhtrai.DoanhTraiService;
+import com.girlkun.models.map.gas.GasService;
 import com.girlkun.models.mob.Mob;
 import com.girlkun.models.player.Pet;
 import com.girlkun.models.player.Player;
 import com.girlkun.server.Manager;
 import com.girlkun.network.io.Message;
+import com.girlkun.services.func.ChangeMapService;
 import com.girlkun.utils.Logger;
 import com.girlkun.utils.Util;
 import java.io.DataInputStream;
@@ -103,6 +105,20 @@ public class MapService {
 //        }
         if (isMapOffline(mapId)) {
             return getMapById(mapId).zones.get(0);
+        }   
+        if (this.isMapKhiGas(mapId)) {
+            if (player.clan == null || player.clan.khiGas == null) {
+                return null;
+            }
+            if (this.isMapKhiGas(player.zone.map.mapId)) {
+                for (Mob mob : player.zone.mobs) {
+                    if (!mob.isDie()) {
+                        return null;
+                    }
+                }
+               
+            }
+            return player.clan.khiGas.getMapById(mapId);
         }
         if (this.isMapDoanhTrai(mapId)) {
             if (player.clan == null || player.clan.doanhTrai == null) {
@@ -135,9 +151,12 @@ public class MapService {
         if (map == null) {
             return null;
         }
-        int z = Util.nextInt(0, map.zones.size() - 1);
+            
+        //int z = Util.nextInt(0, map.zones.size() - 1);
+       int z = 0;
         while (map.zones.get(z).getNumOfPlayers() >= map.zones.get(z).maxPlayer) {
-            z = Util.nextInt(0, map.zones.size() - 1);
+         //   z = Util.nextInt(0, map.zones.size() - 1);
+         z++;
         }
         return map.zones.get(z);
     }
@@ -285,6 +304,19 @@ public class MapService {
     public boolean isMapCold(Map map) {
         int mapId = map.mapId;
         return mapId >= 105 && mapId <= 110;
+    }   
+    
+    
+    public boolean isChienTruong(Map map) {
+        int mapId = map.mapId;
+        return mapId == 169;
+    }
+    
+    public boolean isChienTruong(int mapId) {
+        return mapId == 169;
+    }
+     public boolean isMapKhiGas(int mapId) {
+        return mapId ==149 || mapId == 148 || mapId == 147 || mapId == 151 || mapId == 152;
     }
 
     public boolean isMapDoanhTrai(int mapId) {
@@ -293,6 +325,9 @@ public class MapService {
 
     public boolean isMapHuyDiet(int mapId) {
         return mapId >= 146 && mapId <= 148;
+    }
+    public boolean isMap1sao(int mapId) {
+        return mapId >= 106 && mapId <= 108;
     }
 
     public boolean isMapBanDoKhoBau(int mapId) {
@@ -303,5 +338,16 @@ public class MapService {
         return (mapId >= 92 && mapId <= 94)
                 || (mapId >= 96 && mapId <= 100)
                 || mapId == 102 || mapId == 103;
+    }
+    public void goToMap(Player player, Zone zoneJoin) {
+        Zone oldZone = player.zone;
+        if (oldZone != null) {
+            ChangeMapService.gI().exitMap(player);
+            if (player.mobMe != null) {
+                player.mobMe.goToMap(zoneJoin);
+            }
+        }
+        player.zone = zoneJoin;
+        player.zone.addPlayer(player);
     }
 }

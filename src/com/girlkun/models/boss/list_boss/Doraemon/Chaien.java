@@ -6,6 +6,7 @@ import com.girlkun.models.boss.BossStatus;
 import com.girlkun.models.boss.BossesData;
 import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.player.Player;
+import com.girlkun.services.EffectSkillService;
 import com.girlkun.services.Service;
 import com.girlkun.services.TaskService;
 import com.girlkun.utils.Util;
@@ -23,25 +24,25 @@ public class Chaien extends Boss {
         int[] NRs = new int[]{15, 16};
         int randomDo = new Random().nextInt(itemDos.length);
         int randomNR = new Random().nextInt(NRs.length);
-        if (Util.isTrue(15, 100)) {
+        if (Util.isTrue(20, 100)) {
             if (Util.isTrue(1, 5)) {
                 Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, 561, 1, this.location.x, this.location.y, plKill.id));
                 return;
             }
             Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, itemDos[randomDo], 1, this.location.x, this.location.y, plKill.id));
-        } else {
+        }else {
             Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, NRs[randomNR], 1, this.location.x, zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
         }
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
     }
 
-   @Override
-    public void active() {
-        super.active(); //To change body of generated methods, choose Tools | Templates.
-        if(Util.canDoWithTime(st,900000)){
-            this.changeStatus(BossStatus.LEAVE_MAP);
-        }
-    }
+//   @Override
+//    public void active() {
+//        super.active(); //To change body of generated methods, choose Tools | Templates.
+//        if(Util.canDoWithTime(st,1500000)){
+//            this.changeStatus(BossStatus.LEAVE_MAP);
+//        }
+//    }
 
     @Override
     public void joinMap() {
@@ -63,9 +64,33 @@ public class Chaien extends Boss {
         }
         
     }
+       @Override
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (!this.isDie()) {
+            if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
+                this.chat("Xí hụt");
+                return 0;
+            }
+            damage = this.nPoint.subDameInjureWithDeff(damage);
+            if (!piercing && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
+            }
+            this.nPoint.subHP(damage);
+            if (isDie()) {
+                this.setDie(plAtt);
+                die(plAtt);
+            }
+            return damage;
+        } else {
+            return 0;
+        }
+    }
 }
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

@@ -85,5 +85,6 @@ public class ConstMob {
     public static final byte GAU_TUONG_CUOP = 77;
     public static final byte KHI_LONG_XANH = 78;
     public static final byte TABURINE_DO = 79;
+    public static final byte TRU_INVIS = 82;
 
 }

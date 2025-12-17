@@ -30,6 +30,9 @@ public class MobEffectSkill {
         if (isSocola && (Util.canDoWithTime(lastTimeSocola, timeSocola) || mob.isDie())) {
             removeSocola();
         }
+        if (isBinh && (Util.canDoWithTime(lastTimeBinh, timeBinh) || mob.isDie())) {
+            removeBinh();
+        }
         if (isAnTroi && (Util.canDoWithTime(lastTimeAnTroi, timeAnTroi) || mob.isDie())) {
             removeAnTroi();
         }
@@ -136,12 +139,28 @@ public class MobEffectSkill {
     }
 
     public boolean isSocola;
+    public boolean isBinh;
     private long lastTimeSocola;
     private int timeSocola;
+    private long lastTimeBinh;
+    private int timeBinh;
 
     public void removeSocola() {
         Message msg;
         this.isSocola = false;
+        try {
+            msg = new Message(-112);
+            msg.writer().writeByte(0);
+            msg.writer().writeByte(mob.id);
+            Service.getInstance().sendMessAllPlayerInMap(mob.zone, msg);
+            msg.cleanup();
+        } catch (Exception e) {
+
+        }
+    }
+    public void removeBinh() {
+        Message msg;
+        this.isBinh = false;
         try {
             msg = new Message(-112);
             msg.writer().writeByte(0);
@@ -157,5 +176,10 @@ public class MobEffectSkill {
         this.lastTimeSocola = lastTimeSocola;
         this.timeSocola = timeSocola;
         this.isSocola = true;
+    }
+    public void setBinh(long lastTimeBinh, int timeBinh) {
+        this.lastTimeBinh = lastTimeBinh;
+        this.timeBinh = timeBinh;
+        this.isBinh = true;
     }
 }

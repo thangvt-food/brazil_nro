@@ -4,6 +4,7 @@ import com.girlkun.models.boss.*;
 import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.player.Player;
 import com.girlkun.server.Manager;
+import com.girlkun.services.EffectSkillService;
 import com.girlkun.services.Service;
 import com.girlkun.utils.Util;
 
@@ -13,7 +14,7 @@ import java.util.Random;
 public class Black extends Boss {
 
     public Black() throws Exception {
-        super(BossID.BLACK, BossesData.BLACK_GOKU, BossesData.SUPER_BLACK_GOKU, BossesData.ZAMAS, BossesData.THANZM2);
+        super(BossID.BLACK, BossesData.BLACK_GOKU);
     }
 
     @Override
@@ -22,8 +23,12 @@ public class Black extends Boss {
         byte randomNR = (byte) new Random().nextInt(Manager.itemIds_NR_SB.length);
         if (Util.isTrue(BossManager.ratioReward, 100)) {
             if (Util.isTrue(1, 20)) {
-                Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, 561, 1, this.location.x, this.location.y, plKill.id));
-            } else {
+              Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, 992, 1, this.location.x, this.location.y, plKill.id));
+            }
+            else if (Util.isTrue(10, 20)) {
+              Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, 1079, 1, this.location.x, this.location.y, plKill.id));
+            }
+            else {
                 Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, Manager.itemIds_TL[randomDo], 1, this.location.x, this.location.y, plKill.id));
             }
         } else {
@@ -31,14 +36,37 @@ public class Black extends Boss {
         }
     }
 
+//    @Override
+//    public void active() {
+//        super.active(); //To change body of generated methods, choose Tools | Templates.
+//        if (Util.canDoWithTime(st, 900000)) {
+//            this.changeStatus(BossStatus.LEAVE_MAP);
+//        }
+//    }
     @Override
-    public void active() {
-        super.active(); //To change body of generated methods, choose Tools | Templates.
-        if (Util.canDoWithTime(st, 400000)) {
-            this.changeStatus(BossStatus.LEAVE_MAP);
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (!this.isDie()) {
+            if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
+                this.chat("Xí hụt");
+                return 0;
+            }
+            damage = this.nPoint.subDameInjureWithDeff(damage);
+            if (!piercing && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
+            }
+            this.nPoint.subHP(damage);
+            if (isDie()) {
+                this.setDie(plAtt);
+                die(plAtt);
+            }
+            return damage;
+        } else {
+            return 0;
         }
     }
-
     @Override
     public void joinMap() {
         super.joinMap(); //To change body of generated methods, choose Tools | Templates.

@@ -7,8 +7,7 @@
 //
 ///**
 // *
-// * @author 💖 Trần Lại 💖
-// * @copyright 💖 GirlkuN 💖
+// *@Stole By Arriety 💖
 // *
 // */
 //public abstract class PVP {

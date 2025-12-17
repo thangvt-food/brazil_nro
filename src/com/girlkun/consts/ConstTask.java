@@ -13,13 +13,30 @@ public class ConstTask {
     public static final byte VERY_HARD = 3;
     public static final byte HELL = 4;
 
-    //const gold reward side task
-    public static final int GOLD_EASY = 10000000;
-    public static final int GOLD_NORMAL = 30000000;
-    public static final int GOLD_HARD = 50000000;
-    public static final int GOLD_VERY_HARD = 80000000;
-    public static final int GOLD_HELL = 100000000;
+    //Vàng nhiệm vụ ngày
+    public static final long GOLD_EASY = 100000000L;
+    public static final long GOLD_NORMAL = 200000000L;
+    public static final long GOLD_HARD = 400000000L;
+    public static final long GOLD_VERY_HARD = 1000000000L;
+    public static final long GOLD_HELL = 2000000000L;
 
+    //Ruby nhiệm vụ ngày
+    public static final int RUBY_EASY = 1000;
+    public static final int RUBY_NORMAL = 2000;
+    public static final int RUBY_HARD = 4000;
+    public static final int RUBY_VERY_HARD = 10000;
+    public static final int RUBY_HELL = 20000;
+    
+    //Năng động nhiệm vụ ngày
+    public static final int DIEMND_EASY = 1;
+    public static final int DIEMND_NORMAL = 2;
+    public static final int DIEMND_HARD = 3;
+    public static final int DIEMND_VERY_HARD = 4;
+    public static final int DIEMND_HELL = 5;
+    
+    
+    
+    
     //const max side task of date
     public static final byte MAX_SIDE_TASK = 20;
 

@@ -719,6 +719,7 @@ public class RewardService {
                 optionId = 97;
                 break;
             case 444:
+                optionId = 73;
                 break;
             case 445:
                 break;
@@ -846,6 +847,10 @@ public class RewardService {
             }
         }
         return list;
+    }
+
+    public void initStarOption(Item itemReward, RatioStar[] ratioStar) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public static class RatioStar {

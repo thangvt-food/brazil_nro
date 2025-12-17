@@ -42,7 +42,7 @@ public class Android15 extends Boss {
     }
 
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (!this.callApk13 && damage >= this.nPoint.hp) {
             if (this.parentBoss != null) {
                 ((Android14) this.parentBoss).callApk13();
@@ -59,5 +59,5 @@ public class Android15 extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

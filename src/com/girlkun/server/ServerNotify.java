@@ -42,8 +42,8 @@ public class ServerNotify extends Thread {
                 while (!notifies.isEmpty()) {
                     sendThongBaoBenDuoi(notifies.remove(0));
                 }
-                if (Util.canDoWithTime(this.lastTimeGK, 120000)) {
-                    sendThongBaoBenDuoi("NRO GOD nhà cái đến từ bé khoa");
+                if (Util.canDoWithTime(this.lastTimeGK, 12000)) {
+                    sendThongBaoBenDuoi("Chúc bạn chơi game vui vẻ!");
                     this.lastTimeGK = System.currentTimeMillis();
                 }
             } catch (Exception ignored) {

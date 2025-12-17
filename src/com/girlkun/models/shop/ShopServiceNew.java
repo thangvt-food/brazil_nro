@@ -246,7 +246,7 @@ public class ShopServiceNew {
             msg.writer().writeByte(items.size());
             for (Item item : items) {
                 msg.writer().writeShort(item.template.id);
-                msg.writer().writeUTF("\n|7|NROGOD");
+                msg.writer().writeUTF("\n|7|Chúc bạn chơi game vui vẻ");
                 msg.writer().writeByte(item.itemOptions.size() + 1);
                 for (Item.ItemOption io : item.itemOptions) {
                     msg.writer().writeByte(io.optionTemplate.id);
@@ -280,6 +280,9 @@ public class ShopServiceNew {
 
     public void takeItem(Player player, byte type, int tempId) {
         String tagName = player.iDMark.getTagNameShop();
+        if(tagName == null || tagName.length() <= 0){
+            return;
+        }
         if (tagName.equals("ITEMS_LUCKY_ROUND")) {
             getItemSideBoxLuckyRound(player, player.inventory.itemsBoxCrackBall, type, tempId);
             return;
@@ -377,8 +380,14 @@ public class ShopServiceNew {
             Service.getInstance().sendThongBao(player, "Hành trang đã đầy");
             return;
         }
-        if (!subMoneyByItemShop(player, is)) {
-            return;
+        if (shop.typeShop == ShopServiceNew.NORMAL_SHOP) {
+            if (!subMoneyByItemShop(player, is)) {
+                return;
+            }
+        } else if (shop.typeShop == ShopServiceNew.SPEC_SHOP) {
+            if (!this.subIemByItemShop(player, is)) {
+                return;
+            }
         }
         Item item = ItemService.gI().createItemFromItemShop(is);
         InventoryServiceNew.gI().addItemBag(player, item);
@@ -390,6 +399,49 @@ public class ShopServiceNew {
         //**********************************************************************
     }
 
+    private boolean subIemByItemShop(Player pl, ItemShop itemShop) {
+        boolean isBuy = false;
+        short itSpec = ItemService.gI().getItemIdByIcon((short) itemShop.iconSpec);
+        int buySpec = itemShop.cost;
+        Item itS = ItemService.gI().createNewItem(itSpec);
+        switch (itS.template.id) {
+            case 76:
+            case 188:
+            case 189:
+            case 190:
+                if (pl.inventory.gold >= buySpec) {
+                    pl.inventory.gold -= buySpec;
+                    isBuy = true;
+                } else {
+                    Service.getInstance().sendThongBao(pl, "Bạn Không Đủ Vàng Để Mua Vật Phẩm");
+                    isBuy = false;
+                }
+                break;
+            case 861:
+                if (pl.inventory.ruby >= buySpec) {
+                    pl.inventory.ruby -= buySpec;
+                    isBuy = true;
+                } else {
+                    Service.getInstance().sendThongBao(pl, "Bạn Không Đủ Hồng Ngọc Để Mua Vật Phẩm");
+                    isBuy = false;
+                }
+                break;
+            default:
+                if (InventoryServiceNew.gI().findItemBag(pl, itSpec) == null || !InventoryServiceNew.gI().findItemBag(pl, itSpec).isNotNullItem()) {
+                    Service.getInstance().sendThongBao(pl, "Không tìm thấy " + itS.template.name);
+                    isBuy = false;
+                } else if (InventoryServiceNew.gI().findItemBag(pl, itSpec).quantity < buySpec) {
+                    Service.getInstance().sendThongBao(pl, "Bạn không có đủ " + buySpec + " " + itS.template.name);
+                    isBuy = false;
+                } else {
+                    InventoryServiceNew.gI().subQuantityItemsBag(pl, InventoryServiceNew.gI().findItemBag(pl, itSpec), buySpec);
+                    isBuy = true;
+                }
+                break;
+        }
+        return isBuy;
+    }
+    
     public void showConfirmSellItem(Player pl, int where, int index) {
         if (index == 2 || index == 1) {
             return;
@@ -520,5 +572,5 @@ public class ShopServiceNew {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - Girl Béo
  */

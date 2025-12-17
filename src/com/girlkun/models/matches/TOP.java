@@ -15,4 +15,5 @@ public class TOP {
     private long sd;
     private byte nv;
     private int sk;
+    private int pvp;
 }

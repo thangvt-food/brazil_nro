@@ -12,7 +12,7 @@ import com.girlkun.utils.Logger;
 public class MabuEgg {
 
 //    private static final long DEFAULT_TIME_DONE = 7776000000L;
-    private static final long DEFAULT_TIME_DONE = 86400000L;
+    private static final long DEFAULT_TIME_DONE = 86400L;
 
     private Player player;
     public long lastTimeCreate;
@@ -62,9 +62,9 @@ public class MabuEgg {
                 destroyEgg();
                 Thread.sleep(4000);
                 if (this.player.pet == null) {
-                    PetService.gI().createMabuPet(this.player, gender);
+                    PetService.gI().createMabuPet1(this.player, gender);
                 } else {
-                    PetService.gI().changeMabuPet(this.player, gender);
+                    PetService.gI().changeMabuPet1(this.player, gender);
                 }
                 ChangeMapService.gI().changeMapInYard(this.player, this.player.gender * 7, -1, Util.nextInt(300, 500));
                 player.mabuEgg = null;

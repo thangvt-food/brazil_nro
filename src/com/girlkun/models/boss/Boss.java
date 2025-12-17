@@ -44,7 +44,9 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
 
     protected long lastTimeTargetPlayer;
     protected int timeTargetPlayer;
-    protected Player playerTarger;
+    public Player playerTarger;
+    
+    public int mapCongDuc;
 
     protected Boss parentBoss;
     public Boss[][] bossAppearTogether;
@@ -316,7 +318,7 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
 
     protected void notifyJoinMap() {
         if (this.id >= -22 && this.id <= -20) return;
-        if (MapService.gI().isMapMaBu(this.zone.map.mapId) || MapService.gI().isMapBlackBallWar(this.zone.map.mapId))
+        if (this.zone.map.mapId == 140||MapService.gI().isMapMaBu(this.zone.map.mapId) ||MapService.gI().isMapDoanhTrai(this.zone.map.mapId) || MapService.gI().isMapBlackBallWar(this.zone.map.mapId))
             return;
         ServerNotify.gI().notify("BOSS " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
     }
@@ -397,7 +399,7 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
                                     Util.nextInt(10) % 2 == 0 ? pl.location.y : pl.location.y - Util.nextInt(0, 50));
                         }
                     }
-                    SkillService.gI().useSkill(this, pl, null);
+                    SkillService.gI().useSkill(this, pl, null, null);
                     checkPlayerDie(pl);
                 } else {
                     if (Util.isTrue(1, 2)) {
@@ -485,7 +487,7 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
     //end loop
 
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (!this.isDie()) {
             if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
                 this.chat("Xí hụt");
@@ -518,7 +520,7 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
     public void moveTo(int x, int y) {
         byte dir = (byte) (this.location.x - x < 0 ? 1 : -1);
         byte move = (byte) Util.nextInt(40, 60);
-        PlayerService.gI().playerMove(this, this.location.x + (dir == 1 ? move : -move), y + (Util.isTrue(3, 10) ? -50 : 0));
+        PlayerService.gI().playerMove(this, this.location.x + (dir == 1 ? move : -move), y + (Util.isTrue(3, 100) ? -50 : 0));
     }
 
     public void chat(String text) {
@@ -593,5 +595,5 @@ public class Boss extends Player implements IBossNew, IBossOutfit {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

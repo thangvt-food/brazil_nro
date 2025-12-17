@@ -9,6 +9,7 @@ import com.girlkun.models.map.MapMaBu.MapMaBu;
 import com.girlkun.models.map.blackball.BlackBallWar;
 import com.girlkun.models.map.doanhtrai.DoanhTrai;
 import com.girlkun.models.map.doanhtrai.DoanhTraiService;
+import com.girlkun.models.map.gas.Gas;
 import com.girlkun.models.mob.Mob;
 import com.girlkun.models.npc.Npc;
 import com.girlkun.models.npc.NpcFactory;
@@ -86,6 +87,9 @@ public class Map implements Runnable {
             case ConstMap.MAP_DOANH_TRAI:
                 nZone = DoanhTrai.AVAILABLE;
                 break;
+                 case ConstMap.MAP_KHI_GAS:
+                nZone = Gas.MAX_AVAILABLE;
+                break; 
         }
 
         for (int i = 0; i < nZone; i++) {
@@ -94,6 +98,9 @@ public class Map implements Runnable {
             switch (this.type) {
                 case ConstMap.MAP_DOANH_TRAI:
                     DoanhTraiService.gI().addMapDoanhTrai(i, zone);
+                    break;
+                    case ConstMap.MAP_KHI_GAS:
+                    Gas.addZone(i, zone);
                     break;
             }
         }
@@ -171,6 +178,7 @@ public class Map implements Runnable {
                     trap.effectId = 49; //xiên
                     zone.trapMaps.add(trap);
                     break;
+               
             }
         }
     }

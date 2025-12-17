@@ -1,18 +1,11 @@
 package com.girlkun.utils;
 
-import com.girlkun.database.GirlkunDB;
-import com.girlkun.models.Template;
-import com.girlkun.models.boss.Boss;
 import com.girlkun.models.boss.BossManager;
 import com.girlkun.models.item.Item;
 import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.map.Zone;
 
 import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -24,26 +17,44 @@ import com.girlkun.network.io.Message;
 import com.girlkun.server.Client;
 import com.girlkun.server.Manager;
 import com.girlkun.services.ItemService;
+import java.text.SimpleDateFormat;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import com.girlkun.services.MapService;
-import com.girlkun.services.Service;
 import org.apache.commons.lang.ArrayUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
-import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.math.BigInteger;
 
 public class Util {
 
     private static final Random rand;
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final Locale locale = new Locale("vi", "VN");
+    private static final NumberFormat num = NumberFormat.getInstance(locale);
 
     static {
         rand = new Random();
+    }
+    public static int createIdDuongTank(int idPlayer) {
+        return -idPlayer - 100_000_000;
+    }
+    public static int createIdBossClone(int idPlayer) {
+        return -idPlayer - 100_000_000;
+    }
+    public static boolean contains(String[] arr, String key) {
+        return Arrays.toString(arr).contains(key);
+    }
+    
+       public static void setTimeout(Runnable runnable, int delay) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }).start();
     }
 
     public static String numberToMoney(long power) {
@@ -61,7 +72,7 @@ public class Util {
         }
     }
 
-    public static String powerToString(long power) {
+    public static String powerToString(double power) {
         Locale locale = new Locale("vi", "VN");
         NumberFormat num = NumberFormat.getInstance(locale);
         num.setMaximumFractionDigits(1);
@@ -76,6 +87,10 @@ public class Util {
         }
     }
 
+    public static String format(double power) {
+        return num.format(power);
+    }
+
     public static int getDistance(int x1, int y1, int x2, int y2) {
         return (int) Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
@@ -86,6 +101,29 @@ public class Util {
 
     public static int getDistance(Player pl, Npc npc) {
         return getDistance(pl.location.x, pl.location.y, npc.cx, npc.cy);
+    }
+
+    public static long Tamkjllnext(double from, double to) {
+        //Telegram: @Tamkjll
+        return (long) (from + rand.nextInt((int) (to - from + 1)));
+    }
+
+    public static int TamkjllGH(double a) {
+        //Telegram: @Tamkjll
+        if (a > 2123456789) {
+            a = 2123456789;
+        }
+        return (int) a;
+    }
+
+    public static String toDateString(Date date) {
+        //Telegram: @Tamkjll
+        try {
+            String a = Util.dateFormat.format(date);
+            return a;
+        } catch (Exception e) {
+            return "2021-01-01 01:01:00";
+        }
     }
 
     public static int getDistance(Player pl, Mob mob) {
@@ -159,28 +197,28 @@ public class Util {
     }
 
     private static final char[] SOURCE_CHARACTERS = {'À', 'Á', 'Â', 'Ã', 'È', 'É',
-            'Ê', 'Ì', 'Í', 'Ò', 'Ó', 'Ô', 'Õ', 'Ù', 'Ú', 'Ý', 'à', 'á', 'â',
-            'ã', 'è', 'é', 'ê', 'ì', 'í', 'ò', 'ó', 'ô', 'õ', 'ù', 'ú', 'ý',
-            'Ă', 'ă', 'Đ', 'đ', 'Ĩ', 'ĩ', 'Ũ', 'ũ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ạ',
-            'ạ', 'Ả', 'ả', 'Ấ', 'ấ', 'Ầ', 'ầ', 'Ẩ', 'ẩ', 'Ẫ', 'ẫ', 'Ậ', 'ậ',
-            'Ắ', 'ắ', 'Ằ', 'ằ', 'Ẳ', 'ẳ', 'Ẵ', 'ẵ', 'Ặ', 'ặ', 'Ẹ', 'ẹ', 'Ẻ',
-            'ẻ', 'Ẽ', 'ẽ', 'Ế', 'ế', 'Ề', 'ề', 'Ể', 'ể', 'Ễ', 'ễ', 'Ệ', 'ệ',
-            'Ỉ', 'ỉ', 'Ị', 'ị', 'Ọ', 'ọ', 'Ỏ', 'ỏ', 'Ố', 'ố', 'Ồ', 'ồ', 'Ổ',
-            'ổ', 'Ỗ', 'ỗ', 'Ộ', 'ộ', 'Ớ', 'ớ', 'Ờ', 'ờ', 'Ở', 'ở', 'Ỡ', 'ỡ',
-            'Ợ', 'ợ', 'Ụ', 'ụ', 'Ủ', 'ủ', 'Ứ', 'ứ', 'Ừ', 'ừ', 'Ử', 'ử', 'Ữ',
-            'ữ', 'Ự', 'ự',};
+        'Ê', 'Ì', 'Í', 'Ò', 'Ó', 'Ô', 'Õ', 'Ù', 'Ú', 'Ý', 'à', 'á', 'â',
+        'ã', 'è', 'é', 'ê', 'ì', 'í', 'ò', 'ó', 'ô', 'õ', 'ù', 'ú', 'ý',
+        'Ă', 'ă', 'Đ', 'đ', 'Ĩ', 'ĩ', 'Ũ', 'ũ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ạ',
+        'ạ', 'Ả', 'ả', 'Ấ', 'ấ', 'Ầ', 'ầ', 'Ẩ', 'ẩ', 'Ẫ', 'ẫ', 'Ậ', 'ậ',
+        'Ắ', 'ắ', 'Ằ', 'ằ', 'Ẳ', 'ẳ', 'Ẵ', 'ẵ', 'Ặ', 'ặ', 'Ẹ', 'ẹ', 'Ẻ',
+        'ẻ', 'Ẽ', 'ẽ', 'Ế', 'ế', 'Ề', 'ề', 'Ể', 'ể', 'Ễ', 'ễ', 'Ệ', 'ệ',
+        'Ỉ', 'ỉ', 'Ị', 'ị', 'Ọ', 'ọ', 'Ỏ', 'ỏ', 'Ố', 'ố', 'Ồ', 'ồ', 'Ổ',
+        'ổ', 'Ỗ', 'ỗ', 'Ộ', 'ộ', 'Ớ', 'ớ', 'Ờ', 'ờ', 'Ở', 'ở', 'Ỡ', 'ỡ',
+        'Ợ', 'ợ', 'Ụ', 'ụ', 'Ủ', 'ủ', 'Ứ', 'ứ', 'Ừ', 'ừ', 'Ử', 'ử', 'Ữ',
+        'ữ', 'Ự', 'ự',};
 
     private static final char[] DESTINATION_CHARACTERS = {'A', 'A', 'A', 'A', 'E',
-            'E', 'E', 'I', 'I', 'O', 'O', 'O', 'O', 'U', 'U', 'Y', 'a', 'a',
-            'a', 'a', 'e', 'e', 'e', 'i', 'i', 'o', 'o', 'o', 'o', 'u', 'u',
-            'y', 'A', 'a', 'D', 'd', 'I', 'i', 'U', 'u', 'O', 'o', 'U', 'u',
-            'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A',
-            'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'E', 'e',
-            'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E',
-            'e', 'I', 'i', 'I', 'i', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o',
-            'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O',
-            'o', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u',
-            'U', 'u', 'U', 'u',};
+        'E', 'E', 'I', 'I', 'O', 'O', 'O', 'O', 'U', 'U', 'Y', 'a', 'a',
+        'a', 'a', 'e', 'e', 'e', 'i', 'i', 'o', 'o', 'o', 'o', 'u', 'u',
+        'y', 'A', 'a', 'D', 'd', 'I', 'i', 'U', 'u', 'O', 'o', 'U', 'u',
+        'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A',
+        'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'A', 'a', 'E', 'e',
+        'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E',
+        'e', 'I', 'i', 'I', 'i', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o',
+        'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O',
+        'o', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u',
+        'U', 'u', 'U', 'u',};
 
     public static char removeAccent(char ch) {
         int index = Arrays.binarySearch(SOURCE_CHARACTERS, ch);
@@ -234,44 +272,43 @@ public class Util {
         List<Integer> gang = Arrays.asList(562, 564, 566);
         List<Integer> giay = Arrays.asList(563, 565, 567);
         int ntl = 561;
-            if (ao.contains(tempId)) {
-                it.options.add(new Item.ItemOption(47, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(501) + 1300)));
-            }
-            if (quan.contains(tempId)) {
-                it.options.add(new Item.ItemOption(22, highlightsItem(it.itemTemplate.gender == 0, new Random().nextInt(11) + 45)));
-            }
-            if (gang.contains(tempId)) {
-                it.options.add(new Item.ItemOption(0, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(1001) + 3500)));
-            }
-            if (giay.contains(tempId)) {
-                it.options.add(new Item.ItemOption(23, highlightsItem(it.itemTemplate.gender == 1, new Random().nextInt(11) + 35)));
-            }
-            if (ntl == tempId) {
-                it.options.add(new Item.ItemOption(14, new Random().nextInt(2) + 15));
-            }
-            it.options.add(new Item.ItemOption(209, 1)); // đồ rơi từ boss
+        if (ao.contains(tempId)) {
+            it.options.add(new Item.ItemOption(47, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(501) + 1300)));
+        }
+        if (quan.contains(tempId)) {
+            it.options.add(new Item.ItemOption(22, highlightsItem(it.itemTemplate.gender == 0, new Random().nextInt(11) + 45)));
+        }
+        if (gang.contains(tempId)) {
+            it.options.add(new Item.ItemOption(0, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(1001) + 3500)));
+        }
+        if (giay.contains(tempId)) {
+            it.options.add(new Item.ItemOption(23, highlightsItem(it.itemTemplate.gender == 1, new Random().nextInt(11) + 35)));
+        }
+        if (ntl == tempId) {
+            it.options.add(new Item.ItemOption(14, new Random().nextInt(2) + 15));
+        }
+        it.options.add(new Item.ItemOption(209, 1)); // đồ rơi từ boss
         it.options.add(new Item.ItemOption(21, 18)); // ycsm 18 tỉ
         it.options.add(new Item.ItemOption(30, 1)); // ko thể gd
         if (Util.isTrue(90, 100)) {// tỉ lệ ra spl
             it.options.add(new Item.ItemOption(107, new Random().nextInt(3) + 1));
-        }else  if (Util.isTrue(4, 100)) {
+        } else if (Util.isTrue(4, 100)) {
             it.options.add(new Item.ItemOption(107, new Random().nextInt(3) + 5));
-        }else {
+        } else {
             it.options.add(new Item.ItemOption(107, new Random().nextInt(5) + 1));
         }
         return it;
     }
 
-
     public static ItemMap RaitiDoc12(Zone zone, int tempId, int quantity, int x, int y, long playerId) {
-        ItemMap it = new ItemMap(zone, tempId, quantity, x,y, playerId);
+        ItemMap it = new ItemMap(zone, tempId, quantity, x, y, playerId);
         List<Integer> ao = Arrays.asList(233, 237, 241);
         List<Integer> quan = Arrays.asList(245, 249, 253);
         List<Integer> gang = Arrays.asList(257, 261, 265);
         List<Integer> giay = Arrays.asList(269, 273, 277);
         int rd12 = 281;
         if (ao.contains(tempId)) {
-            it.options.add(new Item.ItemOption(47, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(121) +350)));//giáp 350-470
+            it.options.add(new Item.ItemOption(47, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(121) + 350)));//giáp 350-470
         }
         if (quan.contains(tempId)) {
             it.options.add(new Item.ItemOption(22, highlightsItem(it.itemTemplate.gender == 0, new Random().nextInt(5) + 20)));//hp 20-24k
@@ -286,20 +323,18 @@ public class Util {
             it.options.add(new Item.ItemOption(14, new Random().nextInt(3) + 10));//10-12cm
         }
         it.options.add(new Item.ItemOption(209, 1));//đồ rơi từ boss
-        if (Util.isTrue(90, 100)) {// tỉ lệ ra spl 1-3 sao 90%
+        if (Util.isTrue(70, 100)) {// tỉ lệ ra spl 1-3 sao 70%
             it.options.add(new Item.ItemOption(107, new Random().nextInt(1) + 3));
-        }else  if (Util.isTrue(4, 100)) {// tỉ lệ ra spl 5-7 sao 4%
+        } else if (Util.isTrue(4, 100)) {// tỉ lệ ra spl 5-7 sao 4%
             it.options.add(new Item.ItemOption(107, new Random().nextInt(3) + 5));
-        }else {// tỉ lệ ra spl 1-5 sao 6%
+        } else {// tỉ lệ ra spl 1-5 sao 6%
             it.options.add(new Item.ItemOption(107, new Random().nextInt(2) + 3));
         }
         return it;
     }
 
-
-
     public static Item ratiItemTL(int tempId) {
-        Item it = ItemService.gI().createItemSetKichHoat(tempId,1);
+        Item it = ItemService.gI().createItemSetKichHoat(tempId, 1);
         List<Integer> ao = Arrays.asList(555, 557, 559);
         List<Integer> quan = Arrays.asList(556, 558, 560);
         List<Integer> gang = Arrays.asList(562, 564, 566);
@@ -323,7 +358,6 @@ public class Util {
         it.itemOptions.add(new Item.ItemOption(21, 15));
         return it;
     }
-
 
     public static ItemMap ratiItem(Zone zone, int tempId, int quantity, int x, int y, long playerId) {
         ItemMap it = new ItemMap(zone, tempId, quantity, x, y, playerId);
@@ -352,6 +386,32 @@ public class Util {
         return it;
     }
 
+    public static ItemMap ratiItem1(Zone zone, int tempId, int quantity, int x, int y, long playerId) {
+        ItemMap it = new ItemMap(zone, tempId, quantity, x, y, playerId);
+        List<Integer> ao = Arrays.asList(555, 557, 559);
+        List<Integer> quan = Arrays.asList(556, 558, 560);
+        List<Integer> gang = Arrays.asList(562, 564, 566);
+        List<Integer> giay = Arrays.asList(563, 565, 567);
+        int ntl = 561;
+        if (ao.contains(tempId)) {
+            it.options.add(new Item.ItemOption(47, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(501) + 1000)));
+        }
+        if (quan.contains(tempId)) {
+            it.options.add(new Item.ItemOption(22, highlightsItem(it.itemTemplate.gender == 0, new Random().nextInt(11) + 45)));
+        }
+        if (gang.contains(tempId)) {
+            it.options.add(new Item.ItemOption(0, highlightsItem(it.itemTemplate.gender == 2, new Random().nextInt(1001) + 3500)));
+        }
+        if (giay.contains(tempId)) {
+            it.options.add(new Item.ItemOption(23, highlightsItem(it.itemTemplate.gender == 1, new Random().nextInt(11) + 35)));
+        }
+        if (ntl == tempId) {
+            it.options.add(new Item.ItemOption(14, new Random().nextInt(3) + 15));
+        }
+        it.options.add(new Item.ItemOption(21, 15));
+        return it;
+    }
+
     public static int highlightsItem(boolean highlights, int value) {
         double highlightsNumber = 1.1;
         return highlights ? (int) (value * highlightsNumber) : value;
@@ -369,14 +429,20 @@ public class Util {
     public static boolean checkDo(Item.ItemOption itemOption) {
         switch (itemOption.optionTemplate.id) {
             case 0:// tấn công
-                if (itemOption.param > 12000) return false;
+                if (itemOption.param > 12000) {
+                    return false;
+                }
                 break;
             case 14:// chí mạng
-                if (itemOption.param > 30) return false;
+                if (itemOption.param > 30) {
+                    return false;
+                }
                 break;
             case 107:// spl
             case 102:// spl
-                if (itemOption.param > 8) return false;
+                if (itemOption.param > 16) {
+                    return false;
+                }
                 break;
             case 77:
             case 103:
@@ -387,14 +453,20 @@ public class Util {
                 }
                 break;
             case 50:// sd 3%
-                if (itemOption.param > 24) return false;
+                if (itemOption.param > 24) {
+                    return false;
+                }
                 break;
             case 6:// hp
             case 7:// ki
-                if (itemOption.param > 120000) return false;
+                if (itemOption.param > 120000) {
+                    return false;
+                }
                 break;
             case 47:// giáp
-                if (itemOption.param > 3500) return false;
+                if (itemOption.param > 3500) {
+                    return false;
+                }
                 break;
         }
         return true;
@@ -403,9 +475,15 @@ public class Util {
     public static void useCheckDo(Player player, Item item, String position) {
         try {
             if (item.template != null) {
-                if (item.template.id >= 381 && item.template.id <= 385) return;
-                if (item.template.id >= 66 && item.template.id <= 135) return;
-                if (item.template.id >= 474 && item.template.id <= 515) return;
+                if (item.template.id >= 381 && item.template.id <= 385) {
+                    return;
+                }
+                if (item.template.id >= 66 && item.template.id <= 135) {
+                    return;
+                }
+                if (item.template.id >= 474 && item.template.id <= 515) {
+                    return;
+                }
                 item.itemOptions.forEach(itemOption -> {
                     if (!Util.checkDo(itemOption)) {
                         Logger.error(player.name + "-" + item.template.name + "-" + position + "\n");
@@ -417,16 +495,19 @@ public class Util {
         }
     }
 
-    public static String md5(String pass) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(pass.getBytes());
-            byte[] digest = md.digest();
-            return DatatypeConverter.printHexBinary(digest).toUpperCase();
-        } catch (Exception e) {
-            Logger.error("Lỗi mã hóa password");
-        }
-        return "";
+   public static String md5(String input) {
+       try {
+           MessageDigest md = MessageDigest.getInstance("MD5");
+           byte[] messageDigest = md.digest(input.getBytes());
+           BigInteger no = new BigInteger(1, messageDigest);
+           String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+               hashtext = "0" + hashtext;
+            }
+           return hashtext;
+       } catch (Exception e) {
+       }
+       return "";
     }
 
     public static void showListTop(Player player, byte select) {
@@ -440,6 +521,9 @@ public class Util {
                 break;
             case 2:
                 tops = Manager.topSK;
+                break;
+            case 3:
+                tops = Manager.topPVP;
                 break;
         }
         Message msg;
@@ -464,6 +548,10 @@ public class Util {
                     case 1:
                         msg.writer().writeUTF(top.getNv() + "");
                         msg.writer().writeUTF(top.getNv() + "");
+                        break;
+                    case 3:
+                        msg.writer().writeUTF(top.getPvp() + " điểm");
+                        msg.writer().writeUTF(top.getPvp() + " điểm");
                         break;
                     default:
                         msg.writer().writeUTF(top.getSk() + " điểm");
@@ -543,11 +631,22 @@ public class Util {
 
     public static void checkPlayer(Player player) {
         new Thread(() -> {
-            List<Player> list = Client.gI().getPlayers().stream().filter(p -> !p.isPet && p.getSession().userId == player.getSession().userId).collect(Collectors.toList());
+            List<Player> list = Client.gI().getPlayers().stream().filter(p -> !p.isPet && !p.isNewPet && p.getSession().userId == player.getSession().userId).collect(Collectors.toList());
             if (list.size() > 1) {
                 list.forEach(pp -> Client.gI().kickSession(pp.getSession()));
                 list.clear();
             }
         }).start();
+    }
+    public static int[] pickNRandInArr(int[] array, int n) {
+        List<Integer> list = new ArrayList<Integer>(array.length);
+        for (int i : array)
+            list.add(i);
+        Collections.shuffle(list);
+        int[] answer = new int[n];
+        for (int i = 0; i < n; i++)
+            answer[i] = list.get(i);
+        Arrays.sort(answer);
+        return answer;
     }
 }

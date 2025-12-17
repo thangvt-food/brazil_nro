@@ -15,7 +15,6 @@ import com.girlkun.services.SkillService;
 import com.girlkun.services.func.ChangeMapService;
 import com.girlkun.utils.TimeUtil;
 
-
 public class Pet extends Player {
 
     private static final short ARANGE_CAN_ATTACK = 300;
@@ -107,6 +106,49 @@ public class Pet extends Player {
                 return "Ok con về, bibi sư phụ";
             default:
                 return "";
+        }
+    }
+    
+      public void fusion2(boolean porata) {
+        if (this.isDie()) {
+            Service.getInstance().sendThongBao(master, "Không thể thực hiện");
+            return;
+        }
+        if (Util.canDoWithTime(lastTimeUnfusion, TIME_WAIT_AFTER_UNFUSION)) {
+            if (porata) {
+                master.fusion.typeFusion = ConstPlayer.HOP_THE_PORATA2;
+            }
+            this.status = FUSION;
+            ChangeMapService.gI().exitMap(this);
+            fusionEffect(master.fusion.typeFusion);
+            Service.getInstance().Send_Caitrang(master);
+            master.nPoint.calPoint();
+            master.nPoint.setFullHpMp();
+            Service.getInstance().point(master);
+        } else {
+            Service.getInstance().sendThongBao(this.master, "Vui lòng đợi "
+                    + TimeUtil.getTimeLeft(lastTimeUnfusion, TIME_WAIT_AFTER_UNFUSION / 1000) + " nữa");
+        }
+    }
+      public void fusion3(boolean porata) {
+        if (this.isDie()) {
+            Service.getInstance().sendThongBao(master, "Không thể thực hiện");
+            return;
+        }
+        if (Util.canDoWithTime(lastTimeUnfusion, TIME_WAIT_AFTER_UNFUSION)) {
+            if (porata) {
+                master.fusion.typeFusion = ConstPlayer.HOP_THE_PORATA3;
+            }
+            this.status = FUSION;
+            ChangeMapService.gI().exitMap(this);
+            fusionEffect(master.fusion.typeFusion);
+            Service.getInstance().Send_Caitrang(master);
+            master.nPoint.calPoint();
+            master.nPoint.setFullHpMp();
+            Service.getInstance().point(master);
+        } else {
+            Service.getInstance().sendThongBao(this.master, "Vui lòng đợi "
+                    + TimeUtil.getTimeLeft(lastTimeUnfusion, TIME_WAIT_AFTER_UNFUSION / 1000) + " nữa");
         }
     }
 
@@ -209,10 +251,10 @@ public class Pet extends Player {
             moveIdle();
             switch (status) {
                 case FOLLOW:
-//                    followMaster(60);
+                    followMaster(60);
                     break;
                 case PROTECT:
-                    if (useSkill3() || useSkill4()) {
+                    if (useSkill3() || useSkill4()) { //|| useSkill5()) {
                         break;
                     }
                     mobAttack = findMobAttack();
@@ -224,7 +266,7 @@ public class Pet extends Player {
                             if (SkillService.gI().canUseSkillWithCooldown(this)) {
                                 if (SkillService.gI().canUseSkillWithMana(this)) {
                                     PlayerService.gI().playerMove(this, mobAttack.location.x + Util.nextInt(-60, 60), mobAttack.location.y);
-                                    SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                                    SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                                 } else {
                                     askPea();
                                 }
@@ -235,7 +277,7 @@ public class Pet extends Player {
                             if (this.playerSkill.skillSelect.skillId != -1) {
                                 if (SkillService.gI().canUseSkillWithCooldown(this)) {
                                     if (SkillService.gI().canUseSkillWithMana(this)) {
-                                        SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                                        SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                                     } else {
                                         askPea();
                                     }
@@ -249,7 +291,7 @@ public class Pet extends Player {
 
                     break;
                 case ATTACK:
-                    if (useSkill3() || useSkill4()) {
+                    if (useSkill3() || useSkill4() ) { //|| useSkill5()) {
                         break;
                     }
                     mobAttack = findMobAttack();
@@ -260,7 +302,7 @@ public class Pet extends Player {
                             if (SkillService.gI().canUseSkillWithCooldown(this)) {
                                 if (SkillService.gI().canUseSkillWithMana(this)) {
                                     PlayerService.gI().playerMove(this, mobAttack.location.x + Util.nextInt(-20, 20), mobAttack.location.y);
-                                    SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                                    SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                                 } else {
                                     askPea();
                                 }
@@ -269,14 +311,14 @@ public class Pet extends Player {
                             this.playerSkill.skillSelect = getSkill(2);
                             if (this.playerSkill.skillSelect.skillId != -1) {
                                 if (SkillService.gI().canUseSkillWithMana(this)) {
-                                    SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                                    SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                                 }
                             } else {
                                 this.playerSkill.skillSelect = getSkill(1);
                                 if (SkillService.gI().canUseSkillWithCooldown(this)) {
                                     if (SkillService.gI().canUseSkillWithMana(this)) {
                                         PlayerService.gI().playerMove(this, mobAttack.location.x + Util.nextInt(-20, 20), mobAttack.location.y);
-                                        SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                                        SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                                     } else {
                                         askPea();
                                     }
@@ -351,7 +393,7 @@ public class Pet extends Player {
             switch (this.playerSkill.skillSelect.template.id) {
                 case Skill.THAI_DUONG_HA_SAN:
                     if (SkillService.gI().canUseSkillWithCooldown(this) && SkillService.gI().canUseSkillWithMana(this)) {
-                        SkillService.gI().useSkill(this, null, null);
+                        SkillService.gI().useSkill(this, null, null,null);
                         Service.getInstance().chatJustForMe(master, this, "Bất ngờ chưa ông già");
                         return true;
                     }
@@ -363,7 +405,7 @@ public class Pet extends Player {
                     }
                     if (SkillService.gI().canUseSkillWithCooldown(this) && SkillService.gI().canUseSkillWithMana(this)
                             && (this.nPoint.getCurrPercentHP() <= 20 || this.nPoint.getCurrPercentMP() <= 20)) {
-                        SkillService.gI().useSkill(this, null, null);
+                        SkillService.gI().useSkill(this, null, null,null);
                         this.countTTNL = 0;
                         return true;
                     }
@@ -382,7 +424,7 @@ public class Pet extends Player {
                                 PlayerService.gI().playerMove(this, mobAttack.location.x + Util.nextInt(-20, 20), mobAttack.location.y);
                             }
                         }
-                        SkillService.gI().useSkill(this, playerAttack, mobAttack);
+                        SkillService.gI().useSkill(this, playerAttack, mobAttack,null);
                         getSkill(1).lastTimeUseThisSkill = System.currentTimeMillis();
                         return true;
                     }
@@ -404,19 +446,19 @@ public class Pet extends Player {
             switch (this.playerSkill.skillSelect.template.id) {
                 case Skill.BIEN_KHI:
                     if (!this.effectSkill.isMonkey && SkillService.gI().canUseSkillWithCooldown(this) && SkillService.gI().canUseSkillWithMana(this)) {
-                        SkillService.gI().useSkill(this, null, null);
+                        SkillService.gI().useSkill(this, null, null,null);
                         return true;
                     }
                     return false;
                 case Skill.KHIEN_NANG_LUONG:
                     if (!this.effectSkill.isShielding && SkillService.gI().canUseSkillWithCooldown(this) && SkillService.gI().canUseSkillWithMana(this)) {
-                        SkillService.gI().useSkill(this, null, null);
+                        SkillService.gI().useSkill(this, null, null,null);
                         return true;
                     }
                     return false;
                 case Skill.DE_TRUNG:
                     if (this.mobMe == null && SkillService.gI().canUseSkillWithCooldown(this) && SkillService.gI().canUseSkillWithMana(this)) {
-                        SkillService.gI().useSkill(this, null, null);
+                        SkillService.gI().useSkill(this, null, null,null);
                         return true;
                     }
                     return false;
@@ -461,7 +503,7 @@ public class Pet extends Player {
 //            return false;
 //        }
 //    }
-//    
+
     //====================================================
     private long lastTimeIncreasePoint;
 
@@ -511,8 +553,74 @@ public class Pet extends Player {
 
     public short getAvatar() {
         if (this.typePet == 1) {
-            return 297;
-        } else {
+            return 297; // Ma Bư
+        } else if (this.typePet == 2) {
+            return 879; // Black Gohan Rose
+        } else if (this.typePet == 3) {
+            return 1318; // Supper Broly
+        } else if (this.typePet == 3) {
+            return 946;
+            }else if (this.typePet == 4) {
+            return 264 ; // Xên Con
+            } else if (this.typePet == 5) {
+            return 790 ; // Đôremon
+            } else if (this.typePet == 6) {
+            return 802 ; // XuKa
+            } else if (this.typePet == 7) {
+            return 850 ; // Xêko
+            } else if (this.typePet == 8) {
+            return 847 ; //Chaien
+            } else if (this.typePet == 9) {
+            return 844 ; // Nobita 
+            } else if (this.typePet == 10) {
+            return 1270 ; // Captain America
+            } else if (this.typePet == 11) {
+            return 1276 ; // Thần Thor
+            } else if (this.typePet == 12) {
+            return 1273 ; //Spider Man
+            } else if (this.typePet == 13) {
+            return 1279 ; // Thanos
+            } else if (this.typePet == 14) {
+            return 1282 ; // Dr.Strange
+            } else if (this.typePet == 15) {
+            return 1288 ; // Gohan SSJ5
+            } else if (this.typePet == 16) {
+            return 2030 ; // Kamioren
+            } else if (this.typePet == 17) {
+            return 1312 ; // Super Zamasu White
+            } else if (this.typePet == 18) {
+            return 1315 ; // Hearts Gold
+            } else if (this.typePet == 19) {
+            return 2024 ; // Cumber
+            } else if (this.typePet == 20) {
+            return 2027 ; //Super Cumber
+            } else if (this.typePet == 21) {
+            return 1213 ; // Zeno
+            } else if (this.typePet == 22) {
+            return 1216 ; // Thần Zeno 1
+            } else if (this.typePet == 23) {
+            return 1219 ; //Thần Zeno 2
+            } else if (this.typePet == 24) {
+            return 1222 ; // Germa 1
+            } else if (this.typePet == 25) {
+            return 1225 ; // Germa 2
+            } else if (this.typePet == 26) {
+            return 1228 ; //Thần Zeno 3
+            } else if (this.typePet == 27) {
+            return 1231 ; // Goku Vô Cực
+            } else if (this.typePet == 28) {
+            return 1234 ; //Jiren
+            } else if (this.typePet == 29) {
+            return 1258 ; //Gojo
+            } else if (this.typePet == 30) {
+            return 903; // Zamasu
+            } else if (this.typePet == 31) {
+            return 508 ; // Bill
+            } else if (this.typePet == 32) {
+            return 838 ; //  Whis
+            } else if (this.typePet == 33) {
+            return 1324 ; // Baby Vegeta
+        }else {
             return PET_ID[3][this.gender];
         }
     }
@@ -525,6 +633,70 @@ public class Pet extends Player {
             return 412;
         } else if (this.typePet == 1) {
             return 297;
+        } else if (this.typePet == 2) {
+            return 879;
+        }else if (this.typePet == 3) {
+            return 1318;
+        }else if (this.typePet == 4) {
+            return 264 ;
+            } else if (this.typePet == 5) {
+            return 790 ;
+            } else if (this.typePet == 6) {
+            return 802 ;
+            } else if (this.typePet == 7) {
+            return 850 ;
+            } else if (this.typePet == 8) {
+            return 847 ;
+            } else if (this.typePet == 9) {
+            return 844 ;
+            } else if (this.typePet == 10) {
+            return 1270 ;
+            } else if (this.typePet == 11) {
+            return 1276 ;
+            } else if (this.typePet == 12) {
+            return 1273 ;
+            } else if (this.typePet == 13) {
+            return 1279 ;
+            } else if (this.typePet == 14) {
+            return 1282 ;
+            } else if (this.typePet == 15) {
+            return 1288 ;
+            } else if (this.typePet == 16) {
+            return 2030 ;
+            } else if (this.typePet == 17) {
+            return 1312 ;
+            } else if (this.typePet == 18) {
+            return 1315 ;
+            } else if (this.typePet == 19) {
+            return 2024 ;
+            } else if (this.typePet == 20) {
+            return 2027 ;
+            } else if (this.typePet == 21) {
+            return 1213 ;
+            } else if (this.typePet == 22) {
+            return 1216 ;
+            } else if (this.typePet == 23) {
+            return 1219 ;
+            } else if (this.typePet == 24) {
+            return 1222 ;
+            } else if (this.typePet == 25) {
+            return 1222 ;
+            } else if (this.typePet == 26) {
+            return 1228 ;
+            } else if (this.typePet == 27) {
+            return 1231 ;
+            } else if (this.typePet == 28) {
+            return 1234 ;
+            } else if (this.typePet == 29) {
+            return 1258 ;
+            } else if (this.typePet == 30) {
+            return 903;
+            } else if (this.typePet == 31) {
+            return 508 ;
+            } else if (this.typePet == 32) {
+            return 838 ;
+            } else if (this.typePet == 33) {
+            return 1324 ;
         } else if (inventory.itemsBody.get(5).isNotNullItem()) {
             int part = inventory.itemsBody.get(5).template.head;
             if (part != -1) {
@@ -546,6 +718,71 @@ public class Pet extends Player {
             return 413;
         } else if (this.typePet == 1 && !this.isTransform) {
             return 298;
+        } else if (this.typePet == 2 && !this.isTransform) {
+            return 880;
+        }else if (this.typePet == 3 && !this.isTransform) {
+            return 1319;
+        } else if (this.typePet == 4 && !this.isTransform) {
+            return 265 ;
+            } else if (this.typePet == 5 && !this.isTransform) {
+            return 791 ;
+            } else if (this.typePet == 6&& !this.isTransform) {
+            return 803 ;
+            } else if (this.typePet == 7&& !this.isTransform) {
+            return 851  ;
+            } else if (this.typePet == 8&& !this.isTransform) {
+            return 848 ;
+            } else if (this.typePet == 9&& !this.isTransform) {
+            return 845 ;
+            } else if (this.typePet == 10&& !this.isTransform) {
+            return 1271 ;
+            } else if (this.typePet == 11&& !this.isTransform) {
+            return 1277 ;
+            } else if (this.typePet == 12&& !this.isTransform) {
+            return 1274 ;
+            } else if (this.typePet == 13&& !this.isTransform) {
+            return 1280 ;
+            } else if (this.typePet == 14&& !this.isTransform) {
+            return 1283 ;
+            } else if (this.typePet == 15&& !this.isTransform) {
+            return 1289 ;
+            } else if (this.typePet == 16&& !this.isTransform) {
+            return 2031 ;
+            } else if (this.typePet == 17&& !this.isTransform) {
+            return 1313 ;
+            } else if (this.typePet == 18&& !this.isTransform) {
+            return 1316 ;
+            } else if (this.typePet == 19&& !this.isTransform) {
+            return 2025 ;
+            } else if (this.typePet == 20&& !this.isTransform) {
+            return 2028 ;
+            } else if (this.typePet == 21&& !this.isTransform) {
+            return 1214 ;
+            } else if (this.typePet == 22&& !this.isTransform) {
+            return 1217 ;
+            } else if (this.typePet == 23&& !this.isTransform) {
+            return 1220 ;
+            } else if (this.typePet == 24&& !this.isTransform) {
+            return 1223 ;
+            } else if (this.typePet == 25&& !this.isTransform) {
+            return 1223 ;
+            } else if (this.typePet == 26&& !this.isTransform) {
+            return 1229 ;
+            } else if (this.typePet == 27&& !this.isTransform) {
+            return 1232 ;
+            } else if (this.typePet == 28&& !this.isTransform) {
+            return 1235 ;
+            } else if (this.typePet == 29&& !this.isTransform) {
+            return 1259 ;
+            } else if (this.typePet == 30&& !this.isTransform) {
+            return 904 ;
+            } else if (this.typePet == 31&& !this.isTransform) {
+            return 509  ;
+            } else if (this.typePet == 32&& !this.isTransform) {
+            return 839  ;
+            } else if (this.typePet == 33&& !this.isTransform) {
+            return 1325  ;
+            
         } else if (inventory.itemsBody.get(5).isNotNullItem()) {
             int body = inventory.itemsBody.get(5).template.body;
             if (body != -1) {
@@ -570,6 +807,70 @@ public class Pet extends Player {
             return 414;
         } else if (this.typePet == 1 && !this.isTransform) {
             return 299;
+        } else if (this.typePet == 2 && !this.isTransform) {
+            return 881;
+        }else if (this.typePet == 3 && !this.isTransform) {
+            return 1320;
+        } else if (this.typePet == 4 && !this.isTransform) {
+            return 266;
+            } else if (this.typePet == 5 && !this.isTransform) {
+            return 792;
+            } else if (this.typePet == 6&& !this.isTransform) {
+            return 804;
+            } else if (this.typePet == 7&& !this.isTransform) {
+            return 852;
+            } else if (this.typePet == 8&& !this.isTransform) {
+            return 849;
+            } else if (this.typePet == 9&& !this.isTransform) {
+            return 846;
+            } else if (this.typePet == 10&& !this.isTransform) {
+            return 1272;
+            } else if (this.typePet == 11&& !this.isTransform) {
+            return 1278;
+            } else if (this.typePet == 12&& !this.isTransform) {
+            return 1275;
+            } else if (this.typePet == 13&& !this.isTransform) {
+            return 1281;
+            } else if (this.typePet == 14&& !this.isTransform) {
+            return 1284;
+            } else if (this.typePet == 15&& !this.isTransform) {
+            return 1290;
+            } else if (this.typePet == 16&& !this.isTransform) {
+            return 2032;
+            } else if (this.typePet == 17&& !this.isTransform) {
+            return 1314;
+            } else if (this.typePet == 18&& !this.isTransform) {
+            return 1317;
+            } else if (this.typePet == 19&& !this.isTransform) {
+            return 2026;
+            } else if (this.typePet == 20&& !this.isTransform) {
+            return 2029;
+            } else if (this.typePet == 21&& !this.isTransform) {
+            return 1215;
+            } else if (this.typePet == 22&& !this.isTransform) {
+            return 1218;
+            } else if (this.typePet == 23&& !this.isTransform) {
+            return 1221;
+            } else if (this.typePet == 24&& !this.isTransform) {
+            return 1224;
+            } else if (this.typePet == 25&& !this.isTransform) {
+            return 1224;
+            } else if (this.typePet == 26&& !this.isTransform) {
+            return 1230;
+            } else if (this.typePet == 27&& !this.isTransform) {
+            return 1233;
+            } else if (this.typePet == 28&& !this.isTransform) {
+            return 1236;
+            } else if (this.typePet == 29&& !this.isTransform) {
+            return 1260;
+            } else if (this.typePet == 30&& !this.isTransform) {
+            return 905;
+            } else if (this.typePet == 31&& !this.isTransform) {
+            return 510;
+            } else if (this.typePet == 32&& !this.isTransform) {
+            return 840 ;
+            } else if (this.typePet == 33&& !this.isTransform) {
+            return 1326;
         } else if (inventory.itemsBody.get(5).isNotNullItem()) {
             int leg = inventory.itemsBody.get(5).template.leg;
             if (leg != -1) {
@@ -621,10 +922,13 @@ public class Pet extends Player {
                     if (this.nPoint.power >= 20000000000L) {
                         openSkill4();
                     }
-
                     break;
                 //case 4:
-
+//                case 4:
+//                    if (this.nPoint.power >= 60000000000L) {
+//                        openSkill5();
+//                    }
+//                    break;
             }
         }
     }
@@ -637,11 +941,11 @@ public class Pet extends Player {
 
         int rd = Util.nextInt(1, 100);
         if (rd <= tiLeKame) {
-            skill = SkillUtil.createSkill(Skill.KAMEJOKO, 7);
+            skill = SkillUtil.createSkill(Skill.KAMEJOKO, 1);
         } else if (rd <= tiLeKame + tiLeMasenko) {
-            skill = SkillUtil.createSkill(Skill.MASENKO, 7);
+            skill = SkillUtil.createSkill(Skill.MASENKO, 1);
         } else if (rd <= tiLeKame + tiLeMasenko + tiLeAntomic) {
-            skill = SkillUtil.createSkill(Skill.ANTOMIC, 7);
+            skill = SkillUtil.createSkill(Skill.ANTOMIC, 1);
         }
         skill.coolDown = 1000;
         this.playerSkill.skills.set(1, skill);
@@ -655,11 +959,11 @@ public class Pet extends Player {
 
         int rd = Util.nextInt(1, 100);
         if (rd <= tiLeTDHS) {
-            skill = SkillUtil.createSkill(Skill.THAI_DUONG_HA_SAN, 7);
+            skill = SkillUtil.createSkill(Skill.THAI_DUONG_HA_SAN, 1);
         } else if (rd <= tiLeTDHS + tiLeTTNL) {
-            skill = SkillUtil.createSkill(Skill.TAI_TAO_NANG_LUONG, 7);
+            skill = SkillUtil.createSkill(Skill.TAI_TAO_NANG_LUONG, 1);
         } else if (rd <= tiLeTDHS + tiLeTTNL + tiLeKOK) {
-            skill = SkillUtil.createSkill(Skill.KAIOKEN, 7);
+            skill = SkillUtil.createSkill(Skill.KAIOKEN, 1);
         }
         this.playerSkill.skills.set(2, skill);
     }
@@ -672,16 +976,16 @@ public class Pet extends Player {
 
         int rd = Util.nextInt(1, 100);
         if (rd <= tiLeBienKhi) {
-            skill = SkillUtil.createSkill(Skill.BIEN_KHI, 7);
+            skill = SkillUtil.createSkill(Skill.BIEN_KHI, 1);
         } else if (rd <= tiLeBienKhi + tiLeDeTrung) {
-            skill = SkillUtil.createSkill(Skill.DE_TRUNG, 7);
+            skill = SkillUtil.createSkill(Skill.DE_TRUNG, 1);
         } else if (rd <= tiLeBienKhi + tiLeDeTrung + tiLeKNL) {
-            skill = SkillUtil.createSkill(Skill.KHIEN_NANG_LUONG, 7);
+            skill = SkillUtil.createSkill(Skill.KHIEN_NANG_LUONG, 1);
         }
         this.playerSkill.skills.set(3, skill);
     }
-//    ==============TEST SKill 5 =================
-//     private void openSkill5() {
+
+//    private void openSkill5() {
 //        Skill skill = null;
 //        int tiLeThoiMien = 10; //khi
 //        int tiLeSoCoLa = 70; //detrung
@@ -696,7 +1000,7 @@ public class Pet extends Player {
 //            skill = SkillUtil.createSkill(Skill.DICH_CHUYEN_TUC_THOI, 1);
 //        }
 //        this.playerSkill.skills.set(4, skill);
-//
+//    }
 //    private Skill getSkill(int i) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
@@ -712,6 +1016,11 @@ public class Pet extends Player {
             this.isTransform = !this.isTransform;
             Service.getInstance().Send_Caitrang(this);
             Service.getInstance().chat(this, "Bố Mày Là Bư Nè !! Bư..Bư..Bư..Ma..Nhân..Bư....");
+        }
+        if (this.typePet == 2) {
+            this.isTransform = !this.isTransform;
+            Service.getInstance().Send_Caitrang(this);
+            Service.getInstance().chat(this, "Tao là thần");
         }
     }
 

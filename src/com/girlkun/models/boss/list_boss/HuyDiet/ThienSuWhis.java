@@ -3,7 +3,9 @@ package com.girlkun.models.boss.list_boss.HuyDiet;
 import com.girlkun.models.boss.Boss;
 import com.girlkun.models.boss.BossStatus;
 import com.girlkun.models.boss.BossesData;
+import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.player.Player;
+import com.girlkun.server.Manager;
 import com.girlkun.services.EffectSkillService;
 import com.girlkun.services.Service;
 import com.girlkun.utils.Util;
@@ -17,21 +19,29 @@ public class ThienSuWhis extends Boss {
 
     @Override
     public void reward(Player plKill) {
-        int[] manhthuong = new int[]{1066, 1070};
-        int[] manhhiem = new int[]{1069, 1067, 1068};
-
-        int randomAWJ = new Random().nextInt(manhthuong.length);
-        int randomGR = new Random().nextInt(manhhiem.length);
-        if (Util.isTrue(95, 100)) {
-            Service.getInstance().dropItemMap(this.zone, Util.manhTS(zone, manhthuong[randomAWJ], 1, this.location.x, this.location.y, plKill.id));
+//        byte randomDo = (byte) new Random().nextInt(Manager.itemIds_CT.length); // Có -1 k hiểu
+        int[] manhhiem = new int[]{1069,1070,1066, 1067, 1068};
+        int[] dats = new int[]{1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086};
+        int randommanhhiem = new Random().nextInt(manhhiem.length);
+        int randomda = new Random().nextInt(dats.length);
+           if (Util.isTrue(50, 100)) {
+            Service.getInstance().dropItemMap(this.zone, Util.manhTS(zone, manhhiem[randommanhhiem], Util.nextInt(20, 40), this.location.x, this.location.y, plKill.id));
+            plKill.diemsk += 1;
         } else {
-            Service.getInstance().dropItemMap(this.zone, Util.manhTS(zone, manhhiem[randomGR], 1, this.location.x, this.location.y, plKill.id));
+            Service.getInstance().dropItemMap(this.zone, Util.manhTS(zone, dats[randomda], 1, this.location.x, this.location.y, plKill.id));
+            plKill.diemsk += 1;
         }
+//        if (Util.isTrue(10, 100)) {           
+//                itemMap = Util.ratiItem(zone, Manager.itemIds_ManhTShiem[randomManhTShiem], Util.nextInt(10, 20), this.location.x, this.location.y, plKill.id);        
+//        } else {
+//            Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, Manager.itemIds_ManhTSthuong[randomManhTSthuong], Util.nextInt(20, 40), this.location.x, this.location.y, plKill.id));
+//        }
+//        itemMap.options.add(new Item.ItemOption(30, 1));
+//        Service.getInstance().dropItemMap(this.zone, ItemMap);
     }
-
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
-        if (Util.isTrue(90, 100) && plAtt != null) {//tỉ lệ hụt của thiên sứ
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (Util.isTrue(20, 100) && plAtt != null) {//tỉ lệ hụt của thiên sứ
             Util.isTrue(this.nPoint.tlNeDon, 100000);
             if (Util.isTrue(1, 100)) {
                 this.chat("Hãy để bản năng tự vận động");
@@ -56,9 +66,6 @@ public class ThienSuWhis extends Boss {
                 if (damage > nPoint.hpMax) {
                     EffectSkillService.gI().breakShield(this);
                 }
-                damage = 1;
-            }
-            if (damage >= 1) {
                 damage = 1;
             }
             this.nPoint.subHP(damage);

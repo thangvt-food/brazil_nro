@@ -27,47 +27,48 @@ import java.util.List;
 import java.util.Map;
 
 public class MySession extends Session {
-
+    
     private static final Map<String, AntiLogin> ANTILOGIN = new HashMap<>();
     public Player player;
-
+    
     public byte timeWait = 100;
-
+    
     public boolean connected;
     public boolean sentKey;
-
+    
     public static final byte[] KEYS = {0};
     public byte curR, curW;
-
+    
     public String ipAddress;
     public boolean isAdmin;
     public int userId;
     public String uu;
     public String pp;
-
+    
     public int typeClient;
     public byte zoomLevel;
-
+    
     public long lastTimeLogout;
     public boolean joinedGame;
-
+    
     public long lastTimeReadMessage;
-
+    
     public boolean actived;
-
+    
     public int goldBar;
     public List<Item> itemsReward;
     public String dataReward;
     public boolean is_gift_box;
     public double bdPlayer;
-
+    
     public int version;
-
+    public int vnd;
+    
     public MySession(Socket socket) {
         super(socket);
         ipAddress = socket.getInetAddress().getHostAddress();
     }
-
+    
     public void initItemsReward() {
         try {
             this.itemsReward = new ArrayList<>();
@@ -96,16 +97,16 @@ public class MySession extends Session {
                 this.itemsReward.add(item);
             }
         } catch (Exception e) {
-
+            
         }
     }
-
+    
     @Override
     public void sendKey() throws Exception {
         super.sendKey();
         this.startSend();
     }
-
+    
     public void sendSessionKey() {
         Message msg = new Message(-27);
         try {
@@ -120,7 +121,7 @@ public class MySession extends Session {
         } catch (Exception e) {
         }
     }
-
+    
     public void login(String username, String password) {
         AntiLogin al = ANTILOGIN.get(this.ipAddress);
         if (al == null) {
@@ -158,7 +159,7 @@ public class MySession extends Session {
                     DataGame.sendSmallVersion(this);
                     // -93 bgitem version
                     Service.getInstance().sendMessage(this, -93, "1630679752231_-93_r");
-
+                    
                     this.timeWait = 0;
                     this.joinedGame = true;
                     player.nPoint.calPoint();
@@ -170,7 +171,7 @@ public class MySession extends Session {
                         player.pet.nPoint.setHp(player.pet.nPoint.hp);
                         player.pet.nPoint.setMp(player.pet.nPoint.mp);
                     }
-
+                    Service.getInstance().sendTimeSkill(player);
                     player.setSession(this);
                     Client.gI().put(player);
                     this.player = player;
@@ -179,7 +180,7 @@ public class MySession extends Session {
                     //-31 data item background
                     DataGame.sendDataItemBG(this);
                     Controller.getInstance().sendInfo(this);
-
+                    
                     Logger.warning("Login thành công player " + this.player.name + ": " + (System.currentTimeMillis() - st) + " ms\n");
 //                    Service.getInstance().sendThongBaoOK(this, "Ngọc rồng sao đen sẽ mở lúc 21h hôm nay");
                 }

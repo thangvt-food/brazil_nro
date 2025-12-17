@@ -22,6 +22,7 @@ import com.girlkun.services.*;
 import com.girlkun.utils.Util;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Mob {
 
@@ -29,7 +30,7 @@ public class Mob {
     public Zone zone;
     public int tempId;
     public String name;
-    public byte level;
+    public int level;
 
     public MobPoint point;
     public MobEffectSkill effectSkill;
@@ -64,7 +65,36 @@ public class Mob {
         this.effectSkill = new MobEffectSkill(this);
         this.location = new Location();
     }
-
+    
+     public static void initMopbKhiGas(Mob mob, int level) {
+        if ( level <= 700){
+        mob.point.dame = (level * 3250 * mob.level * 4) * 5;
+        mob.point.maxHp = (level * 12472 * mob.level * 2 + level * 7263 * mob.tempId) * 5;
+         }
+        if ( level > 700 && level <= 10000 ){
+        mob.point.dame = (level * 3250 * mob.level * 4) * 5;
+        mob.point.maxHp = 2100000000;
+         }
+        if ( level > 10000 ){
+        mob.point.dame = 2000000000;
+        mob.point.maxHp = 2100000000;
+         }
+    } 
+     public static void hoiSinhMob(Mob mob) {
+        mob.point.hp = mob.point.maxHp;
+        mob.setTiemNang();
+        Message msg;
+        try {
+            msg = new Message(-13);
+            msg.writer().writeByte(mob.id);
+            msg.writer().writeByte(mob.tempId);
+            msg.writer().writeByte(0); //level mob
+            msg.writer().writeInt((mob.point.hp));
+            Service.getInstance().sendMessAllPlayerInMap(mob.zone, msg);
+            msg.cleanup();
+        } catch (Exception e) {
+        }
+    }
     public void setTiemNang() {
         this.maxTiemNang = (long) this.point.getHpFull() * (this.pTiemNang + Util.nextInt(-2, 2)) / 100;
     }
@@ -75,7 +105,7 @@ public class Mob {
         return this.point.gethp() <= 0;
     }
 
-    public synchronized void injured(Player plAtt, int damage, boolean dieWhenHpFull) {
+    public synchronized void injured(Player plAtt, double damage, boolean dieWhenHpFull) {
         if (!this.isDie()) {
             if (damage >= this.point.hp) {
                 damage = this.point.hp;
@@ -104,14 +134,17 @@ public class Mob {
         }
     }
 
-    public long getTiemNangForPlayer(Player pl, long dame) {
+    public long getTiemNangForPlayer(Player pl, double dame) {
         int levelPlayer = Service.getInstance().getCurrLevel(pl);
         int n = levelPlayer - this.level;
-        long pDameHit = dame * 100 / point.getHpFull();
-        long tiemNang = pDameHit * maxTiemNang / 100;
-        if (tiemNang <= 0) {
-            tiemNang = 1;
+        long pDameHit = 0;
+        if (point.getHpFull() >= 100000000)
+        {
+        pDameHit = Util.TamkjllGH(dame) * 500 / point.getHpFull();
         }
+        else pDameHit = Util.TamkjllGH(dame) * 100 / point.getHpFull();
+        
+        long tiemNang = pDameHit * maxTiemNang / 100;
         if (n >= 0) {
             for (int i = 0; i < n; i++) {
                 long sub = tiemNang * 10 / 100;
@@ -132,7 +165,11 @@ public class Mob {
         if (tiemNang <= 0) {
             tiemNang = 1;
         }
-        tiemNang = (int) pl.nPoint.calSucManhTiemNang(tiemNang);
+        tiemNang = Util.TamkjllGH(pl.nPoint.calSucManhTiemNang(tiemNang));
+        if (pl.zone.map.mapId == 122 || pl.zone.map.mapId == 123 || pl.zone.map.mapId == 124 || pl.zone.map.mapId == 141 || pl.zone.map.mapId == 142 || pl.zone.map.mapId == 146) {
+         
+        tiemNang *= 2;
+        }
         return tiemNang;
     }
 
@@ -148,9 +185,11 @@ public class Mob {
             }
         }
 
-        if (this.isDie()&& !Maintenance.isRuning) {
+        if (this.isDie() && !Maintenance.isRuning) {
             switch (zone.map.type) {
                 case ConstMap.MAP_DOANH_TRAI:
+                    break;
+                     case ConstMap.MAP_KHI_GAS:
                     break;
                 default:
                     if (Util.canDoWithTime(lastTimeDie, 5000)) {
@@ -200,18 +239,18 @@ public class Mob {
         if (player.charms.tdDaTrau > System.currentTimeMillis()) {
             dameMob /= 2;
         }
-        int dame = player.injured(null, dameMob, false, true);
+        double dame = player.injured(null, dameMob, false, true);
         this.sendMobAttackMe(player, dame);
         this.sendMobAttackPlayer(player);
     }
 
-    private void sendMobAttackMe(Player player, int dame) {
-        if (!player.isPet) {
+    private void sendMobAttackMe(Player player, double dame) {
+        if (!player.isPet && !player.isNewPet) {
             Message msg;
             try {
                 msg = new Message(-11);
                 msg.writer().writeByte(this.id);
-                msg.writer().writeInt(dame); //dame
+                msg.writer().writeInt(Util.TamkjllGH(dame)); //dame
                 player.sendMessage(msg);
                 msg.cleanup();
             } catch (Exception e) {
@@ -225,13 +264,13 @@ public class Mob {
             msg = new Message(-10);
             msg.writer().writeByte(this.id);
             msg.writer().writeInt((int) player.id);
-            msg.writer().writeInt(player.nPoint.hp);
+            msg.writer().writeInt(Util.TamkjllGH(player.nPoint.hp));
             Service.getInstance().sendMessAnotherNotMeInMap(player, msg);
             msg.cleanup();
         } catch (Exception e) {
         }
     }
-
+    
     public void hoiSinh() {
         this.status = 5;
         this.point.hp = this.point.maxHp;
@@ -253,12 +292,12 @@ public class Mob {
     }
 
     //**************************************************************************
-    private void sendMobDieAffterAttacked(Player plKill, int dameHit) {
+    private void sendMobDieAffterAttacked(Player plKill, double dameHit) {
         Message msg;
         try {
             msg = new Message(-12);
             msg.writer().writeByte(this.id);
-            msg.writer().writeInt(dameHit);
+            msg.writer().writeInt(Util.TamkjllGH(dameHit));
             msg.writer().writeBoolean(plKill.nPoint.isCrit); // crit
             List<ItemMap> items = mobReward(plKill, this.dropItemTask(plKill), msg);
             Service.getInstance().sendMessAllPlayerInMap(this.zone, msg);
@@ -269,7 +308,7 @@ public class Mob {
     }
 
     private void hutItem(Player player, List<ItemMap> items) {
-        if (!player.isPet) {
+        if (!player.isPet && !player.isNewPet) {
             if (player.charms.tdThuHut > System.currentTimeMillis()) {
                 for (ItemMap item : items) {
                     if (item.itemTemplate.id != 590) {
@@ -292,9 +331,9 @@ public class Mob {
 //        nplayer
         List<ItemMap> itemReward = new ArrayList<>();
         try {
-            if ((!player.isPet && player.getSession().actived && player.setClothes.setDHD == 5) || (player.isPet && ((Pet) player).master.getSession().actived && ((Pet) player).setClothes.setDHD == 5)) {
+            if ((!player.isPet && player.setClothes.setDHD == 5) || (player.isPet && ((Pet) player).setClothes.setDHD == 5)) {
                 byte random = 1;
-                if (Util.isTrue(5, 100)) {
+                if (Util.isTrue(2, 100)) {
                     random = 2;
                 }
                 Item i = Manager.RUBY_REWARDS.get(Util.nextInt(0, Manager.RUBY_REWARDS.size() - 1));
@@ -331,6 +370,8 @@ public class Mob {
         }
         List<ItemMobReward> items = mobReward.getItemReward();
         List<ItemMobReward> golds = mobReward.getGoldReward();
+        byte randomDo = (byte) new Random().nextInt(Manager.itemIds_TL.length - 1);
+        byte randomVp = (byte) new Random().nextInt(Manager.itemSkien.length);
         if (!items.isEmpty()) {
             ItemMobReward item = items.get(Util.nextInt(0, items.size() - 1));
             ItemMap itemMap = item.getItemMap(zone, player, x, yEnd);
@@ -345,9 +386,390 @@ public class Mob {
                 list.add(itemMap);
             }
         }
-        if (player.itemTime.isUseMayDo && Util.isTrue(15, 100) && this.tempId > 57 && this.tempId < 66) {
+        if (player.itemTime.isUseMayDo && Util.isTrue(8, 100) && this.tempId > 57 && this.tempId < 66) {
             list.add(new ItemMap(zone, 380, 1, x, player.location.y, player.id));
+        }// vat phẩm rơi khi user maaáy dò adu hoa r o day ti code choa
+//        if (player.itemTime.isUseMayDo2) {
+//            list.add(new ItemMap(zone, 570, 1, x, player.location.y, player.id));// cai nay sua sau nha
+//
+//        }
+//        if (Util.isTrue(10, 100) && this.tempId > 38 && this.tempId < 42) {
+//            list.add(new ItemMap(zone, 698, 1, x, player.location.y, player.id));
+//        }
+//        if (Util.isTrue(10, 100) && this.tempId > 43 && this.tempId < 54) {
+//            list.add(new ItemMap(zone, 695, 1, x, player.location.y, player.id));
+//        }
+//        if (Util.isTrue(10, 100) && this.tempId > 53 && this.tempId < 58) {
+//            list.add(new ItemMap(zone, 696, 1, x, player.location.y, player.id));
+//        }
+//        if (Util.isTrue(2, 100) && this.tempId > 64 && this.tempId < 66) {
+//            list.add(new ItemMap(zone, Manager.itemSkien[randomVp], 1, this.location.x, this.location.y, player.id));
+//        }
+//        if (Util.isTrue(0.002f, 100) && this.tempId > 76 && this.tempId < 78) {
+//            list.add(new ItemMap(zone, Manager.itemManh[randomVp], 1, this.location.x, this.location.y, player.id));
+//        }
+//        if (Util.isTrue(0.5f, 100) && this.tempId > 57 && this.tempId < 59) {
+//            list.add(new ItemMap(zone, 720, 1, this.location.x, this.location.y, player.id));
+//        }
+//        if (Util.isTrue(0.003f, 100) && this.tempId > 65 && this.tempId < 69) {
+//            Service.getInstance().dropItemMap(this.zone, Util.ratiItem1(zone, Manager.itemIds_TL[randomDo], 1, this.location.x, this.location.y, player.id));
+//        }
+//        if (Util.isTrue(60, 100) && this.tempId > 76 && this.tempId < 78) {
+//            byte random = 1;
+//            if (Util.isTrue(5, 100)) {
+//                random = 2;
+//            }
+//            Item i = Manager.RUBY_REWARDS.get(Util.nextInt(0, Manager.RUBY_REWARDS.size() - 1));
+//            i.quantity = random;
+//            InventoryServiceNew.gI().addItemBag(player, i);
+//            InventoryServiceNew.gI().sendItemBags(player);
+//            Service.getInstance().sendThongBao(player, "Bạn vừa nhận được " + random + " hồng ngọc");
+//        }
+        
+        Item item = player.inventory.itemsBody.get(1); // Sự kiện quần bơi
+        if (this.zone.map.mapId > 0){
+            if(item.isNotNullItem()){
+            if (item.template.id == 691){ // Id vật phẩm 691
+        if (Util.isTrue(5, 100)) {    
+            list.add(new ItemMap(zone, Util.nextInt(695,698), 1, x, player.location.y, player.id));} // Rơi vật phẩm sự kiện 695 - 698
+        }else if (item.template.id != 691 && item.template.id != 692 && item.template.id != 693){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
         }
+        }
+            
+        }if (this.zone.map.mapId > 0){
+            if(item.isNotNullItem()){
+            if (item.template.id == 692){
+        if (Util.isTrue(5, 100)) {    
+            list.add(new ItemMap(zone, Util.nextInt(695,698), 1, x, player.location.y, player.id));}
+        }else if (item.template.id != 691 && item.template.id != 692 && item.template.id != 693){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id));
+        }
+        }
+            
+        }if (this.zone.map.mapId > 0){
+            if(item.isNotNullItem()){
+            if (item.template.id == 693){
+        if (Util.isTrue(5, 100)) {    
+            list.add(new ItemMap(zone, Util.nextInt(695,698), 1, x, player.location.y, player.id));}
+        }else if (item.template.id != 691 && item.template.id != 692 && item.template.id != 693){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id));
+        }
+        }
+        }
+        // Rơi đá nâng cấp đồ
+        if (this.zone.map.mapId >= 0){
+            if (Util.isTrue(5, 100)){
+        list.add(new ItemMap(zone, Util.nextInt(220,224), 1, x, player.location.y, player.id));
+        }}
+        //Roi Do Than Cold
+//        if (!player.isPet && !player.isNewPet && !player.isNewPet1 && player.isBoss){
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Quanthanlinh = ItemService.gI().createNewItem((short) (556));
+                Quanthanlinh.itemOptions. add(new Item.ItemOption(22, Util.nextInt(55,65)));
+                Quanthanlinh.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Quanthanlinh);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Quanthanlinh.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Quanthanlinhxd = ItemService.gI().createNewItem((short) (560));
+                Quanthanlinhxd.itemOptions.add(new Item.ItemOption(22, Util.nextInt(45,55)));
+                Quanthanlinhxd.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Quanthanlinhxd);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Quanthanlinhxd.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Quanthanlinhnm = ItemService.gI().createNewItem((short) (558));
+                Quanthanlinhnm.itemOptions.add(new Item.ItemOption(22, Util.nextInt(45,60)));
+                Quanthanlinhnm.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Quanthanlinhnm);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Quanthanlinhnm.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Aothanlinh = ItemService.gI().createNewItem((short) (555));
+                Aothanlinh.itemOptions.add(new Item.ItemOption(47, Util.nextInt(500,600)));
+                Aothanlinh.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Aothanlinh);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Aothanlinh.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Aothanlinhnm = ItemService.gI().createNewItem((short) (557));
+                Aothanlinhnm.itemOptions.add(new Item.ItemOption(47, Util.nextInt(400,550)));
+                Aothanlinhnm.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Aothanlinhnm);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Aothanlinhnm.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Aothanlinhxd = ItemService.gI().createNewItem((short) (559));
+                Aothanlinhxd.itemOptions.add(new Item.ItemOption(47, Util.nextInt(600,700)));
+                Aothanlinhxd.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Aothanlinhxd);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Aothanlinhxd.template.name);
+                            }}
+
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 100000)){
+                Item Gangthanlinh = ItemService.gI().createNewItem((short) (562));
+                Gangthanlinh.itemOptions.add(new Item.ItemOption(0, Util.nextInt(6000,7000)));
+                Gangthanlinh.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Gangthanlinh);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Gangthanlinh.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 100000)){
+                Item Gangthanlinhxd = ItemService.gI().createNewItem((short) (566));
+                Gangthanlinhxd.itemOptions.add(new Item.ItemOption(0, Util.nextInt(6500,7500)));
+                Gangthanlinhxd.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Gangthanlinhxd);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Gangthanlinhxd.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 100000)){
+                Item Gangthanlinhnm = ItemService.gI().createNewItem((short) (564));
+                Gangthanlinhnm.itemOptions.add(new Item.ItemOption(0, Util.nextInt(5500,6500)));
+                Gangthanlinhnm.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Gangthanlinhnm);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Gangthanlinhnm.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Giaythanlinh = ItemService.gI().createNewItem((short) (563));
+                Giaythanlinh.itemOptions.add(new Item.ItemOption(23, Util.nextInt(50,60)));
+                Giaythanlinh.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Giaythanlinh);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Giaythanlinh.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Giaythanlinhxd = ItemService.gI().createNewItem((short) (567));
+                Giaythanlinhxd.itemOptions.add(new Item.ItemOption(23, Util.nextInt(55,65)));
+                Giaythanlinhxd.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Giaythanlinhxd);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Giaythanlinhxd.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 60000)){
+                Item Giaythanlinhnm = ItemService.gI().createNewItem((short) (565));
+                Giaythanlinhnm.itemOptions.add(new Item.ItemOption(23, Util.nextInt(65,75)));
+                Giaythanlinhnm.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Giaythanlinhnm);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Giaythanlinhnm.template.name);
+                            }}
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110) {
+            if(Util.isTrue(1, 100000)){
+                Item Nhanthanlinh = ItemService.gI().createNewItem((short) (561));
+                Nhanthanlinh.itemOptions.add(new Item.ItemOption(14, Util.nextInt(13,16)));
+                Nhanthanlinh.itemOptions.add(new Item.ItemOption(21, Util.nextInt(15,17)));
+                InventoryServiceNew.gI().addItemBag(player, Nhanthanlinh);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được "+Nhanthanlinh.template.name);
+                            }}
+        
+        
+        // Rơi vật phẩm Mảnh Vỡ Bông Tai ( ID 541 )        
+       if (this.zone.map.mapId >= 156 && this.zone.map.mapId <= 159) {
+            if(Util.isTrue(7, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (933));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Mảnh Vỡ Bông Tai ");
+                            }}
+       // Rơi mảnh 
+       if (this.zone.map.mapId >= 156 && this.zone.map.mapId <= 159) {
+            if(Util.isTrue(7, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (934));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Mảnh Hồn Bông Tai ");
+                            }}
+       if (this.zone.map.mapId >= 156 && this.zone.map.mapId <= 159) {
+            if(Util.isTrue(1, 200)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (935));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Đá Xanh Lam ");
+                            }}
+                
+ 
+        
+        
+        
+        // Rơi vật phẩm Quả Hồng Đào ( ID 541 )
+       if (this.zone.map.mapId >= 122 && this.zone.map.mapId <= 124) {
+            if(Util.isTrue(2, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (541));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Quả Hồng Đào ");
+                            }}
+         
+        // Rơi Event Giải - Khai -Phong - Ấn
+        if (this.zone.map.mapId >= 92 && this.zone.map.mapId <= 94) {
+            if(Util.isTrue(2, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (537));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Chữ Giải ");
+                            }}
+        if (this.zone.map.mapId >= 96 && this.zone.map.mapId <= 98) {
+            if(Util.isTrue(2, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (538));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Chữ Khai ");
+                            }}
+        if (this.zone.map.mapId >= 99 && this.zone.map.mapId <= 100) {
+            if(Util.isTrue(2, 100)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (539));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Chữ Phong ");
+                            }}
+        
+        //Rơi mảnh Tinh Ấn
+        if (this.zone.map.mapId >= 149 && this.zone.map.mapId <= 152) {
+            if(Util.isTrue(1, 200)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (1232));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được mảnh Tinh Ấn ");
+                            }}
+        if (this.zone.map.mapId == 147 ) {
+            if(Util.isTrue(1, 500)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (1232));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Chữ Phong ");
+                            }}
+        //Rơi Bí Kíp Tuyệt Kỹ
+         if (this.zone.map.mapId == 155 ) {
+            if(Util.isTrue(1, 200)){
+                Item quahongdao = ItemService.gI().createNewItem((short) (1215));                
+                InventoryServiceNew.gI().addItemBag(player, quahongdao);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Mảnh Tuyệt Kỹ ");
+                            }}
+        
+        Item item1 = player.inventory.itemsBody.get(5); // Sự kiện mặc cải trang GoHanSSJ
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1192){ // Id cải trang
+        if (Util.isTrue(1, 500)) {    
+            Item Thoivang = ItemService.gI().createNewItem((short) (457));                
+                InventoryServiceNew.gI().addItemBag(player, Thoivang);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Thỏi vàng ");} // Rơi Thỏi Vàng
+        }else if (item1.template.id != 1192){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+        Item item2 = player.inventory.itemsBody.get(5); // Sự kiện mặc cải trang GoHanSSJ
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1192){ // Id cải trang
+        if (Util.isTrue(1, 1000)) {    
+            Item Vehongngoc = ItemService.gI().createNewItem((short) (1132));                
+                InventoryServiceNew.gI().addItemBag(player, Vehongngoc);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Vé Hồng Ngọc ");} // Rơi Vé Hồng Ngọc
+        }else if (item1.template.id != 1192){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+        Item item3 = player.inventory.itemsBody.get(5); // Sự kiện mặc cải trang GoHanSSJ
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1192){ // Id cải trang
+        if (Util.isTrue(1, 400)) {    
+            Item Dangusac = ItemService.gI().createNewItem((short) (674));                
+                InventoryServiceNew.gI().addItemBag(player, Dangusac);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Đá Ngũ Sắc ");} // Rơi vật phẩm Đá Ngũ Sắc
+        }else if (item1.template.id != 1192){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+        Item item4 = player.inventory.itemsBody.get(5); // Sự kiện mặc cải trang Baby Vegeta
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1216){ // Id cải trang
+        if (Util.isTrue(1, 400)) {    
+            Item Thoivang = ItemService.gI().createNewItem((short) (457));                
+                InventoryServiceNew.gI().addItemBag(player, Thoivang);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Thỏi vàng ");} // Rơi Thỏi Vàng
+        }else if (item1.template.id != 1216){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+        Item item5 = player.inventory.itemsBody.get(5); // Sự kiện mặc cải trang Baby Vegeta
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1216){ // Id cải trang
+        if (Util.isTrue(1, 900)) {    
+            Item Vehongngoc = ItemService.gI().createNewItem((short) (1132));                
+                InventoryServiceNew.gI().addItemBag(player, Vehongngoc);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Vé Hồng Ngọc ");} // Rơi Vé Hồng Ngọc
+        }else if (item1.template.id != 1216){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+        Item item6 = player.inventory.itemsBody.get(5); // ự kiện mặc cải trang Baby Vegeta
+        if (this.zone.map.mapId >= 105 && this.zone.map.mapId <= 110){
+            if(item1.isNotNullItem()){
+            if (item1.template.id == 1216){ // Id cải trang
+        if (Util.isTrue(1, 300)) {    
+            Item Dangusac = ItemService.gI().createNewItem((short) (674));                
+                InventoryServiceNew.gI().addItemBag(player, Dangusac);
+                InventoryServiceNew.gI().sendItemBags(player);
+                Service.gI().sendThongBao(player, "Bạn vừa nhận được Đá Ngũ Sắc ");} // Rơi vật phẩm Đá Ngũ Sắc
+        }else if (item1.template.id != 1216){
+            if (Util.isTrue(0, 1))
+            list.add(new ItemMap(zone, 76, 1, x, player.location.y, player.id)); // Rơi vàng
+        }
+        }}
+        
+//        if (this.zone.map.mapId >= 0){
+//            if (player.setClothes.setDHD == 5){
+//                if (Util.isTrue(100, 100)) {
+//                    list.add(new ItemMap(zone, 861, Util.nextInt(1000,10000), x, player.location.y, player.id));                               
+//                            }
+//                        }
+//                    }
+            
+//    }
 //        if (!player.isPet && player.getSession().actived && Util.isTrue(15, 100)) {
 //            list.add(new ItemMap(zone, 610, 1, x, player.location.y, player.id));
 //        }
@@ -371,13 +793,13 @@ public class Mob {
         return null;
     }
 
-    private void sendMobStillAliveAffterAttacked(int dameHit, boolean crit) {
+    private void sendMobStillAliveAffterAttacked(double dameHit, boolean crit) {
         Message msg;
         try {
             msg = new Message(-9);
             msg.writer().writeByte(this.id);
             msg.writer().writeInt(this.point.gethp());
-            msg.writer().writeInt(dameHit);
+            msg.writer().writeInt(Util.TamkjllGH(dameHit));
             msg.writer().writeBoolean(crit); // chí mạng
             msg.writer().writeInt(-1);
             Service.getInstance().sendMessAllPlayerInMap(this.zone, msg);

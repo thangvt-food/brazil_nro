@@ -8,7 +8,10 @@ import com.girlkun.services.Service;
 import com.girlkun.services.func.ChangeMapService;
 import com.girlkun.utils.Util;
 
-
+/**
+ *
+ * @Stole By Arriety❤
+ */
 public class TraThu extends PVP {
 
     public TraThu(Player p1, Player p2) {
@@ -21,7 +24,7 @@ public class TraThu extends PVP {
                 p2.zone,
                 p2.location.x + Util.nextInt(-5, 5), p2.location.y);
         Service.getInstance().sendThongBao(p2, "Có người tìm tới bạn để trả thù");
-        Service.getInstance().chat(p1, "Đi chết đi rác");
+        Service.getInstance().chat(p1, "Mày Tới Số Rồi Con Ạ!");
         super.start();
     }
 
@@ -49,5 +52,5 @@ public class TraThu extends PVP {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

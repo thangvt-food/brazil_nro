@@ -4,7 +4,9 @@ import com.girlkun.models.clan.Clan;
 import com.girlkun.models.map.Zone;
 import com.girlkun.models.mob.Mob;
 import com.girlkun.models.player.Player;
+import com.girlkun.services.ItemTimeService;
 import com.girlkun.services.func.ChangeMapService;
+import com.girlkun.utils.Util;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -14,15 +16,24 @@ import lombok.Data;
 public class DoanhTrai {
     
     //bang hội đủ số người mới đc mở
-    public static final int N_PLAYER_CLAN = 1;
+    public static final List<DoanhTrai> DOANH_TRAI;
+    public static final int N_PLAYER_CLAN = 5;
     //số người đứng cùng khu
-    public static final int N_PLAYER_MAP = 0;
-    public static final int AVAILABLE = 10;
+    public static final int N_PLAYER_MAP = 2;
+    public static final int AVAILABLE = 150;
     public static final int TIME_DOANH_TRAI = 1800000;
+    
+    static {
+        DOANH_TRAI = new ArrayList<>();
+        for (int i = 0; i < AVAILABLE; i++) {
+            DOANH_TRAI.add(new DoanhTrai(i));
+        }
+    }
 
     private int id;
     private List<Zone> zones;
     private Clan clan;
+    public boolean isOpened;
     
     private long lastTimeOpen;
 
@@ -50,6 +61,7 @@ public class DoanhTrai {
         player.clan.doanhTrai = this;
         player.clan.playerOpenDoanhTrai = player.name;
         player.clan.lastTimeOpenDoanhTrai = this.lastTimeOpen;
+        player.clan.timeOpenDoanhTrai = this.lastTimeOpen;
         //Khởi tạo quái, boss
         this.init();
         //Đưa thành viên vào doanh trại
@@ -58,6 +70,7 @@ public class DoanhTrai {
                 continue;
             }
             ChangeMapService.gI().changeMapInYard(pl, 53, -1, 60);
+            ItemTimeService.gI().sendTextDoanhTrai(pl);
         }
     }
 
@@ -73,15 +86,20 @@ public class DoanhTrai {
         //Hồi sinh quái
         for(Zone zone : this.zones){
             for(Mob mob : zone.mobs){
-                mob.point.dame = (int) (totalHp / 20);
-                mob.point.maxHp = (int) (totalDame * 20);
+                mob.point.dame = Util.TamkjllGH(totalHp / 20);
+                mob.point.maxHp = Util.TamkjllGH(totalDame * 20);
                 mob.hoiSinh();
             }
+        }
+    }
+    private void sendTextDoanhTrai() {
+        for (Player pl : this.clan.membersInGame) {
+            ItemTimeService.gI().sendTextDoanhTrai(pl);
         }
     }
 }
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

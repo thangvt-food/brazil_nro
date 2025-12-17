@@ -34,6 +34,7 @@ public class NpcService {
     }
 
     private void createMenu(Player player, int indexMenu, byte npcTempId, int avatar, String npcSay, String... menuSelect) {
+        if(player == null) return;
         Message msg;
         try {
             player.iDMark.setIndexMenu(indexMenu);

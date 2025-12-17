@@ -12,7 +12,17 @@ public class BossID {
     public static final int MAP_DAU_DINH = -21;
     public static final int RAMBO = -22;
     
+    //Doanh Trại
+    public static final int TRUNG_UY_TRANG = -4;
+    public static final int TRUNG_UY_THEP = -5;
+    public static final int TRUNG_UY_XANH_LO = -6;
+    public static final int NINJA_AO_TIM = -7;
+    public static final int ROBOT_VE_SI = -8;
     
+    public static final int NINJA_AO_TIM1 = -9;
+    public static final int NINJA_AO_TIM2 = -10;
+    public static final int NINJA_AO_TIM3 = -11;
+    public static final int NINJA_AO_TIM4 = -12;
     
 //   
     public static final int SO_4 = -23;
@@ -40,9 +50,9 @@ public class BossID {
     
     public static final int XEN_BO_HUNG = -100;
     public static final int SIEU_BO_HUNG = -101;
-    public static final int XEN_CON = -102;
+    public static final int XEN_CON_1 = -102;
     
-    public static final int TRUNG_UY_TRANG = -200;
+//    public static final int TRUNG_UY_TRANG = -200;
     
     public static final int COOLER_GOLD = -201;
     public static final int VUA_COLD = -202;
@@ -51,7 +61,7 @@ public class BossID {
     public static final int HIT = -204;
     public static final int CHILL_1 = -205;
     public static final int CHILL_2 = -206;
-    public static final int HACHIYACK = -207;
+     public static final int HACHIYACK = -207;
     public static final int DR_LYCHEE = -208;
 
 
@@ -63,7 +73,8 @@ public class BossID {
 
     public static final int MABU = -214;
         public static final int CUMBER = -215;
-        
+     public static final int BLACK3 = -231;
+     
     public static final int BROLY = -1;
     
     public static final int SONGOKU_TA_AC = -217;
@@ -71,7 +82,7 @@ public class BossID {
 
 
     //super 17 saga
-    public static  final int SUPER_ANDROID_17 = -218;
+    public static  final int SUPER_ANDROID_17 = -247;
     public  static final int DR_MYUU = -219;
     public  static final  int DR_KORE_GT = -220;
 
@@ -106,6 +117,55 @@ public class BossID {
     public static final int THIEN_SU_WHIS = -240;
     public static final int THAN_HUY_DIET_CHAMPA = -245;
     public static final int THIEN_SU_VADOS = -246;
+    public static final int BOSS_VIET = -248;
+    public static final int SUPER_BLACK_GOKU = -249;
+    public static final int BOSS_DETU_BERUS = -250;
+    public static final int BOSS_ZENO = -251;
+    public static final int BOSS_VANG = -252;
+     public static final int BOSS_TRAU = -253;
+    public static final int BOSS_DETU_BL = -254;
+    public static final int BOSS_GOHAN_SSJ = -255;
+    public static final int BOSS_GOJO = -256;
+    public static final int BOSS_SAT_THU1 = -257;
+    public static final int BOSS_SAT_THU2 = -258;
+    public static final int BOSS_SAT_THU3 = -259;
+    public static final int BOSS_SAT_THU4 = -260;
+    public static final int BOSS_SAT_THU5 = -261;
+    public static final int BOSS_SAT_THU6 = -262;
+    public static final int BOSS_SAT_THU7 = -263;
+        public static final int BOSS_SAT_THU8 = -264;
+        public static final int BOSS_SAT_THU9 = -265;
+        public static final int BOSS_SAT_THU10 = -266;
+        public static final int BOSS_SAT_THU11 = -267;
+        public static final int BOSS_SAT_THU12 = -268;
+        public static final int BOSS_SAT_THU13 = -269;
+        public static final int BOSS_SAT_THU14 = -270;
+        public static final int BOSS_SAT_THU15 = -271;
+     public static final int BOSS_SAT_THU16 = -272;
+    public static final int BOSS_CAPTAIN = -273;
+    public static final int BOSS_SPIDER = -274;
+    public static final int BOSS_STRANGE = -275;
+    public static final int BOSS_GoHanSN = -276;
+    public static final int BOSS_ChiChiSN = -277;
+    public static final int BOSS_PanSN = -278;
+    
+     
+     
+      public static final byte SOI_HEC_QUYN = -77;
+    public static final byte O_DO = -78;
+    public static final byte XINBATO = -79;
+    public static final byte CHA_PA = -80;
+    public static final byte PON_PUT = -81;
+    public static final byte CHAN_XU = -82;
+    public static final byte TAU_PAY_PAY = -83;
+    public static final byte YAMCHA = -84;
+    public static final byte JACKY_CHUN = -85;
+    public static final byte THIEN_XIN_HANG = -86;
+    public static final byte LIU_LIU = -87;
+    public static final byte THIEN_XIN_HANG_CLONE = -88;
+    public static final byte THIEN_XIN_HANG_CLONE1 = -89;
+    public static final byte THIEN_XIN_HANG_CLONE2 = -90;
+    public static final byte THIEN_XIN_HANG_CLONE3 = -91;
 
 
 

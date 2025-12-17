@@ -7,7 +7,6 @@ import com.girlkun.services.Service;
 import com.girlkun.utils.Util;
 import com.girlkun.network.io.Message;
 
-
 public final class MobMe extends Mob {
 
     private Player player;
@@ -20,8 +19,8 @@ public final class MobMe extends Mob {
         this.id = (int) player.id;
         int level = player.playerSkill.getSkillbyId(12).point;
         this.tempId = SkillUtil.getTempMobMe(level);
-        this.point.maxHp = SkillUtil.getHPMobMe(player.nPoint.hpMax, level);
-        this.point.dame = SkillUtil.getHPMobMe(player.nPoint.getDameAttack(false), level);
+        this.point.maxHp = SkillUtil.getHPMobMe(Util.TamkjllGH(player.nPoint.hpMax), level);
+        this.point.dame = SkillUtil.getHPMobMe(Util.TamkjllGH(player.nPoint.getDameAttack(false)), level);
         if (this.player.setClothes.pikkoroDaimao == 5) {
             this.point.dame *= 2;
         }
@@ -45,14 +44,14 @@ public final class MobMe extends Mob {
         try {
             if (pl != null) {
                 if (pl.nPoint.hp > this.point.dame && pl.nPoint.hp > pl.nPoint.hpMax * 0.05) {
-                    int dameHit = pl.injured(null, this.point.dame, true, true);
+                    double dameHit = pl.injured(null, this.point.dame, true, true);
                     msg = new Message(-95);
                     msg.writer().writeByte(2);
 
                     msg.writer().writeInt(this.id);
                     msg.writer().writeInt((int) pl.id);
-                    msg.writer().writeInt(dameHit);
-                    msg.writer().writeInt(pl.nPoint.hp);
+                    msg.writer().writeInt(1);
+                    msg.writer().writeInt(Util.TamkjllGH(pl.nPoint.hp));
 
                     Service.getInstance().sendMessAllPlayerInMap(this.zone, msg);
                     msg.cleanup();
@@ -68,7 +67,7 @@ public final class MobMe extends Mob {
                     msg.writer().writeInt((int) mob.id);
                     mob.point.sethp(mob.point.gethp() - this.point.dame);
                     msg.writer().writeInt(mob.point.gethp());
-                    msg.writer().writeInt(this.point.dame);
+                    msg.writer().writeInt(1);
                     Service.getInstance().sendMessAllPlayerInMap(this.zone, msg);
                     msg.cleanup();
                     Service.getInstance().addSMTN(player, (byte) 2, tnsm, true);

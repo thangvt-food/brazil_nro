@@ -1,15 +1,21 @@
 package com.girlkun.services;
 
+import com.girlkun.MaQuaTang.MaQuaTang;
 import com.girlkun.models.item.Item;
+import com.girlkun.models.item.Item.ItemOption;
 import com.girlkun.models.map.blackball.BlackBallWar;
 import com.girlkun.models.npc.specialnpc.MabuEgg;
+import com.girlkun.models.npc.specialnpc.Timedua;
 import com.girlkun.models.player.Inventory;
 import com.girlkun.models.player.Pet;
 import com.girlkun.models.player.Player;
+import com.girlkun.models.player.Tamkjllgift;
 import com.girlkun.network.io.Message;
+import com.girlkun.services.func.ChangeMapService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class InventoryServiceNew {
 
@@ -26,24 +32,27 @@ public class InventoryServiceNew {
         //**********************************************************************
     }
 
-    public Item findItem(List<Item> list, int tempId) throws Exception {
-        for (Item item : list) {
-            if (item.isNotNullItem() && item.template.id == tempId) {
-                return item;
+    public Item findItem(List<Item> list, int tempId) {
+        try {
+            for (Item item : list) {
+                if (item.isNotNullItem() && item.template.id == tempId) {
+                    return item;
+                }
             }
+        } catch (Exception e) {
         }
-        throw new Exception("Không tìm thấy item " + tempId);
+        return null;
     }
 
-    public Item findItemBody(Player player, int tempId) throws Exception {
+    public Item findItemBody(Player player, int tempId) {
         return this.findItem(player.inventory.itemsBody, tempId);
     }
 
-    public Item findItemBag(Player player, int tempId) throws Exception {
+    public Item findItemBag(Player player, int tempId) {
         return this.findItem(player.inventory.itemsBag, tempId);
     }
 
-    public Item findItemBox(Player player, int tempId) throws Exception {
+    public Item findItemBox(Player player, int tempId) {
         return this.findItem(player.inventory.itemsBox, tempId);
     }
 
@@ -105,7 +114,7 @@ public class InventoryServiceNew {
             Service.getInstance().Send_Caitrang(player);
         } else if (where == 1) {
             itemThrow = player.inventory.itemsBag.get(index);
-            if (itemThrow.template.id != 457) {
+            if (itemThrow.template.id != 457 || itemThrow.template.id != 1066 || itemThrow.template.id != 1067 || itemThrow.template.id != 1068 || itemThrow.template.id != 1069 || itemThrow.template.id != 1070) {
                 removeItemBag(player, index);
                 sortItems(player.inventory.itemsBag);
                 sendItemBags(player);
@@ -236,6 +245,46 @@ public class InventoryServiceNew {
         return item;
     }
 
+    public void addItemGiftCodeToPlayer(Player p, Tamkjllgift giftcode) {
+        Set<Integer> keySet = giftcode.Item.keySet();
+        String textGift = "Bạn vừa nhận được:\b";
+        for (Integer key : keySet) {
+            int idItem = key;
+            int quantity = giftcode.Item.get(key);
+            if (idItem == -1) {
+                p.inventory.gold = Math.min(p.inventory.gold + (long) quantity, 2000000000L);
+                textGift += quantity + " vàng\b";
+            } else if (idItem == -2) {
+                p.inventory.gem = Math.min(p.inventory.gem + quantity, 200000000);
+                textGift += quantity + " ngọc\b";
+            } else if (idItem == -3) {
+                p.inventory.ruby = Math.min(p.inventory.ruby + quantity, 200000000);
+                textGift += quantity + " ngọc khóa\b";
+            } else {
+                Item itemGiftTemplate = ItemService.gI().createNewItem((short) idItem);
+                if (itemGiftTemplate != null) {
+                    Item itemGift = new Item((short) idItem);
+                    if (itemGift.template.type == 0 || itemGift.template.type == 1 || itemGift.template.type == 2 || itemGift.template.type == 3
+                            || itemGift.template.type == 4 || itemGift.template.type == 5 || itemGift.template.type == 29 || itemGift.template.type == 27) {
+                        if (itemGift.template.id == 457) {
+                            itemGift.itemOptions.add(new ItemOption(30, 0));
+                        } else {
+                            itemGift.itemOptions = giftcode.option;
+                            itemGift.quantity = quantity;
+                            addItemBag(p, itemGift);
+                        }
+                    } else {
+                        itemGift.quantity = quantity;
+                        addItemBag(p, itemGift);
+                    }
+                    textGift += "x" + quantity + " " + itemGift.template.name + "\b";
+                }
+            }
+        }
+        sendItemBags(p);
+        Service.getInstance().sendThongBaoOK(p, textGift);
+    }
+
     private Item putItemBox(Player player, Item item) {
         for (int i = 0; i < player.inventory.itemsBox.size(); i++) {
             if (!player.inventory.itemsBox.get(i).isNotNullItem()) {
@@ -263,6 +312,9 @@ public class InventoryServiceNew {
             case 23:
             case 24:
             case 11:
+            case 75:
+            case 72:
+            case 27:
                 break;
             default:
                 Service.getInstance().sendThongBaoOK(player.isPet ? ((Pet) player).master : player, "Trang bị không phù hợp!");
@@ -297,11 +349,20 @@ public class InventoryServiceNew {
                 index = 6;
                 break;
             case 23:
+               index = 7;
+                break;
             case 24:
                 index = 9;
                 break;
             case 11:
                 index = 8;
+                break;
+            case 75:
+            case 72:
+                index = 10;
+                break;
+            case 27:
+                index = 7;
                 break;
         }
         sItem = player.inventory.itemsBody.get(index);
@@ -315,6 +376,7 @@ public class InventoryServiceNew {
             player.inventory.itemsBag.set(index, putItemBody(player, item));
             sendItemBags(player);
             sendItemBody(player);
+            Service.gI().sendFlagBag(player);
             Service.getInstance().Send_Caitrang(player);
             Service.getInstance().point(player);
         }
@@ -323,9 +385,20 @@ public class InventoryServiceNew {
     public void itemBodyToBag(Player player, int index) {
         Item item = player.inventory.itemsBody.get(index);
         if (item.isNotNullItem()) {
+            if (index == 10) {
+                Service.getInstance().sendPetFollow(player, (short) 0);
+            }
+            if (index == 7) {
+                if (player.newpet != null) {
+                    ChangeMapService.gI().exitMap(player.newpet);
+                    player.newpet.dispose();
+                    player.newpet = null;
+                }
+            }
             player.inventory.itemsBody.set(index, putItemBag(player, item));
             sendItemBags(player);
             sendItemBody(player);
+            Service.getInstance().sendFlagBag(player);
             Service.getInstance().Send_Caitrang(player);
             Service.getInstance().point(player);
         }
@@ -408,6 +481,10 @@ public class InventoryServiceNew {
         Item item = player.inventory.itemsBag.get(index);
         if (item != null) {
             if (item.template.id == 457) {
+                Service.getInstance().sendThongBao(player, "Không thể cất vàng vào rương");
+                return;
+            }
+            if (item.template.id == 1066 || item.template.id == 1067 || item.template.id == 1068 || item.template.id == 1069 || item.template.id == 1070) {
                 Service.getInstance().sendThongBao(player, "Không thể cất vàng vào rương");
                 return;
             }
@@ -565,6 +642,11 @@ public class InventoryServiceNew {
                     MabuEgg.createMabuEgg(player);
                 }
                 return true;
+            case 569: //quả trứng
+                if (player.timedua == null) {
+                    Timedua.createTimedua(player);
+                }
+                return true;
             case 453: //tàu tennis
                 player.haveTennisSpaceShip = true;
                 return true;
@@ -653,16 +735,89 @@ public class InventoryServiceNew {
                 }
             }
         }
-
-        //item tăng số lượng
-
-        if (itemAdd.template.isUpToUp) {
+// Gộp vật phẩm x9999
+      if (itemAdd.template.isUpToUp) {
             for (Item it : items) {
                 if (!it.isNotNullItem() || it.template.id != itemAdd.template.id) {
                     continue;
                 }
                 //457-thỏi vàng; 590-bí kiếp
-                if (itemAdd.template.id == 457 || itemAdd.template.id == 590 || itemAdd.template.id == 610 || itemAdd.template.type == 14) {
+                if (itemAdd.template.id == 457
+                        ||itemAdd.template.type == 14
+                        ||itemAdd.template.type == 12
+                        ||itemAdd.template.type == 30
+                        
+                        || itemAdd.template.id == 380
+                        || itemAdd.template.id == 381
+                        || itemAdd.template.id == 382
+                        || itemAdd.template.id == 383
+                        || itemAdd.template.id == 384
+                        || itemAdd.template.id == 385
+                        || itemAdd.template.id == 537
+                        || itemAdd.template.id == 538
+                        || itemAdd.template.id == 539
+                        || itemAdd.template.id == 540
+                        || itemAdd.template.id == 541
+                        
+                        || itemAdd.template.id == 579
+                        || itemAdd.template.id == 590
+                        || itemAdd.template.id == 610
+                        || itemAdd.template.id == 674
+                        || itemAdd.template.id == 695
+                        || itemAdd.template.id == 696
+                        || itemAdd.template.id == 697
+                        || itemAdd.template.id == 698                     
+                        || itemAdd.template.id == 720
+                        || itemAdd.template.id == 722
+                        || itemAdd.template.id == 933
+                        || itemAdd.template.id == 934
+                        || itemAdd.template.id == 935
+                        || itemAdd.template.id == 987
+                        || itemAdd.template.id == 1066 
+                        || itemAdd.template.id == 1067 
+                        || itemAdd.template.id == 1068 
+                        || itemAdd.template.id == 1069 
+                        || itemAdd.template.id == 1070
+                        || itemAdd.template.id == 1071
+                        || itemAdd.template.id == 1072
+                        || itemAdd.template.id == 1073
+                        || itemAdd.template.id == 1074
+                        || itemAdd.template.id == 1075
+                        || itemAdd.template.id == 1076
+                        || itemAdd.template.id == 1077
+                        || itemAdd.template.id == 1078
+                        || itemAdd.template.id == 1079
+                        || itemAdd.template.id == 1080
+                        || itemAdd.template.id == 1081
+                        || itemAdd.template.id == 1082
+                        || itemAdd.template.id == 1083
+                        || itemAdd.template.id == 1084
+                        || itemAdd.template.id == 1085
+                        || itemAdd.template.id == 1086
+                        || itemAdd.template.id == 1099
+                        || itemAdd.template.id == 1100
+                        || itemAdd.template.id == 1101
+                        || itemAdd.template.id == 1102
+                        || itemAdd.template.id == 1103
+                        || itemAdd.template.id == 1132
+                        || itemAdd.template.id == 1215
+                        || itemAdd.template.id == 1232
+                        || itemAdd.template.id == 1233
+                        || itemAdd.template.id == 1234
+                        || itemAdd.template.id == 1244
+                        || itemAdd.template.id == 1245
+                        || itemAdd.template.id == 1249
+                        || itemAdd.template.id == 1250
+                        || itemAdd.template.id == 1252
+                        || itemAdd.template.id == 1265
+                        || itemAdd.template.id == 1267
+                        || itemAdd.template.id == 2029
+                        || itemAdd.template.id == 2046
+                        || itemAdd.template.id == 2047
+                        || itemAdd.template.id == 2048
+                        || itemAdd.template.id == 2049
+
+                        || itemAdd.template.id == 541) {
                     it.quantity += itemAdd.quantity;
                     itemAdd.quantity = 0;
                     return true;
@@ -732,5 +887,30 @@ public class InventoryServiceNew {
         }
         return count;
     }
-}
+    public byte getIndexBag(Player pl, Item it) {
+        for (byte i = 0; i < pl.inventory.itemsBag.size(); ++i) {
+            Item item = pl.inventory.itemsBag.get(i);
+            if (item != null && it.equals(item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public boolean finditemWoodChest(Player player) {
+        for (Item item : player.inventory.itemsBag) {
+            if (item.isNotNullItem() && item.template.id == 570) {
+                return false;
+            }
+        }
+        for (Item item : player.inventory.itemsBox) {
+            if (item.isNotNullItem() && item.template.id == 570) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    void addItemGiftCodeToPlayer(Player player, MaQuaTang giftcode) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}

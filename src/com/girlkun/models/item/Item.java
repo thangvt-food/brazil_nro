@@ -64,6 +64,14 @@ public class Item {
         }
         this.itemOptions = null;
     }
+    public String getInfoItem() {
+        String strInfo = "|1|" + template.name + "\n|0|";
+        for (ItemOption itemOption : itemOptions) {
+            strInfo += itemOption.getOptionString() + "\n";
+        }
+        strInfo += "|2|" + template.description;
+        return strInfo;
+    }
 
     public static class ItemOption {
 
@@ -99,6 +107,7 @@ public class Item {
             this.optionTemplate = null;
         }
     }
+    
     public boolean isSKH() {
         for (ItemOption itemOption : itemOptions
         ) {
@@ -108,7 +117,41 @@ public class Item {
         }
         return false;
     }
+   public boolean isCTGoHanSSJ() {
 
+        if (this.template.id == 1192) {
+            return true;
+        }
+
+        return false;
+    }
+   
+    public boolean isCTBlackGoku() {
+
+        if (this.template.id == 1280) {
+            return true;
+        }
+
+        return false;
+    }
+      
+    public boolean isCTBill() {
+
+        if (this.template.id == 2008) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public boolean isCTBaby() {
+
+        if (this.template.id == 1216) {
+            return true;
+        }
+
+        return false;
+    }
     public boolean isDTS() {
         if (this.template.id >= 1048 && this.template.id <= 1062) {
             return true;
@@ -136,7 +179,46 @@ public class Item {
         }
         return false;
     }
+    public boolean haveOption(int idOption) {
+        if (this != null && this.isNotNullItem()) {
+            return this.itemOptions.stream().anyMatch(op -> op != null && op.optionTemplate.id == idOption);
+        }
+        return false;
+    }
 
+    public boolean isTrangBiHacHoa() {
+
+        if (this.template.type == 11 
+                || this.template.type == 5 
+                || this.template.type == 72
+                || this.template.type == 32) {
+            return true;
+        }
+
+        return false;
+    }
+    
+        public boolean isCongThucVip() {
+        if (this.template.id >= 1084 && this.template.id <= 1086) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isDaNangCap() {
+        if (this.template.id >= 1074 && this.template.id <= 1078) {
+            return true;
+        } else if (this.template.id == -1) {
+    }
+        return false;
+    }
+    
+    public boolean isDaMayMan() {
+        if (this.template.id >= 1079 && this.template.id <= 1083) {
+            return true;
+        }
+        return false;
+    }
     public String typeName() {
         switch (this.template.type) {
             case 0:
@@ -149,6 +231,24 @@ public class Item {
                 return "Giày";
             case 4:
                 return "Rada";
+            default:
+                return "";
+        }
+    }
+    public String typeHanhTinh() {
+        switch (this.template.id) {
+            case 1071:
+                return "Trái đất";
+            case 1084:
+                return "Trái đất";
+            case 1072:
+                return "Namếc";
+            case 1085:
+                return "Namếc";
+            case 1073:
+                return "Xayda";
+            case 1086:
+                return "Xayda";
             default:
                 return "";
         }
@@ -184,6 +284,39 @@ public class Item {
                 return "Giày";
             case 1069:
                 return "Nhẫn";
+            default:
+                return "";
+        }
+    }
+        public String typeDanangcap() {
+        switch (this.template.id) {
+            case 1074:
+                return "cấp 1";
+            case 1075:
+                return "cấp 2";
+            case 1076:
+                return "cấp 3";
+            case 1077:
+                return "cấp 4";
+            case 1078:
+                return "cấp 5";
+            default:
+                return "";
+        }
+    }
+    
+    public String typeDaMayman() {
+        switch (this.template.id) {
+            case 1079:
+                return "cấp 1";
+            case 1080:
+                return "cấp 2";
+            case 1081:
+                return "cấp 3";
+            case 1082:
+                return "cấp 4";
+            case 1083:
+                return "cấp 5";
             default:
                 return "";
         }

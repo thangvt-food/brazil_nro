@@ -10,7 +10,7 @@ import com.girlkun.result.GirlkunResultSet;
 
 /**
  *
- * @author Administrator
+ * @Stole By Arriety
  */
 public class Test {
 

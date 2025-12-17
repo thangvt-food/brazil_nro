@@ -24,7 +24,7 @@ public class TopService {
             + "player.data_location, player.data_point, player.data_magic_tree,"
             + "player.items_body, player.items_bag, player.items_box, player.items_box_lucky_round,"
             + "player.friends, player.enemies, player.data_intrinsic,player.data_item_time,"
-            + "player.data_task, player.data_mabu_egg, player.data_charm, player.skills,"
+            + "player.data_task, player.data_mabu_egg, player.data_dua, player.data_charm, player.skills,"
             + "player.skills_shortcut, player.pet_info, player.pet_power, player.pet_point,"
             + "player.pet_body, player.pet_skill, player.data_black_ball from player join "
             + "account on player.account_id = account.id where account.is_admin = 0 order by "
@@ -47,6 +47,108 @@ public class TopService {
         }
         return i;
     }
+    public static String getTopNap() {
+        StringBuffer sb = new StringBuffer("");
+
+        String SELECT_TOP_POWER = "SELECT name, vnd FROM player ORDER BY vnd DESC LIMIT 10;";
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            Connection conn = GirlkunDB.getConnection();
+            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            conn.setAutoCommit(false);
+
+            rs = ps.executeQuery();
+            byte i = 1;
+            while(rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("vnd")).append("\b");
+                i++;
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+    
+    
+    
+       public static String getTopSK() {
+        StringBuffer sb = new StringBuffer("");
+
+        String SELECT_TOP_POWER = "SELECT name, diemsk FROM player ORDER BY diemsk DESC LIMIT 10;";
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            Connection conn = GirlkunDB.getConnection();
+            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            conn.setAutoCommit(false);
+
+            rs = ps.executeQuery();
+            byte i = 1;
+            while(rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemsk")).append("\b");
+                i++;
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+       
+//    public static String getTopChienTruong() {
+//        StringBuffer sb = new StringBuffer("");
+//
+//        String SELECT_TOP_POWER = "SELECT name, diemchientruong FROM player ORDER BY diemchientruong DESC LIMIT 10;";
+//        PreparedStatement ps;
+//        ResultSet rs;
+//        try {
+//            Connection conn = GirlkunDB.getConnection();
+//            ps = conn.prepareStatement(SELECT_TOP_POWER);
+//            conn.setAutoCommit(false);
+//
+//            rs = ps.executeQuery();
+//            byte i = 1;
+//            while(rs.next()) {
+//                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemchientruong")).append("\b");
+//                i++;
+//            }
+//            conn.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return sb.toString();
+//    }
+       
+           public static String getTopHoTong() {
+        StringBuffer sb = new StringBuffer("");
+
+        String SELECT_TOP_POWER = "SELECT name, diemhotong FROM player ORDER BY diemhotong DESC LIMIT 10;";
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            Connection conn = GirlkunDB.getConnection();
+            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            conn.setAutoCommit(false);
+
+            rs = ps.executeQuery();
+            byte i = 1;
+            while(rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemhotong")).append("\b");
+                i++;
+            }
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+
 
     public void showTopPower(Player player) {
         if (Util.canDoWithTime(lastTimeGetTopPower, TIME_TARGET_GET_TOP_POWER)) {
@@ -84,6 +186,8 @@ public class TopService {
                 Manager.topNV = Manager.realTop(Manager.queryTopNV, con);
                 Manager.topSM = Manager.realTop(Manager.queryTopSM, con);
                 Manager.topSK = Manager.realTop(Manager.queryTopSK, con);
+                Manager.topPVP = Manager.realTop(Manager.queryTopPVP, con);
+                Manager.topNHS = Manager.realTop(Manager.queryTopNHS, con);
             } catch (Exception ignored) {
                 Logger.error("Lỗi đọc top");
             }

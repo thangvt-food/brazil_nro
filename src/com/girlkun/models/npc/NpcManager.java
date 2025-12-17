@@ -35,6 +35,8 @@ public class NpcManager {
             for (Npc npc : player.zone.map.npcs) {
                 if (npc.tempId == ConstNpc.QUA_TRUNG && player.mabuEgg == null) {
                     continue;
+                }else if (npc.tempId == ConstNpc.DUA_HAU && player.timedua == null) {
+                    continue;
                 } else if(npc.tempId == ConstNpc.CALICK && TaskService.gI().getIdTask(player) < ConstTask.TASK_20_0){
                     continue;
                 }

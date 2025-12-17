@@ -165,10 +165,20 @@ public class EffectSkillService {
         player.effectSkill.isSocola = true;
         player.effectSkill.countPem1hp = 0;
     }
+    public void setBinh(Player player, long lastTimeBinh, int timeBinh) {
+        player.effectSkill.lastTimeBinh = lastTimeBinh;
+        player.effectSkill.timeBinh = timeBinh;
+        player.effectSkill.isBinh = true;
+    }
 
     //player trở lại thành người
     public void removeSocola(Player player) {
         player.effectSkill.isSocola = false;
+        Service.getInstance().Send_Caitrang(player);
+    }
+    //player trở lại thành người
+    public void removeBinh(Player player) {
+        player.effectSkill.isBinh = false;
         Service.getInstance().Send_Caitrang(player);
     }
 
@@ -183,6 +193,20 @@ public class EffectSkillService {
             Service.getInstance().sendMessAllPlayerInMap(player, msg);
             msg.cleanup();
             mob.effectSkill.setSocola(System.currentTimeMillis(), timeSocola);
+        } catch (Exception e) {
+            com.girlkun.utils.Logger.logException(EffectSkillService.class, e);
+        }
+    }
+    public void sendMobToBinh(Player player, Mob mob, int timeBinh) {
+        Message msg;
+        try {
+            msg = new Message(-112);
+            msg.writer().writeByte(1);
+            msg.writer().writeByte(mob.id); //mob id
+            msg.writer().writeShort(14522); //icon socola
+            Service.getInstance().sendMessAllPlayerInMap(player, msg);
+            msg.cleanup();
+            mob.effectSkill.setBinh(System.currentTimeMillis(), timeBinh);
         } catch (Exception e) {
             com.girlkun.utils.Logger.logException(EffectSkillService.class, e);
         }
@@ -204,7 +228,7 @@ public class EffectSkillService {
 
     //Huýt sáo *****************************************************************
     //Hưởng huýt sáo
-    public void setStartHuytSao(Player player, int tiLeHP) {
+    public void setStartHuytSao(Player player, long tiLeHP) {
         player.effectSkill.tiLeHPHuytSao = tiLeHP;
         player.effectSkill.lastTimeHuytSao = System.currentTimeMillis();
     }
@@ -234,7 +258,7 @@ public class EffectSkillService {
         player.effectSkill.timeMonkey = timeMonkey;
         player.effectSkill.lastTimeUpMonkey = System.currentTimeMillis();
         player.effectSkill.levelMonkey = (byte) player.playerSkill.skillSelect.point;
-        player.nPoint.setHp(player.nPoint.hp * 2);
+        player.nPoint.setHp(player.nPoint.hp * 5);
     }
 
     public void monkeyDown(Player player) {

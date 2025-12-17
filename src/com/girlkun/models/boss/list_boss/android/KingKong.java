@@ -32,7 +32,7 @@ public class KingKong extends Boss {
       @Override
     public void active() {
         super.active(); //To change body of generated methods, choose Tools | Templates.
-        if(Util.canDoWithTime(st,900000)){
+        if(Util.canDoWithTime(st,1500000)){
             this.changeStatus(BossStatus.LEAVE_MAP);
         }
     }
@@ -60,5 +60,5 @@ public class KingKong extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

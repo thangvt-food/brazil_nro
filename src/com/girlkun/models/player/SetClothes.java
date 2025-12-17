@@ -23,8 +23,12 @@ public class SetClothes {
     public byte cadic;
     public byte nappa;
 
-    public byte worldcup;
+    public byte basil;
     public byte setDHD;
+    public byte SetTinhAn;
+    public byte SetNguyetAn;
+    public byte SetNhatAn;
+    public byte SetThienSu;
 
     public boolean godClothes;
     public int ctHaiTac = -1;
@@ -62,6 +66,37 @@ public class SetClothes {
 
             }
         }
+        
+        this.player.setClothes.SetThienSu = 0;
+           for (int i = 0; i < 5; i++) {
+           Item item = this.player.inventory.itemsBody.get(i);
+            if (item.isNotNullItem()) {
+              if (item.template.id >= 1048 && item.template.id <= 1062) {
+                 
+                        player.setClothes.SetThienSu++;
+                }
+            }  
+           }
+           
+                this.player.setClothes.SetTinhAn = 0;
+           for (int i = 0; i < 5; i++) {
+           Item item = this.player.inventory.itemsBody.get(i);
+            if (item.isNotNullItem()) {
+                    int chiso = 0;
+                  Item.ItemOption optionLevel = null;
+                  for (Item.ItemOption io : item.itemOptions) {
+                    if (io.optionTemplate.id == 34) {
+                        chiso = io.param;
+                        optionLevel = io;
+                        break;
+                    }
+                }
+                 if (optionLevel != null){
+                        player.setClothes.SetTinhAn++;
+                 }
+                
+            }  
+           }
     }
 
     private void setupSKT() {
@@ -117,10 +152,27 @@ public class SetClothes {
                             cadic++;
                             break;
                         case 21:
-                            if (io.param == 80) {
+                            if (io.param == 120) {
                                 setDHD++;
                             }
                             break;
+                        case 192:
+                        case 193:
+                            isActSet = true;
+                            basil++;
+                            break;
+//                        case 34:
+//                            isActSet = true;
+//                            tinhan++;
+//                            break;
+//                        case 35:
+//                            isActSet = true;
+//                            nguyetan++;
+//                            break;
+//                        case 36:
+//                            isActSet = true;
+//                            nhatan++;
+//                            break;
                     }
 
                     if (isActSet) {
@@ -144,7 +196,11 @@ public class SetClothes {
         this.cadic = 0;
         this.nappa = 0;
         this.setDHD = 0;
-        this.worldcup = 0;
+        this.basil = 0;
+        this.SetTinhAn = 0;
+        this.SetNguyetAn = 0;
+        this.SetNhatAn = 0;
+        this.SetThienSu = 0;
         this.godClothes = false;
         this.ctHaiTac = -1;
     }

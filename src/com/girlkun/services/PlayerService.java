@@ -60,7 +60,7 @@ public class PlayerService {
         Message msg;
         try {
             msg = Service.getInstance().messageSubCommand((byte) 5);
-            msg.writer().writeInt(player.nPoint.hp);
+            msg.writer().writeInt(Util.TamkjllGH(player.nPoint.hp));
             player.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class PlayerService {
         Message msg;
         try {
             msg = Service.getInstance().messageSubCommand((byte) 6);
-            msg.writer().writeInt(player.nPoint.mp);
+            msg.writer().writeInt(Util.TamkjllGH(player.nPoint.mp));
             player.sendMessage(msg);
             msg.cleanup();
         } catch (Exception e) {
@@ -85,12 +85,12 @@ public class PlayerService {
         sendInfoMp(player);
     }
 
-    public void hoiPhuc(Player player, int hp, int mp) {
+    public void hoiPhuc(Player player, long hp, long mp) {
         if (!player.isDie()) {
             player.nPoint.addHp(hp);
             player.nPoint.addMp(mp);
             Service.getInstance().Send_Info_NV(player);
-            if (!player.isPet) {
+            if (!player.isPet&&!player.isNewPet) {
                 PlayerService.gI().sendInfoHpMp(player);
             }
         }
@@ -110,8 +110,8 @@ public class PlayerService {
                 msg.writer().writeInt((int) player.inventory.gold);
             }
             msg.writer().writeInt(player.inventory.gem);//luong
-            msg.writer().writeInt(player.nPoint.hp);//chp
-            msg.writer().writeInt(player.nPoint.mp);//cmp
+            msg.writer().writeInt(Util.TamkjllGH(player.nPoint.hp));//chp
+            msg.writer().writeInt(Util.TamkjllGH(player.nPoint.mp));//cmp
             msg.writer().writeInt(player.inventory.ruby);//ruby
             player.sendMessage(msg);
         } catch (Exception e) {
@@ -158,6 +158,9 @@ public class PlayerService {
             }
             if (player.pet != null) {
                 player.pet.followMaster();
+            }
+            if (player.newpet != null) {
+                player.newpet.followMaster();
             }
             MapService.gI().sendPlayerMove(player);
             TaskService.gI().checkDoneTaskGoToMap(player, player.zone);

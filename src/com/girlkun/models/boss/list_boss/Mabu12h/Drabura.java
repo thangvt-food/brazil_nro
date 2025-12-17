@@ -41,8 +41,8 @@ public class Drabura extends Boss {
         }
         plKill.fightMabu.changePoint((byte) 20);
     }
-    @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+   @Override
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (!this.isDie()) {
             if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1)) {
                 this.chat("Xí hụt");

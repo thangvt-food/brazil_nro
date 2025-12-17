@@ -78,6 +78,24 @@ public class IntrinsicService {
                 "Nội tại là một kỹ năng bị động hỗ trợ đặc biệt\nBạn có muốn mở hoặc thay đổi nội tại không?",
                 "Xem\ntất cả\nNội Tại", "Mở\nNội Tại", "Mở VIP", "Từ chối");
     }
+    
+    public void sattd(Player player) {
+        NpcService.gI().createMenuConMeo(player, ConstNpc.menutd, -1,
+                                "chọn lẹ đi để tau đi chơi với ny", "Set\nTaiyoken", "Set\nGenki", "Set\nkamejoko", "Từ chối");
+                    
+            }
+    
+    public void satnm(Player player) {
+        NpcService.gI().createMenuConMeo(player, ConstNpc.menunm, -1,
+                                "chọn lẹ đi để tau đi chơi với ny", "Set\ngod ki", "Set\ngod dame", "Set\nsummon", "Từ chối");
+                    
+            }
+    
+    public void setxd(Player player) {
+        NpcService.gI().createMenuConMeo(player, ConstNpc.menuxd, -1,
+                                "chọn lẹ đi để tau đi chơi với ny", "Set\ngod galick", "Set\nmonkey", "Set\ngod hp", "Từ chối");
+                    
+            }
 
     public void showConfirmOpen(Player player) {
         NpcService.gI().createMenuConMeo(player, ConstNpc.CONFIRM_OPEN_INTRINSIC, -1, "Bạn muốn đổi Nội Tại khác\nvới giá là "

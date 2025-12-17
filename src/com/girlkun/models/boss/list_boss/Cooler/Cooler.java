@@ -43,7 +43,30 @@ public class Cooler extends Boss {
             this.changeStatus(BossStatus.LEAVE_MAP);
         }
     }
-
+    @Override
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (!this.isDie()) {
+            if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
+                this.chat("Xí hụt");
+                return 0;
+            }
+            damage = this.nPoint.subDameInjureWithDeff(damage);
+            if (!piercing && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
+            }
+            this.nPoint.subHP(damage);
+            if (isDie()) {
+                this.setDie(plAtt);
+                die(plAtt);
+            }
+            return damage;
+        } else {
+            return 0;
+        }
+    }
     @Override
     public void joinMap() {
         super.joinMap(); //To change body of generated methods, choose Tools | Templates.

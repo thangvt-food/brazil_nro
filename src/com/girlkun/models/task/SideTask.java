@@ -72,7 +72,7 @@ public class SideTask {
             case ConstTask.HELL:
                 return "địa ngục";
             default:
-                return "NROGOD.COM";
+                return "Arriety.org";
         }
     }
 

@@ -1,6 +1,5 @@
 package com.girlkun.consts;
 
-
 public class ConstNpc {
 
     public static final String CALICK_KE_CHUYEN = "20 năm trước bọn Android sát thủ đã đánh bại nhóm bảo vệ trái đất của Sôngoku và Cađíc, Pôcôlô ...\n"
@@ -78,6 +77,7 @@ public class ConstNpc {
     public static final byte RONG_1S = 36;
     public static final byte BUNMA_TL = 37;
     public static final byte CALICK = 38;
+    public static final byte MI_NUONG = 103;
     public static final byte SANTA = 39;
     public static final byte MABU_MAP = 40;
     public static final byte TRUNG_THU = 41;
@@ -109,7 +109,16 @@ public class ConstNpc {
     public static final byte MR_POPO = 67;
     public static final byte PANCHY = 68;
     public static final byte THO_DAI_CA = 69;
-
+    public static final byte FIDE = 73;
+    public static final byte Jiren = 75;
+    public static final byte GOHANSSJ = 76;
+    public static final byte UUB = 77;
+    public static final byte ZAMASU = 79;
+    public static final byte TRUNG_LINH_THU = 97;
+    public static final byte ONG_GIA_NOEL = 98;
+    public static final byte CAY_THONG_NOEL = 78;
+    public static final byte Monaito = 102;
+    public static final byte RUT_VANG = 103;
 
     //----------------------index menu------------------------------------------
     //menu o len tang map mabu
@@ -119,6 +128,10 @@ public class ConstNpc {
     public static final int IGNORE_MENU = 712002;
     public static final int BASE_MENU = 752002;
 
+    public static final int DOI_TIEN = 555;
+    public static final int MENU_DOITIEN1 = 556;
+    public static final int MENU_DOITIEN2 = 557;
+
     //index quy lão kamê
     public static final int MENU_OPEN_DBKB = 500;
     public static final int MENU_OPENED_DBKB = 501;
@@ -126,25 +139,36 @@ public class ConstNpc {
     public static final int MENU_EVENT = 523;
     public static final int MENU_GIAO_BONG = 524;
     public static final int CONFIRM_DOI_THUONG_SU_KIEN = 525;
-
+     public static final int MENU_ACCPET_GO_TO_GAS = 538;
+    public static final int MENU_OPEN_GAS = 539;
+    public static final int MENU_OPENED_GAS = 540;
     //index than vu tru
     public static final int MENU_DI_CHUYEN = 500;
-
 
     //index menu ba hat mit
     public static final int MENU_PHA_LE_HOA_TRANG_BI = 500;
     public static final int MENU_CHUYEN_HOA_TRANG_BI = 501;
     public static final int MENU_OPTION_SHOP_BUA = 502;
+    public static final int MENU_EP_SKH = 10000;
+    public static final int MENU_NGOC_BOI = 10001;
+    public static final int MENU_DOI_MTS = 10002;
+    public static final int MENU_1 = 10003;
+    public static final int MENU_2 = 10004;
+    public static final int MENU_3 = 10005;
+    public static final int MENU_4 = 10006;
+    public static final int MENU_5 = 10007;
+    public static final int MENU_6 = 10008;
+    public static final int MENU_7 = 10009;
+    public static final int MENU_8 = 10010;
+    public static final int MENU_TRANG_BI = 10011;
+    public static final int MENU_CAI_TRANG = 10012;
     public static final int MENU_START_COMBINE = 503;
     public static final int MENU_PHAN_RA_DO_THAN_LINH = 504;
     public static final int MENU_NANG_CAP_DO_TS = 505;
     public static final int MENU_NANG_DOI_SKH_VIP = 506;
 
-
-
     //index menu linh canh
     public static final int MENU_JOIN_DOANH_TRAI = 502;
-
 
     //index menu con meo
     public static final int MAKE_MATCH_PVP = 502;
@@ -164,6 +188,10 @@ public class ConstNpc {
     public static final int MENU_FIND_PLAYER = 516;
     public static final int CONFIRM_DISSOLUTION_CLAN = 517;
     public static final int CONFIRM_ACTIVE = 518;
+    public static final int menutd = 519;
+    public static final int menunm = 520;
+    public static final int menuxd = 521;
+    public static final int CONFIRM_TELE_NAMEC = 522;
 
     public static final int MENU_OPTION_USE_ITEM2000 = 2000;
     public static final int MENU_OPTION_USE_ITEM2001 = 2001;
@@ -172,7 +200,8 @@ public class ConstNpc {
     public static final int MENU_OPTION_USE_ITEM2004 = 2004;
     public static final int MENU_OPTION_USE_ITEM2005 = 2005;
     public static final int MENU_OPTION_USE_ITEM736 = 736;
-
+    public static final int MENU_OPTION_USE_ITEM1105 = 1105;
+    public static final int MENU_OPTION_USE_ITEM2048 = 2048;
 
     //index menu rong thieng
     public static final int SHENRON_CONFIRM = 501;
@@ -180,6 +209,7 @@ public class ConstNpc {
     public static final int SHENRON_1_2 = 503;
     public static final int SHENRON_2 = 504;
     public static final int SHENRON_3 = 505;
+    public static final int NAMEC_1 = 506;
 
     //index menu magic tree
     public static final int MAGIC_TREE_NON_UPGRADE_LEFT_PEA = 501;
@@ -193,6 +223,11 @@ public class ConstNpc {
     public static final int CAN_OPEN_EGG = 501;
     public static final int CONFIRM_OPEN_EGG = 502;
     public static final int CONFIRM_DESTROY_EGG = 503;
+    //index menu mabu egg
+    public static final int CAN_NOT_OPEN_DUA = 500;
+    public static final int CAN_OPEN_DUA = 501;
+    public static final int CONFIRM_OPEN_DUA = 502;
+    public static final int CONFIRM_DESTROY_DUA = 503;
 
     //index menu npc nhà
     public static final int QUA_TAN_THU = 500;
@@ -225,14 +260,12 @@ public class ConstNpc {
     public static final int MENU_OPTION_PHU_HP = 501;
     public static final int MENU_OPTION_GO_HOME = 502;
 
-
     //index menu bò mộng
     public static final int MENU_OPTION_LEVEL_SIDE_TASK = 500;
     public static final int MENU_OPTION_PAY_SIDE_TASK = 501;
 
     //------------------------------shop id-------------------------------------
     //npcname_shoporder
-
     public static final int SHOP_BUNMA_QK_0 = 500;
     public static final int SHOP_DENDE_0 = 501;
     public static final int SHOP_APPULE_0 = 502;
@@ -245,5 +278,7 @@ public class ConstNpc {
     public static final int SIDE_BOX_LUCKY_ROUND = 509;
     public static final int SHOP_BUNMA_TL_0 = 510;
     public static final int SIDE_BOX_ITEM_REWARD = 511;
+    
+    public static final int RUONG_GO = 512;
 
 }

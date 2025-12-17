@@ -78,12 +78,12 @@ public class PVPService {
             return;
         }
         Player plMap = pl.zone.getPlayerInMap(pl.iDMark.getIdPlayThachDau());
-        if (!plMap.getSession().actived) {
-            Service.getInstance().sendThongBao(pl, "Đối thủ chưa là thành viên của GOD");
-            return;
-        }
         if (plMap == null) {
             Service.getInstance().sendThongBao(pl, "Đối thủ đã rời khỏi map");
+            return;
+        }
+        if (!plMap.getSession().actived) {
+            Service.getInstance().sendThongBao(pl, "Đối thủ chưa là thành viên của NRO");
             return;
         }
         int goldThachDau = GOLD_CHALLENGE[selectGold];
@@ -140,7 +140,7 @@ public class PVPService {
         ThachDau thachDau = new ThachDau(pl, plMap, goldThachDau);
     }
 
-    //**************************************************************************TRẢ THÙ
+  //**************************************************************************TRẢ THÙ
     public void openSelectRevenge(Player pl, long idEnemy) {
         Player enemy = Client.gI().getPlayer(idEnemy);
         if (enemy == null) {
@@ -172,4 +172,3 @@ public class PVPService {
         TraThu traThu = new TraThu(pl, enemy);
     }
 }
-

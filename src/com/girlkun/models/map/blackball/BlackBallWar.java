@@ -30,6 +30,13 @@ public class BlackBallWar {
     public static final byte HOUR_OPEN = 20;
     public static final byte MIN_OPEN = 0;
     public static final byte SECOND_OPEN = 0;
+    
+    public static final byte HOUR_OPEN_DuongTank = 20;
+    public static final byte MIN_OPEN_DuongTank = 0;
+    public static final byte SECOND_OPEN_DuongTank = 0;
+        public static final byte HOUR_CLOSE_DuongTank = 20;
+    public static final byte MIN_CLOSE_DuongTank = 15;
+    public static final byte SECOND_CLOSE_DuongTank = 0;
 
     public static final byte HOUR_CAN_PICK_DB = 20;
     public static final byte MIN_CAN_PICK_DB = 30;
@@ -38,6 +45,10 @@ public class BlackBallWar {
     public static final byte HOUR_CLOSE = 21;
     public static final byte MIN_CLOSE = 0;
     public static final byte SECOND_CLOSE = 0;
+    
+    public static final byte HOUR_RS = 21;
+    public static final byte MIN_RS = 0;
+    public static final byte SECOND_RS = 1;
 
     //    public static final byte HOUR_OPEN = 20;
 //    public static final byte MIN_OPEN = 0;
@@ -57,10 +68,16 @@ public class BlackBallWar {
     private static BlackBallWar i;
 
     public static long TIME_OPEN;
-    private static long TIME_CAN_PICK_DB;
+    public static long TIME_CAN_PICK_DB;
     public static long TIME_CLOSE;
+    public static long TIME_RS;
+    
+    public static long TIME_OPEN_DuongTank;
+    public static long TIME_CLOSE_DuongTank;
 
     private int day = -1;
+    public long lastTimeReinit;
+    public boolean isReinit;
 
     public static BlackBallWar gI() {
         if (i == null) {
@@ -77,9 +94,16 @@ public class BlackBallWar {
                 this.TIME_OPEN = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_OPEN + ":" + MIN_OPEN + ":" + SECOND_OPEN, "dd/MM/yyyy HH:mm:ss");
                 this.TIME_CAN_PICK_DB = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_CAN_PICK_DB + ":" + MIN_CAN_PICK_DB + ":" + SECOND_CAN_PICK_DB, "dd/MM/yyyy HH:mm:ss");
                 this.TIME_CLOSE = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_CLOSE + ":" + MIN_CLOSE + ":" + SECOND_CLOSE, "dd/MM/yyyy HH:mm:ss");
+                this.TIME_RS = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_RS + ":" + MIN_RS + ":" + SECOND_RS, "dd/MM/yyyy HH:mm:ss");
+                this.TIME_OPEN_DuongTank = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_OPEN_DuongTank + ":" + MIN_OPEN_DuongTank + ":" + SECOND_OPEN_DuongTank, "dd/MM/yyyy HH:mm:ss");
+                this.TIME_CLOSE_DuongTank = TimeUtil.getTime(TimeUtil.getTimeNow("dd/MM/yyyy") + " " + HOUR_CLOSE_DuongTank + ":" + MIN_CLOSE_DuongTank + ":" + SECOND_CLOSE_DuongTank, "dd/MM/yyyy HH:mm:ss");
             } catch (Exception e) {
             }
         }
+    }
+    public void reInitNrd() {
+        lastTimeReinit = TIME_CAN_PICK_DB;
+        isReinit = true;
     }
 
     public synchronized void dropBlackBall(Player player) {
@@ -132,6 +156,10 @@ public class BlackBallWar {
                 } else {
                     kickOutOfMap(player);
                 }
+            }
+            if ((now > TIME_CLOSE && now < TIME_RS)) {
+                lastTimeReinit += 86400000;
+                Thread.sleep(1000);
             }
         } catch (Exception ex) {
         }

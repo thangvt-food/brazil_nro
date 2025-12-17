@@ -43,7 +43,7 @@ public class Drabura2 extends Boss {
     }
 
     @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (!this.isDie()) {
             if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1)) {
                 this.chat("Xí hụt");

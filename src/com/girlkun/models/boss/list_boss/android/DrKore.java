@@ -53,7 +53,7 @@ public class DrKore extends Boss {
      @Override
     public void active() {
         super.active(); //To change body of generated methods, choose Tools | Templates.
-        if(Util.canDoWithTime(st,900000)){
+        if(Util.canDoWithTime(st,1500000)){
             this.changeStatus(BossStatus.LEAVE_MAP);
         }
     }
@@ -65,14 +65,14 @@ public class DrKore extends Boss {
     }
     private long st;
 
-    @Override
-    public int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+   @Override
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
         if (plAtt != null) {
             switch (plAtt.playerSkill.skillSelect.template.id) {
                 case Skill.KAMEJOKO:
                 case Skill.MASENKO:
                 case Skill.ANTOMIC:
-                    PlayerService.gI().hoiPhuc(this, damage, 0);
+                    PlayerService.gI().hoiPhuc(this, Util.TamkjllGH(damage), 0);
                     if (Util.isTrue(1, 5)) {
                         this.chat("Hấp thụ.. các ngươi nghĩ sao vậy?");
                     }
@@ -101,5 +101,5 @@ public class DrKore extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

@@ -6,8 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author 💖 Trần Lại 💖
- * @copyright 💖 GirlkuN  💖
+ * @Stole By Arriety 💖
  *
  */
 public class CombineNew {
@@ -20,6 +19,10 @@ public class CombineNew {
     public int goldCombine;
     public int gemCombine;
     public float ratioCombine;
+    public float ratioCombine2;
+    public float ratioCombine3;
+    public float ratioCombine4;
+    public float ratioCombine5;
     public int countDaNangCap;
     public short countDaBaoVe;
 

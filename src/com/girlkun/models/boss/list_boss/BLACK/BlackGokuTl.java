@@ -4,6 +4,7 @@ import com.girlkun.models.boss.*;
 import com.girlkun.models.map.ItemMap;
 import com.girlkun.models.player.Player;
 import com.girlkun.server.Manager;
+import com.girlkun.services.EffectSkillService;
 import com.girlkun.services.Service;
 import com.girlkun.utils.Util;
 
@@ -23,21 +24,51 @@ public class BlackGokuTl extends Boss {
         if (Util.isTrue(BossManager.ratioReward, 100)) {
             if (Util.isTrue(1, 20)) {
                 Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, 561, 1, this.location.x, this.location.y, plKill.id));
-            } else {
+            }
+            else if (Util.isTrue(10, 20)) {
+                Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, 1079, 2, this.location.x, this.location.y, plKill.id));
+            }
+            else if (Util.isTrue(5, 20)) {
+                 Service.getInstance().dropItemMap(this.zone, new ItemMap (zone, 15, 1, this.location.x, this.location.y, plKill.id));
+            }
+            else {
                 Service.getInstance().dropItemMap(this.zone, Util.ratiItem(zone, Manager.itemIds_TL[randomDo], 1, this.location.x, this.location.y, plKill.id));
             }
         } else {
-            Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, Manager.itemIds_NR_SB[randomNR], 1, this.location.x, zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
+            Service.getInstance().dropItemMap(this.zone, new ItemMap(zone, 15, 1, this.location.x, zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
         }
     }
-
     @Override
-    public void active() {
-        super.active(); //To change body of generated methods, choose Tools | Templates.
-        if (Util.canDoWithTime(st, 900000)) {
-            this.changeStatus(BossStatus.LEAVE_MAP);
+    public double injured(Player plAtt, double damage, boolean piercing, boolean isMobAttack) {
+        if (!this.isDie()) {
+            if (!piercing && Util.isTrue(this.nPoint.tlNeDon, 1000)) {
+                this.chat("Xí hụt");
+                return 0;
+            }
+            damage = this.nPoint.subDameInjureWithDeff(damage);
+            if (!piercing && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
+            }
+            this.nPoint.subHP(damage);
+            if (isDie()) {
+                this.setDie(plAtt);
+                die(plAtt);
+            }
+            return damage;
+        } else {
+            return 0;
         }
     }
+//    @Override
+//    public void active() {
+//        super.active(); //To change body of generated methods, choose Tools | Templates.
+//        if (Util.canDoWithTime(st, 900000)) {
+//            this.changeStatus(BossStatus.LEAVE_MAP);
+//        }
+//    }
 
     @Override
     public void joinMap() {

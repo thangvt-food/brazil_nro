@@ -2,6 +2,7 @@ package com.girlkun.models.clan;
 
 import com.girlkun.database.GirlkunDB;
 import com.girlkun.models.map.doanhtrai.DoanhTrai;
+import com.girlkun.models.map.gas.Gas;
 import com.girlkun.services.ClanService;
 
 import java.util.ArrayList;
@@ -46,9 +47,12 @@ public class Clan {
 
     public long lastTimeOpenDoanhTrai;
     public boolean haveGoneDoanhTrai;
+    public long timeOpenDoanhTrai;
     public String playerOpenDoanhTrai;
     public DoanhTrai doanhTrai;
-
+      public long timeOpenKhiGas;
+    public Player playerOpenKhiGas;
+    public Gas khiGas;
     public final List<ClanMember> members;
     public final List<Player> membersInGame;
 
@@ -56,7 +60,7 @@ public class Clan {
         this.id = NEXT_ID++;
         this.name = "";
         this.slogan = "";
-        this.maxMember = 10;
+        this.maxMember = 20;
         this.createTime = (int) (System.currentTimeMillis() / 1000);
         this.members = new ArrayList<>();
         this.membersInGame = new ArrayList<>();

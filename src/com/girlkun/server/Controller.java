@@ -65,6 +65,13 @@ public class Controller implements IMessageHandler {
 //            }
 //            System.out.println("***************************CMD receive: " + cmd);
             switch (cmd) {
+                case -105: 
+                    if(player.type == 0 && player.maxTime == 30){
+                        ChangeMapService.gI().changeMap(player, 102,0, 100, 336);
+                    }else if(player.type == 1 && player.maxTime == 5){
+                        ChangeMapService.gI().changeMap(player, 160,0, -1, 5);
+                    }
+                    break;
                 case 42:
                     Service.getInstance().regisAccount(_session, _msg);
                     break;
@@ -252,8 +259,11 @@ public class Controller implements IMessageHandler {
                     break;
                 case -66:
                     int effId = _msg.reader().readShort();
-//                    System.out.println("get effect data: " + effId);
-                    DataGame.sendEffectTemplate(_session, effId);
+                    int idT = effId;
+                    if(effId == 25){
+                                idT = 50; // id eff rong muon thay doi ( hien tai la rong xuong) 
+                            }
+                    DataGame.effData(_session, effId, idT);
                     break;
                 case -62:
                     if (player != null) {
@@ -284,8 +294,7 @@ public class Controller implements IMessageHandler {
                     break;
                 case -45:
                     if (player != null) {
-                        byte status = _msg.reader().readByte();
-                        SkillService.gI().useSkill(player, null, null);
+                        SkillService.gI().useSkill(player, null, null, _msg);
                     }
                     break;
                 case -46:
@@ -335,7 +344,9 @@ public class Controller implements IMessageHandler {
                     }
                     break;
                 case -40:
-                    UseItem.gI().getItem(_session, _msg);
+                    if(_session != null){
+                        UseItem.gI().getItem(_session, _msg);
+                    }
                     break;
                 case -41:
                     Service.getInstance().sendCaption(_session, _msg.reader().readByte());
@@ -368,6 +379,11 @@ public class Controller implements IMessageHandler {
                             }
 //                            Logger.log(Logger.PURPLE, "done load map nhà!\n");
                         }
+                        if (player.zone.map.mapId == 104) {
+                        if (player.timedua != null) {
+                                player.timedua.sendTimedua();
+                            }
+                    }
                     }
                     break;
                 case 11:
@@ -395,6 +411,7 @@ public class Controller implements IMessageHandler {
                 case 34:
                     if (player != null) {
                         int selectSkill = _msg.reader().readShort();
+//                        System.err.println("id" + selectSkill);
                         SkillService.gI().selectSkill(player, selectSkill);
                     }
                     break;
@@ -599,9 +616,8 @@ public class Controller implements IMessageHandler {
     }
 
     public void login2(MySession session, Message msg) {
-        Service.getInstance().switchToRegisterScr(session);
-//        Service.getInstance().sendThongBaoOK(session, "Vui lòng đăng ký tài khoản tại trang chủ!");
-    }
+       Service.gI().switchToRegisterScr(session); }
+              
 
     public void sendInfo(MySession session) {
         Player player = session.player;
@@ -660,9 +676,19 @@ public class Controller implements IMessageHandler {
 
         if (TaskService.gI().getIdTask(player) == ConstTask.TASK_0_0) {
             NpcService.gI().createTutorial(player, -1,
-                    "Chào mừng " + player.name + " đến với ngọc rồng online server NROGOD\n"
+                    "Chúc " + player.name + " chơi game vui vẻ\n"
                             + "Nhiệm vụ đầu tiên của bạn là di chuyển\n"
                             + "Bạn hãy di chuyển nhân vật theo mũi tên chỉ hướng");
+        }
+        
+        if (player.inventory.itemsBody.get(10).isNotNullItem()) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                    Service.getInstance().sendPetFollow(player, (short) (player.inventory.itemsBody.get(10).template.iconID - 1));
+                } catch (Exception e) {
+                }
+            }).start();
         }
 
     }

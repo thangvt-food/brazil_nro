@@ -41,13 +41,13 @@ public class TDST extends Boss {
         }
         super.notifyJoinMap();
     }
-    @Override
-    public void active() {
-        super.active(); //To change body of generated methods, choose Tools | Templates.
-        if (Util.canDoWithTime(st, 300000)) {
-            this.changeStatus(BossStatus.LEAVE_MAP);
-        }
-    }
+//    @Override
+//    public void active() {
+//        super.active(); //To change body of generated methods, choose Tools | Templates.
+//        if (Util.canDoWithTime(st, 1500000)) {
+//            this.changeStatus(BossStatus.LEAVE_MAP);
+//        }
+//    }
 
     @Override
     public void joinMap() {
@@ -59,5 +59,5 @@ public class TDST extends Boss {
 
 /**
  * Vui lòng không sao chép mã nguồn này dưới mọi hình thức. Hãy tôn trọng tác
- * giả của mã nguồn này. Xin cảm ơn! - Girlkun75
+ * giả của mã nguồn này. Xin cảm ơn! - GirlBeo
  */

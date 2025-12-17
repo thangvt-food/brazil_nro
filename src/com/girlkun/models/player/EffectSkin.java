@@ -47,7 +47,7 @@ public class EffectSkin {
             updateOdo();
             updateXenHutXungQuanh();
         }
-        if (!this.player.isBoss && !this.player.isPet) {
+        if (!this.player.isBoss && !this.player.isPet &&!player.isNewPet) {
             updateTrainArmor();
         }
         if (xHPKI != 1 && Util.canDoWithTime(lastTimeXHPKI, 1800000)) {
@@ -91,7 +91,7 @@ public class EffectSkin {
                         }
                     }
                 }
-                if (!pl.isPet && Util.canDoWithTime(lastTimeUpdateCTHT, 5000)) {
+                if (!pl.isPet &&!pl.isNewPet&& Util.canDoWithTime(lastTimeUpdateCTHT, 5000)) {
                     InventoryServiceNew.gI().sendItemBody(pl);
                 }
                 pl.effectSkin.lastTimeUpdateCTHT = System.currentTimeMillis();
@@ -128,13 +128,13 @@ public class EffectSkin {
                         }
                     }
                     for (Player pl : players) {
-                        int subHp = pl.nPoint.hpMax * param / 100;
-                        int subMp = pl.nPoint.mpMax * param / 100;
+                        long subHp = Util.TamkjllGH(pl.nPoint.hpMax * param / 100);
+                        long subMp = Util.TamkjllGH(pl.nPoint.mpMax * param / 100);
                         if (subHp >= pl.nPoint.hp) {
-                            subHp = pl.nPoint.hp - 1;
+                            subHp = Util.TamkjllGH(pl.nPoint.hp - 1);
                         }
                         if (subMp >= pl.nPoint.mp) {
-                            subMp = pl.nPoint.mp - 1;
+                            subMp = Util.TamkjllGH(pl.nPoint.mp - 1);
                         }
                         hpHut += subHp;
                         mpHut += subMp;
@@ -170,9 +170,9 @@ public class EffectSkin {
 
                     }
                     for (Player pl : players) {
-                        int subHp = pl.nPoint.hpMax * param / 100;
+                        long subHp = Util.TamkjllGH(pl.nPoint.hpMax * param / 100);
                         if (subHp >= pl.nPoint.hp) {
-                            subHp = pl.nPoint.hp - 1;
+                            subHp = Util.TamkjllGH(pl.nPoint.hp - 1);
                         }
                         Service.getInstance().chat(pl, textOdo[Util.nextInt(0, textOdo.length - 1)]);
                         PlayerService.gI().sendInfoHpMpMoney(pl);
