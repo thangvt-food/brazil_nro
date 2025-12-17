@@ -24,7 +24,8 @@ public class GiftDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ps = con.prepareStatement("select * from gift where player_id = ?");
+            ps = con.prepareStatement("select * from gift where player_id = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, (int) player.id);
             rs = ps.executeQuery();
             if (rs.next()) {

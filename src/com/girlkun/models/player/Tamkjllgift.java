@@ -47,7 +47,8 @@ public class Tamkjllgift {
     public void init() {
         listGiftCode.clear();
         try (Connection con = GirlkunDB.getConnection();) {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM TamkjllGift WHERE Luot >= 1");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM TamkjllGift WHERE Luot >= 1",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Tamkjllgift giftcode = new Tamkjllgift();

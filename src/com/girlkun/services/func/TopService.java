@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TopService {
 
     private static final String QUERY_TOP_POWER = "select player.id, player.name,"
@@ -47,6 +46,7 @@ public class TopService {
         }
         return i;
     }
+
     public static String getTopNap() {
         StringBuffer sb = new StringBuffer("");
 
@@ -55,13 +55,14 @@ public class TopService {
         ResultSet rs;
         try {
             Connection conn = GirlkunDB.getConnection();
-            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            ps = conn.prepareStatement(SELECT_TOP_POWER, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             conn.setAutoCommit(false);
 
             rs = ps.executeQuery();
             byte i = 1;
-            while(rs.next()) {
-                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("vnd")).append("\b");
+            while (rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("vnd"))
+                        .append("\b");
                 i++;
             }
             conn.close();
@@ -71,10 +72,8 @@ public class TopService {
 
         return sb.toString();
     }
-    
-    
-    
-       public static String getTopSK() {
+
+    public static String getTopSK() {
         StringBuffer sb = new StringBuffer("");
 
         String SELECT_TOP_POWER = "SELECT name, diemsk FROM player ORDER BY diemsk DESC LIMIT 10;";
@@ -82,13 +81,14 @@ public class TopService {
         ResultSet rs;
         try {
             Connection conn = GirlkunDB.getConnection();
-            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            ps = conn.prepareStatement(SELECT_TOP_POWER, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             conn.setAutoCommit(false);
 
             rs = ps.executeQuery();
             byte i = 1;
-            while(rs.next()) {
-                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemsk")).append("\b");
+            while (rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemsk"))
+                        .append("\b");
                 i++;
             }
             conn.close();
@@ -98,33 +98,35 @@ public class TopService {
 
         return sb.toString();
     }
-       
-//    public static String getTopChienTruong() {
-//        StringBuffer sb = new StringBuffer("");
-//
-//        String SELECT_TOP_POWER = "SELECT name, diemchientruong FROM player ORDER BY diemchientruong DESC LIMIT 10;";
-//        PreparedStatement ps;
-//        ResultSet rs;
-//        try {
-//            Connection conn = GirlkunDB.getConnection();
-//            ps = conn.prepareStatement(SELECT_TOP_POWER);
-//            conn.setAutoCommit(false);
-//
-//            rs = ps.executeQuery();
-//            byte i = 1;
-//            while(rs.next()) {
-//                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemchientruong")).append("\b");
-//                i++;
-//            }
-//            conn.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return sb.toString();
-//    }
-       
-           public static String getTopHoTong() {
+
+    // public static String getTopChienTruong() {
+    // StringBuffer sb = new StringBuffer("");
+    //
+    // String SELECT_TOP_POWER = "SELECT name, diemchientruong FROM player ORDER BY
+    // diemchientruong DESC LIMIT 10;";
+    // PreparedStatement ps;
+    // ResultSet rs;
+    // try {
+    // Connection conn = GirlkunDB.getConnection();
+    // ps = conn.prepareStatement(SELECT_TOP_POWER);
+    // conn.setAutoCommit(false);
+    //
+    // rs = ps.executeQuery();
+    // byte i = 1;
+    // while(rs.next()) {
+    // sb.append(i).append(".").append(rs.getString("name")).append(":
+    // ").append(rs.getString("diemchientruong")).append("\b");
+    // i++;
+    // }
+    // conn.close();
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    //
+    // return sb.toString();
+    // }
+
+    public static String getTopHoTong() {
         StringBuffer sb = new StringBuffer("");
 
         String SELECT_TOP_POWER = "SELECT name, diemhotong FROM player ORDER BY diemhotong DESC LIMIT 10;";
@@ -132,13 +134,14 @@ public class TopService {
         ResultSet rs;
         try {
             Connection conn = GirlkunDB.getConnection();
-            ps = conn.prepareStatement(SELECT_TOP_POWER);
+            ps = conn.prepareStatement(SELECT_TOP_POWER, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             conn.setAutoCommit(false);
 
             rs = ps.executeQuery();
             byte i = 1;
-            while(rs.next()) {
-                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemhotong")).append("\b");
+            while (rs.next()) {
+                sb.append(i).append(".").append(rs.getString("name")).append(": ").append(rs.getString("diemhotong"))
+                        .append("\b");
                 i++;
             }
             conn.close();
@@ -149,12 +152,11 @@ public class TopService {
         return sb.toString();
     }
 
-
     public void showTopPower(Player player) {
         if (Util.canDoWithTime(lastTimeGetTopPower, TIME_TARGET_GET_TOP_POWER)) {
             this.lastTimeGetTopPower = System.currentTimeMillis();
             this.listTopPower.clear();
-//            this.listTopPower = PlayerDAO.getPlayers(QUERY_TOP_POWER);
+            // this.listTopPower = PlayerDAO.getPlayers(QUERY_TOP_POWER);
         }
         Message msg;
         try {

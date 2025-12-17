@@ -13,13 +13,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ShopDAO {
 
     public static List<Shop> getShops(Connection con) {
         List<Shop> list = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("select * from shop order by npc_id asc");
+            PreparedStatement ps = con.prepareStatement("select * from shop order by npc_id asc",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Shop shop = new Shop();
@@ -47,7 +47,8 @@ public class ShopDAO {
 
     private static void loadShopTab(Connection con, Shop shop) {
         try {
-            PreparedStatement ps = con.prepareStatement("select * from tab_shop where shop_id = ? order by id");
+            PreparedStatement ps = con.prepareStatement("select * from tab_shop where shop_id = ? order by id",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, shop.id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -75,7 +76,7 @@ public class ShopDAO {
     private static void loadItemShop(Connection con, TabShop tabShop) {
         try {
             PreparedStatement ps = con.prepareStatement("select * from item_shop where is_sell = 1 and tab_id = ? "
-                    + "order by create_time desc");
+                    + "order by create_time desc", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, tabShop.id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -106,7 +107,8 @@ public class ShopDAO {
 
     private static void loadItemShopOption(Connection con, ItemShop itemShop) {
         try {
-            PreparedStatement ps = con.prepareStatement("select * from item_shop_option where item_shop_id = ?");
+            PreparedStatement ps = con.prepareStatement("select * from item_shop_option where item_shop_id = ?",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, itemShop.id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {

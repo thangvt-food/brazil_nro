@@ -203,7 +203,8 @@ public class Manager {
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection();) {
             // load part
-            ps = con.prepareStatement("select * from part");
+            ps = con.prepareStatement("select * from part", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             List<Part> parts = new ArrayList<>();
             while (rs.next()) {
@@ -248,7 +249,8 @@ public class Manager {
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection();) {
             // load part
-            ps = con.prepareStatement("select * from part");
+            ps = con.prepareStatement("select * from part", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             List<Part> parts = new ArrayList<>();
             while (rs.next()) {
@@ -281,7 +283,8 @@ public class Manager {
             Logger.success("Load part thành công (" + parts.size() + ")\n");
 
             // load small version
-            ps = con.prepareStatement("select count(id) from small_version");
+            ps = con.prepareStatement("select count(id) from small_version", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             List<byte[]> smallVersion = new ArrayList<>();
             if (rs.next()) {
@@ -290,7 +293,8 @@ public class Manager {
                     smallVersion.add(new byte[size]);
                 }
             }
-            ps = con.prepareStatement("select * from small_version order by id");
+            ps = con.prepareStatement("select * from small_version order by id", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             int index = 0;
             while (rs.next()) {
@@ -312,7 +316,8 @@ public class Manager {
             }
 
             // load clan
-            ps = con.prepareStatement("select * from clan_sv" + SERVER);
+            ps = con.prepareStatement("select * from clan_sv" + SERVER, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Clan clan = new Clan();
@@ -353,7 +358,8 @@ public class Manager {
                 dataObject.clear();
             }
 
-            ps = con.prepareStatement("select id from clan_sv" + SERVER + " order by id desc limit 1");
+            ps = con.prepareStatement("select id from clan_sv" + SERVER + " order by id desc limit 1",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             if (rs.next()) {
                 Clan.NEXT_ID = rs.getInt("id") + 1;
@@ -361,7 +367,8 @@ public class Manager {
 
             Logger.success("Load clan thành công (" + CLANS.size() + "), clan next id: " + Clan.NEXT_ID + "\n");
 
-            ps = con.prepareStatement("select * from dhvt_template");
+            ps = con.prepareStatement("select * from dhvt_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             if (rs.next()) {
                 DaiHoiVoThuat dhvt = new DaiHoiVoThuat();
@@ -378,7 +385,8 @@ public class Manager {
             Logger.success("Load DHVT thành công (" + LIST_DHVT.size() + "), clan next id: " + Clan.NEXT_ID + "\n");
 
             // load skill
-            ps = con.prepareStatement("select * from skill_template order by nclass_id, slot");
+            ps = con.prepareStatement("select * from skill_template order by nclass_id, slot",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             byte nClassId = -1;
             NClass nClass = null;
@@ -430,7 +438,8 @@ public class Manager {
             Logger.success("Load skill thành công (" + NCLASS.size() + ")\n");
 
             // load head avatar
-            ps = con.prepareStatement("select * from head_avatar");
+            ps = con.prepareStatement("select * from head_avatar", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 HeadAvatar headAvatar = new HeadAvatar(rs.getInt("head_id"), rs.getInt("avatar_id"));
@@ -439,7 +448,8 @@ public class Manager {
             Logger.success("Load head avatar thành công (" + HEAD_AVATARS.size() + ")\n");
 
             // load flag bag
-            ps = con.prepareStatement("select * from flag_bag");
+            ps = con.prepareStatement("select * from flag_bag", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 FlagBag flagBag = new FlagBag();
@@ -458,7 +468,8 @@ public class Manager {
             Logger.success("Load flag bag thành công (" + FLAGS_BAGS.size() + ")\n");
 
             // load intrinsic
-            ps = con.prepareStatement("select * from intrinsic");
+            ps = con.prepareStatement("select * from intrinsic", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Intrinsic intrinsic = new Intrinsic();
@@ -493,7 +504,7 @@ public class Manager {
             ps = con.prepareStatement("SELECT id, task_main_template.name, detail, "
                     + "task_sub_template.name AS 'sub_name', max_count, notify, npc_id, map "
                     + "FROM task_main_template JOIN task_sub_template ON task_main_template.id = "
-                    + "task_sub_template.task_main_id");
+                    + "task_sub_template.task_main_id", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             int taskId = -1;
             TaskMain task = null;
@@ -518,7 +529,8 @@ public class Manager {
             Logger.success("Load task thành công (" + TASKS.size() + ")\n");
 
             // load side task
-            ps = con.prepareStatement("select * from side_task_template");
+            ps = con.prepareStatement("select * from side_task_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 SideTaskTemplate sideTask = new SideTaskTemplate();
@@ -544,7 +556,8 @@ public class Manager {
             Logger.success("Load side task thành công (" + SIDE_TASKS_TEMPLATE.size() + ")\n");
 
             // load item template
-            ps = con.prepareStatement("select * from item_template");
+            ps = con.prepareStatement("select * from item_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 ItemTemplate itemTemp = new ItemTemplate();
@@ -567,7 +580,8 @@ public class Manager {
             Logger.success("Load map item template thành công (" + ITEM_TEMPLATES.size() + ")\n");
 
             // load item option template
-            ps = con.prepareStatement("select id, name from item_option_template");
+            ps = con.prepareStatement("select id, name from item_option_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 ItemOptionTemplate optionTemp = new ItemOptionTemplate();
@@ -695,7 +709,8 @@ public class Manager {
             Logger.success("Load notify thành công (" + NOTIFY.size() + ")\n");
 
             // load caption
-            ps = con.prepareStatement("select * from caption");
+            ps = con.prepareStatement("select * from caption", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 CAPTIONS.add(rs.getString("name"));
@@ -703,7 +718,8 @@ public class Manager {
             Logger.success("Load caption thành công (" + CAPTIONS.size() + ")\n");
 
             // load image by name
-            ps = con.prepareStatement("select name, n_frame from img_by_name");
+            ps = con.prepareStatement("select name, n_frame from img_by_name", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 IMAGES_BY_NAME.put(rs.getString("name"), rs.getByte("n_frame"));
@@ -711,7 +727,8 @@ public class Manager {
             Logger.success("Load images by name thành công (" + IMAGES_BY_NAME.size() + ")\n");
 
             // load mob template
-            ps = con.prepareStatement("select * from mob_template");
+            ps = con.prepareStatement("select * from mob_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 MobTemplate mobTemp = new MobTemplate();
@@ -729,7 +746,8 @@ public class Manager {
             Logger.success("Load mob template thành công (" + MOB_TEMPLATES.size() + ")\n");
 
             // load npc template
-            ps = con.prepareStatement("select * from npc_template");
+            ps = con.prepareStatement("select * from npc_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 NpcTemplate npcTemp = new NpcTemplate();
@@ -744,12 +762,14 @@ public class Manager {
             Logger.success("Load npc template thành công (" + NPC_TEMPLATES.size() + ")\n");
 
             // load map template
-            ps = con.prepareStatement("select count(id) from map_template");
+            ps = con.prepareStatement("select count(id) from map_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             if (rs.next()) {
                 int countRow = rs.getShort(1);
                 MAP_TEMPLATES = new MapTemplate[countRow];
-                ps = con.prepareStatement("select * from map_template");
+                ps = con.prepareStatement("select * from map_template", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY);
                 rs = ps.executeQuery();
                 short i = 0;
                 while (rs.next()) {
@@ -871,7 +891,8 @@ public class Manager {
     public static List<TOP> realTop(String query, Connection con) {
         List<TOP> tops = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TOP top = TOP.builder().name(rs.getString("name")).gender(rs.getByte("gender")).build();

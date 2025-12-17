@@ -667,7 +667,8 @@ public class GodGK {
         String name = "";
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection()) {
-            ps = con.prepareStatement("select * from player");
+            ps = con.prepareStatement("select * from player", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 int plHp = 200000000;
@@ -892,7 +893,8 @@ public class GodGK {
         String name = "";
         ResultSet rs = null;
         try (Connection con = GirlkunDB.getConnection()) {
-            ps = con.prepareStatement("select * from player");
+            ps = con.prepareStatement("select * from player", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             rs = ps.executeQuery();
             while (rs.next()) {
                 int plHp = 200000000;
