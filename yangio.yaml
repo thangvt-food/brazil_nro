@@ -1,0 +1,23 @@
+slug: brazil-nro
+name: NroPeo (Brazil NRO)
+tagline: Server NRO bản Brazil và tài liệu sửa lỗi
+url: https://github.com/thangvt-food/brazil_nro
+status: paused
+visibility: private
+description: Mã nguồn server NRO bản Brazil (NroPeo) kèm database, build Ant và nhiều tài liệu sửa lỗi.
+tags:
+  - game
+  - nro
+  - server
+category: games
+tech:
+  - java
+  - mysql
+  - ant
+hosting: vps
+updated: '2025-12-17'
+icon: 🐉
+auth: none
+links:
+  repo: https://github.com/thangvt-food/brazil_nro
+notes: Repo public, server game; database basil.sql và tài liệu trong repo.
